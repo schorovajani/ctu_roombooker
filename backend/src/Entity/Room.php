@@ -41,19 +41,25 @@ class Room
 	private $building;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity=Group::class, inversedBy="rooms")
+	 * @ORM\ManyToOne(targetEntity=Team::class, inversedBy="rooms")
 	 * @ORM\JoinColumn(nullable=false)
 	 */
-	private $owner;
+	private $team;
 
 	/**
 	 * @ORM\OneToMany(targetEntity=Request::class, mappedBy="room")
 	 */
 	private $requests;
 
+	/**
+	 * @ORM\OneToMany(targetEntity=RoomRole::class, mappedBy="room")
+	 */
+	private $roomRoles;
+
 	public function __construct()
 	{
 		$this->requests = new ArrayCollection();
+		$this->roomRoles = new ArrayCollection();
 	}
 
 	public function getId(): ?int
@@ -109,14 +115,14 @@ class Room
 		return $this;
 	}
 
-	public function getOwner(): ?Group
+	public function getTeam(): ?Team
 	{
-		return $this->owner;
+		return $this->team;
 	}
 
-	public function setOwner(?Group $owner): self
+	public function setTeam(?Team $team): self
 	{
-		$this->owner = $owner;
+		$this->team = $team;
 
 		return $this;
 	}
@@ -145,6 +151,36 @@ class Room
 			// set the owning side to null (unless already changed)
 			if ($request->getRoom() === $this) {
 				$request->setRoom(null);
+			}
+		}
+
+		return $this;
+	}
+
+	/**
+	 * @return Collection|RoomRole[]
+	 */
+	public function getRoomRoles(): Collection
+	{
+		return $this->roomRoles;
+	}
+
+	public function addRoomRole(RoomRole $roomRole): self
+	{
+		if (!$this->roomRoles->contains($roomRole)) {
+			$this->roomRoles[] = $roomRole;
+			$roomRole->setRoom($this);
+		}
+
+		return $this;
+	}
+
+	public function removeRoomRole(RoomRole $roomRole): self
+	{
+		if ($this->roomRoles->removeElement($roomRole)) {
+			// set the owning side to null (unless already changed)
+			if ($roomRole->getRoom() === $this) {
+				$roomRole->setRoom(null);
 			}
 		}
 

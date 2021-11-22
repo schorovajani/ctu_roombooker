@@ -9,7 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
- * @ORM\Table(name="`user`")
  */
 class User
 {
@@ -41,14 +40,26 @@ class User
 	private $requests;
 
 	/**
-	 * @ORM\ManyToMany(targetEntity=Request::class, mappedBy="attendee")
+	 * @ORM\ManyToMany(targetEntity=Request::class, mappedBy="attendees")
 	 */
-	private $attendee;
+	private $attendees;
+
+	/**
+	 * @ORM\OneToMany(targetEntity=RoomRole::class, mappedBy="user")
+	 */
+	private $roomRoles;
+
+	/**
+	 * @ORM\OneToMany(targetEntity=TeamRole::class, mappedBy="user")
+	 */
+	private $teamRoles;
 
 	public function __construct()
 	{
 		$this->requests = new ArrayCollection();
-		$this->attendee = new ArrayCollection();
+		$this->attendees = new ArrayCollection();
+		$this->roomRoles = new ArrayCollection();
+		$this->teamRoles = new ArrayCollection();
 	}
 
 	public function getId(): ?int
@@ -125,15 +136,15 @@ class User
 	/**
 	 * @return Collection|Request[]
 	 */
-	public function getAttendee(): Collection
+	public function getAttendees(): Collection
 	{
-		return $this->attendee;
+		return $this->attendees;
 	}
 
 	public function addAttendee(Request $attendee): self
 	{
-		if (!$this->attendee->contains($attendee)) {
-			$this->attendee[] = $attendee;
+		if (!$this->attendees->contains($attendee)) {
+			$this->attendees[] = $attendee;
 			$attendee->addAttendee($this);
 		}
 
@@ -142,8 +153,68 @@ class User
 
 	public function removeAttendee(Request $attendee): self
 	{
-		if ($this->attendee->removeElement($attendee)) {
+		if ($this->attendees->removeElement($attendee)) {
 			$attendee->removeAttendee($this);
+		}
+
+		return $this;
+	}
+
+	/**
+	 * @return Collection|RoomRole[]
+	 */
+	public function getRoomRoles(): Collection
+	{
+		return $this->roomRoles;
+	}
+
+	public function addRoomRole(RoomRole $roomRole): self
+	{
+		if (!$this->roomRoles->contains($roomRole)) {
+			$this->roomRoles[] = $roomRole;
+			$roomRole->setUser($this);
+		}
+
+		return $this;
+	}
+
+	public function removeRoomRole(RoomRole $roomRole): self
+	{
+		if ($this->roomRoles->removeElement($roomRole)) {
+			// set the owning side to null (unless already changed)
+			if ($roomRole->getUser() === $this) {
+				$roomRole->setUser(null);
+			}
+		}
+
+		return $this;
+	}
+
+	/**
+	 * @return Collection|TeamRole[]
+	 */
+	public function getTeamRoles(): Collection
+	{
+		return $this->teamRoles;
+	}
+
+	public function addTeamRole(TeamRole $teamRole): self
+	{
+		if (!$this->teamRoles->contains($teamRole)) {
+			$this->teamRoles[] = $teamRole;
+			$teamRole->setUser($this);
+		}
+
+		return $this;
+	}
+
+	public function removeTeamRole(TeamRole $teamRole): self
+	{
+		if ($this->teamRoles->removeElement($teamRole)) {
+			// set the owning side to null (unless already changed)
+			if ($teamRole->getUser() === $this) {
+				$teamRole->setUser(null);
+			}
 		}
 
 		return $this;

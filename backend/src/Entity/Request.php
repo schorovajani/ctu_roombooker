@@ -53,14 +53,14 @@ class Request
 	private $user;
 
 	/**
-	 * @ORM\ManyToMany(targetEntity=User::class, inversedBy="attendee")
+	 * @ORM\ManyToMany(targetEntity=User::class, inversedBy="attendees")
 	 * @JoinTable(name="attendee")
 	 */
-	private $attendee;
+	private $attendees;
 
 	public function __construct()
 	{
-		$this->attendee = new ArrayCollection();
+		$this->attendees = new ArrayCollection();
 	}
 
 	public function getId(): ?int
@@ -143,15 +143,15 @@ class Request
 	/**
 	 * @return Collection|User[]
 	 */
-	public function getAttendee(): Collection
+	public function getAttendees(): Collection
 	{
-		return $this->attendee;
+		return $this->attendees;
 	}
 
 	public function addAttendee(User $attendee): self
 	{
-		if (!$this->attendee->contains($attendee)) {
-			$this->attendee[] = $attendee;
+		if (!$this->attendees->contains($attendee)) {
+			$this->attendees[] = $attendee;
 		}
 
 		return $this;
@@ -159,7 +159,7 @@ class Request
 
 	public function removeAttendee(User $attendee): self
 	{
-		$this->attendee->removeElement($attendee);
+		$this->attendees->removeElement($attendee);
 
 		return $this;
 	}
