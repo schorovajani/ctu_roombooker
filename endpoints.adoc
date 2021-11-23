@@ -8,27 +8,27 @@
 * GET = return all users
 
 ./users/{id}/rooms
-* GET = return all rooms where has user access (group or room member)
+* GET = return all rooms where has user access (team or room member)
 
 ./users/{id}/requests
 * GET = return all request where is user with {id} atendee or manager
 
-=== GROUPS
+=== TEAMS
 
-./groups
-* GET = return all groups
-* POST = create group
+./teams
+* GET = return all teams
+* POST = create team
 
-./groups/{id}
-* PUT = update information about group with {id}, __eg. add/update manager of group__
+./teams/{id}
+* PUT = update information about team with {id}, __eg. add/update manager of team__
 
-./groups/{id}/users
-* GET = return all users in group with {id}
-* POST = add user/s to group with {id}
+./teams/{id}/users
+* GET = return all users in team with {id}
+* POST = add user/s to team with {id}
 
-./groups/{id}/rooms
-* GET = return all rooms manages by group with {id}
-* POST = add room/s to group with {id}
+./teams/{id}/rooms
+* GET = return all rooms manages by team with {id}
+* POST = add room/s to team with {id}
 
 === ROOMS
 
