@@ -1,0 +1,55 @@
+= RoomBooker
+
+== Otázky
+
+=== Přidání lidí do rezervace
+
+Uživatel při dělání rezervace zvolí místnost, datum/čas a zvolí lidi, kteří budou moci do místnosti.
+
+=== Přesouvání místností v rámci skupin
+
+V místnosti bude kolonka skupina a tam se to bude dát změnit.??
+
+=== Podskupiny
+
+Skupina má nějaké místnosti.
+Pro vytvoření podskupiny chci nějaké místnosti z nadskupiny (podskupina má podmnožinu místností). Protože jednu místnost může mít jedna skupina, je třeba po vytvoření podskupiny přesunout dané místností z parent skupiny do podskupiny.
+
+V aplikaci si to představuji tak, že při přidání podskupiny si zvolím nějaké místnosti nadskupiny a samo se to přesune.
+
+Na zvážení: měla by mít nadskupina pole podskupin NEBO podskupina odkaz na nadskupinu?  = v databázi je jen parent, v doctine se to vygeneruje obojí
+
+=== Dveře od místností
+
+Kdokoliv, kdo je napsaný v requestu, může dveře odemnkout. Poté dveře zůstavají otevřené, může tam přijít kdokoliv (v realitě, prostě žádný pípnutí nedělají). Poté je kdokoliv v requestu může zamnkout. => v daném časovém úseku
+
+=== Jmenování rolí
+
+Administrátor jmenuje (všechny role)
+
+* správce skupiny
+* člena skupiny
+* správce místnosti
+* člena místnosti
+
+Správce skupiny jmenuje
+
+* člena skupiny
+* správce podskupiny
+* člena podskupiny
+* správce místnosti
+* člena místnosti
+
+Správce místnosti jmenuje
+
+* člena místnosti
+
+=== Účty uživatelů
+
+V databázi odděleně od entity uživatele, pro případné měnění autentizace.
+
+=== Časy
+
+Místnosti budou mít rezervaci od 0:00 do 23:59.
+
+Uživatelé si budou moci zarezervovat místnost např. po 15 minutách. => místnost lze rezevovat na 15, 30, atd. minut, ale ne na 20 minut.
