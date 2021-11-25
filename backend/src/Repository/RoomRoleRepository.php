@@ -7,7 +7,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method RoomRole|null find($id, $lockMode = null, $lockVersion = null)
+ * @method RoomRole|null find(array $ids, $lockMode = null, $lockVersion = null)
  * @method RoomRole|null findOneBy(array $criteria, array $orderBy = null)
  * @method RoomRole[]    findAll()
  * @method RoomRole[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)

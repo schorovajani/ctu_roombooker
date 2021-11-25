@@ -7,7 +7,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method TeamRole|null find($id, $lockMode = null, $lockVersion = null)
+ * @method TeamRole|null find(array $ids, $lockMode = null, $lockVersion = null)
  * @method TeamRole|null findOneBy(array $criteria, array $orderBy = null)
  * @method TeamRole[]    findAll()
  * @method TeamRole[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
