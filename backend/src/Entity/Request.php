@@ -26,11 +26,6 @@ class Request
 	private $description;
 
 	/**
-	 * @ORM\Column(type="boolean")
-	 */
-	private $isApproved;
-
-	/**
 	 * @ORM\Column(type="datetime")
 	 */
 	private $eventStart;
@@ -58,6 +53,12 @@ class Request
 	 */
 	private $attendees;
 
+	/**
+	 * @ORM\ManyToOne(targetEntity=Status::class, inversedBy="requests")
+	 * @ORM\JoinColumn(nullable=false)
+	 */
+	private $status;
+
 	public function __construct()
 	{
 		$this->attendees = new ArrayCollection();
@@ -76,18 +77,6 @@ class Request
 	public function setDescription(string $description): self
 	{
 		$this->description = $description;
-
-		return $this;
-	}
-
-	public function getIsApproved(): ?bool
-	{
-		return $this->isApproved;
-	}
-
-	public function setIsApproved(bool $isApproved): self
-	{
-		$this->isApproved = $isApproved;
 
 		return $this;
 	}
@@ -160,6 +149,18 @@ class Request
 	public function removeAttendee(User $attendee): self
 	{
 		$this->attendees->removeElement($attendee);
+
+		return $this;
+	}
+
+	public function getStatus(): ?Status
+	{
+		return $this->status;
+	}
+
+	public function setStatus(?Status $status): self
+	{
+		$this->status = $status;
 
 		return $this;
 	}
