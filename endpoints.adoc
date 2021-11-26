@@ -1,0 +1,105 @@
+= RoomBooker
+
+== Endpoints
+
+=== USERS
+
+./users
+* GET = return all users
+* POST = create new user
+
+./users/{id}
+* GET = return user with {id}
+* PUT = update information about user with {id}
+
+./users/{id}/rooms
+* GET = return all rooms where has user access (team or room member)
+
+./users/{id}/requests
+* GET = return all request where is user with {id} atendee or manager
+
+./users/{id}/accounts
+* GET = return all accounts of user with {id}
+* POST = create account to user with {id}
+
+=== TEAMS
+
+./teams
+* GET = return all teams
+* POST = create team
+
+./teams/{id}
+* PUT = update information about team with {id}, __eg. add/update manager of team__
+* DELETE = delete team with {id}
+
+./teams/{id}/rooms
+* GET = return all rooms manages by team with {id}
+* POST = add room/s to team with {id}
+
+./teams/{id}/users
+* GET = return all users in team with {id}
+* POST = add user/s to team with {id}
+
+./teams/{id_t}/users/{id_u}
+* DELETE = delete user team role
+
+=== ROOMS
+
+./rooms
+* GET = return all rooms
+* POST = create new room by administrator
+
+./rooms/{id}
+* PUT = update information about room with {id}, __eg. add/update manager of room__
+* DELETE = delete room with {id}
+
+./rooms?type=public
+* GET = return public rooms
+
+./rooms/{id}/requests
+* GET = return all requests for room with {id}
+
+./rooms/{id}/users
+* GET = return all members of room
+* POST = add user to room role
+
+./rooms/{id_r}/users/{id_u}
+* DELETE = remove user room role 
+
+=== REQUESTS
+
+./requests
+* GET = return all requests
+* POST = create request by everyone (will be different in sent information)
+
+./requests/{id}
+* GET = return request with {id}
+* PUT = update information in request, __eg. accept request by manager__
+* DELETE = delete request
+
+
+=== Other endpoints
+
+==== BUILDINGS
+
+./buildings
+* GET = return all building
+* POST = create new building
+
+./buildings/{id}/rooms
+* GET = return all rooms in building with {id}
+
+==== ACCOUNTS
+All accounts of user will be return from user endpoint. If user/admin click to user account, then he knows ID of account and he can ask endpoint accounts directly.
+
+./accounts
+* GET = return all accounts
+
+./accounts/{id}
+* GET = return account with {id}
+* PUT = update information about account with {id}
+* DELETE = delete account with {id}
+
+
+
+
