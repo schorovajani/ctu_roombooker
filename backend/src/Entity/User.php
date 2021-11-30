@@ -7,9 +7,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @ORM\Table(name="`user`")
+ *
+ * @ExclusionPolicy("all")
  */
 class User
 {
@@ -17,6 +22,8 @@ class User
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
 	 * @ORM\Column(type="integer")
+	 *
+	 * @Expose
 	 */
 	private $id;
 
@@ -25,6 +32,7 @@ class User
 	 *
 	 * @Assert\NotBlank
 	 * @Assert\Length(min=2, max=255)
+	 * @Expose
 	 */
 	private $firstName;
 
@@ -33,6 +41,7 @@ class User
 	 *
 	 * @Assert\NotBlank
 	 * @Assert\Length(min=2, max=255)
+	 * @Expose
 	 */
 	private $lastName;
 
