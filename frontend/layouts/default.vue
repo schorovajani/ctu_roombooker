@@ -1,6 +1,7 @@
 <template>
   <div class="page">
     <header>
+      <img class="header-polygon" src="~/assets/UI/light_polygon.png" />
       <nuxt-link to="/"><h1>RoomBooker</h1></nuxt-link>
       <nav>
         <nuxt-link class="nav-item" to="/"> Domů </nuxt-link>
@@ -15,8 +16,8 @@
         <!-- administrátor -->
         <nuxt-link class="nav-item" to="/teams"> Skupiny </nuxt-link>
 
-        <nuxt-link class="nav-item" to="/auth/login"> Přihlásit se </nuxt-link>
-        <nuxt-link class="nav-item" to="/auth/logout"> Odhlásit se </nuxt-link>
+        <nuxt-link class="nav-item" to="/login"> Přihlásit se </nuxt-link>
+        <nuxt-link class="nav-item" to="/logout"> Odhlásit se </nuxt-link>
       </nav>
     </header>
     <Nuxt />
@@ -29,6 +30,7 @@
 
 <script>
 export default {}
+//     <img class="header-polygon" src="~/assets/UI/light_polygon.png" />
 </script>
 
 <style>
@@ -64,31 +66,38 @@ header {
   justify-content: space-between;
   align-items: center;
   background-color: #e6f5ff;
-  padding: 0rem 2rem 0 2rem;
+  padding: 1.5rem 2rem 1.5rem 2rem;
+}
+
+.header-polygon {
+  position: absolute;
+  top: 0;
+  left: 1.5rem;
+  width: 20%;
 }
 
 h1 {
+  position: absolute;
+  top: 1.5rem;
   font-family: 'Sorts Mill Goudy', serif;
-  font-size: 2.5rem;
-  padding: 0.5rem;
+  font-size: 2.2vw;
   margin-left: 3rem;
 }
 
 .nav-item {
-  padding: 1.7rem;
+  padding: 1.5rem;
 }
 
 .nav-item:hover {
-  background-color: #b2d9ea;
+  background-color: #b7dcef;
 }
 
 .nav-item.nuxt-link-exact-active {
-  background-color: #b2d9ea;
+  background-color: #b7dcef;
 }
 
 footer {
   flex-shrink: 0;
-  width: 100%;
   background-color: #505050;
   color: #ffffff;
   text-align: right;
