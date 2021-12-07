@@ -6,6 +6,7 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -21,16 +22,25 @@ class User
 
 	/**
 	 * @ORM\Column(type="string", length=255)
+	 *
+	 * @Assert\NotBlank
+	 * @Assert\Length(min=2, max=255)
 	 */
 	private $firstName;
 
 	/**
 	 * @ORM\Column(type="string", length=255)
+	 *
+	 * @Assert\NotBlank
+	 * @Assert\Length(min=2, max=255)
 	 */
 	private $lastName;
 
 	/**
 	 * @ORM\Column(type="boolean")
+	 *
+	 * @Assert\NotNull
+	 * @Assert\Type("bool")
 	 */
 	private $isAdmin;
 

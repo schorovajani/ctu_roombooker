@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinTable;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=RequestRepository::class)
@@ -22,16 +23,26 @@ class Request
 
 	/**
 	 * @ORM\Column(type="string", length=500)
+	 *
+	 * @Assert\Length(min=5, max=500)
 	 */
 	private $description;
 
 	/**
 	 * @ORM\Column(type="datetime")
+	 *
+	 * @Assert\NotBlank
+	 * @Assert\DateTime
+	 * @var string A "Y-m-d H:i:s" formatted value
 	 */
 	private $eventStart;
 
 	/**
 	 * @ORM\Column(type="datetime")
+	 *
+	 * @Assert\NotBlank
+	 * @Assert\DateTime
+	 * @var string A "Y-m-d H:i:s" formatted value
 	 */
 	private $eventEnd;
 
