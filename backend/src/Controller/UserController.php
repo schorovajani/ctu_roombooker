@@ -12,26 +12,24 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class UserController extends AbstractFOSRestController
 {
-	private UserService $userService;
+  private UserService $userService;
 
-	/**
-	 * @param UserService $userService
-	 */
-	public function __construct(UserService $userService)
-	{
-		$this->userService = $userService;
-	}
+  /**
+   * @param UserService $userService
+   */
+  public function __construct ( UserService $userService )
+  {
+    $this -> userService = $userService;
+  }
 
-	/**
-	 * @Route("/users", methods={"GET"})
-	 *
-	 * @return Response
-	 */
-	public function getAllUsers(): Response
-	{
-		$employees = $this->userService->getAll();
-		$view = $this->view($employees, 200);
-
-		return $this->handleView($view);
-	}
+  /**
+   * @Route("/users", methods={"GET"})
+   * @return Response
+   */
+  public function getAllUsers () : Response
+  {
+    $employees = $this -> userService -> getAll ();
+    $view = $this -> view ( $employees, 200 );
+    return $this -> handleView ( $view );
+  }
 }
