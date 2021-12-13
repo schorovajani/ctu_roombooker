@@ -30,7 +30,7 @@ class UserController extends AbstractFOSRestController
   public function getAllUsers () : Response
   {
     $users = $this -> userService -> getAll ();
-    $view = $this -> view ( $users, 200 );
+    $view = $this -> view ( $users, Response::HTTP_OK );
     return $this -> handleView ( $view );
   }
 }
