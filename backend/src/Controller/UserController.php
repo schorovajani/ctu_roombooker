@@ -29,8 +29,8 @@ class UserController extends AbstractFOSRestController
    */
   public function getAllUsers () : Response
   {
-    $employees = $this -> userService -> getAll ();
-    $view = $this -> view ( $employees, 200 );
+    $users = $this -> userService -> getAll ();
+    $view = $this -> view ( $users, 200 );
     return $this -> handleView ( $view );
   }
 }
