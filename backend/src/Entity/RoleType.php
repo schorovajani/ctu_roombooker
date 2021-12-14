@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\RoleTypeRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=RoleTypeRepository::class)
@@ -19,6 +20,9 @@ class RoleType
 
 	/**
 	 * @ORM\Column(type="string", length=255)
+	 *
+	 * @Assert\NotBlank
+	 * @Assert\Length(min=5, max=255)
 	 */
 	private $name;
 
