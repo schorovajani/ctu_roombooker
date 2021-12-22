@@ -13,7 +13,7 @@
         </li>
       </ul>
       <button @click="showLess = !showLess">
-        {{ showLess ? 'více' : 'méně' }}
+        {{ showLess ? 'více' : 'méně' }} místností
       </button>
     </div>
   </article>
@@ -66,7 +66,7 @@ article {
 }
 .build-card {
   border: solid 1px #505050;
-  padding: 0.5rem;
+  padding: 1rem;
   text-align: right;
 }
 
@@ -86,7 +86,20 @@ a {
   text-decoration: underline;
 }
 
+a:hover {
+  color: #608394;
+}
+
 li {
   margin: 1rem;
+}
+
+button {
+  text-decoration: underline;
+  font-size: 0.9rem;
+}
+
+button:hover {
+  color: #608394;
 }
 </style>
