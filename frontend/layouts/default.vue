@@ -35,6 +35,7 @@ export default {}
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Sorts+Mill+Goudy&display=swap');
+@import '~/assets/reset.css';
 
 html,
 #__nuxt,
