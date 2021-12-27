@@ -24,8 +24,9 @@ class SecurityController extends AbstractFOSRestController
 		}
 
 		return $this->json([
+			'status' => 'Logged in successfully (info for testing purposes)',
 			'username' => $this->getUser()->getUserIdentifier(),
-		]);
+		], Response::HTTP_OK);
 	}
 
 	/**
@@ -34,5 +35,15 @@ class SecurityController extends AbstractFOSRestController
 	public function logout()
 	{
 		throw new \Exception('This exception should be never thrown');
+	}
+
+	/**
+	 * @Rest\Get("/logout_response", name="app_logout_response")
+	 */
+	public function logoutResponse(): Response
+	{
+		return $this->json([
+			'status' => 'Logged out successfully (info for testing purposes)',
+		], Response::HTTP_OK); // TODO: after testing change to 204?
 	}
 }
