@@ -86,7 +86,7 @@ h1 {
 }
 
 .nav-item {
-  padding: 1.5rem;
+  padding: 1.4rem;
 }
 
 .nav-item:hover {
