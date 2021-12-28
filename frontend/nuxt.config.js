@@ -36,10 +36,39 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/auth-next',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
+  axios: {
+    baseURL: 'http://127.0.0.1:8000',
+    credentials: true,
+    withCredentials: true,
+  },
+
+  auth: {
+    strategies: {
+      cookie: {
+        cookie: {
+          name: 'token',
+        },
+        token: {
+          required: false,
+          type: false,
+        },
+        endpoints: {
+          login: {
+            url: 'http://127.0.0.1:8000/api/login',
+            method: 'post',
+            withCredentials: true,
+          },
+          user: false,
+        },
+      },
+    },
+    localStorage: false,
+    cookie: true,
+  },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
