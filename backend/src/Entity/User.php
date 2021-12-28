@@ -46,14 +46,6 @@ class User
 	private $lastName;
 
 	/**
-	 * @ORM\Column(type="boolean")
-	 *
-	 * @Assert\NotNull
-	 * @Assert\Type("bool")
-	 */
-	private $isAdmin;
-
-	/**
 	 * @ORM\OneToMany(targetEntity=Request::class, mappedBy="user")
 	 */
 	private $requests;
@@ -112,18 +104,6 @@ class User
 	public function setLastName(string $lastName): self
 	{
 		$this->lastName = $lastName;
-
-		return $this;
-	}
-
-	public function getIsAdmin(): ?bool
-	{
-		return $this->isAdmin;
-	}
-
-	public function setIsAdmin(bool $isAdmin): self
-	{
-		$this->isAdmin = $isAdmin;
 
 		return $this;
 	}

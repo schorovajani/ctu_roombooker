@@ -21,8 +21,10 @@ security:
             provider: app_user_provider
             json_login:
                 check_path: app_login
-            # by default, the feature allows 5 login attempts per minute
-            # login_throttling: null
+
+            # 3 login attempts per minute
+            login_throttling:
+                max_attempts: 3
 
             logout:
                 path: app_logout
