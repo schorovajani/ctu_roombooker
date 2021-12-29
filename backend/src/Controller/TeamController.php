@@ -16,7 +16,7 @@ class  TeamController extends \FOS\RestBundle\Controller\AbstractFOSRestControll
 	 * @Rest\Get("/teams")
 	 * @return Response
 	 */
-	public function ActionGetTeams(): Response
+	public function routeGetTeams(): Response
 	{
 		$teams = $this->getDoctrine()->getRepository(Team::class)->findAll();
 		return $this->handleView($this->view($teams, Response::HTTP_OK));
@@ -28,7 +28,7 @@ class  TeamController extends \FOS\RestBundle\Controller\AbstractFOSRestControll
 	 * @param string $attr
 	 * @return Response
 	 */
-	public function ActionGetTeamAttr(Team $team, string $attr): Response
+	public function routeGetTeamAttr(Team $team, string $attr): Response
 	{
 		switch ($attr) {
 			case "rooms":

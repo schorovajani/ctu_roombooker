@@ -16,7 +16,7 @@ class  RequestController extends \FOS\RestBundle\Controller\AbstractFOSRestContr
 	 * @Rest\Get("/requests")
 	 * @return Response
 	 */
-	public function ActionGetRequests(): Response
+	public function routeGetRequests(): Response
 	{
 		$requests = $this->getDoctrine()->getRepository(Request::class)->findAll();
 		return $this->handleView($this->view($requests, Response::HTTP_OK));
@@ -27,7 +27,7 @@ class  RequestController extends \FOS\RestBundle\Controller\AbstractFOSRestContr
 	 * @param Request $request
 	 * @return Response
 	 */
-	public function ActionGetRequest(Request $request): Response
+	public function routeGetRequest(Request $request): Response
 	{
 		return $this->handleView($this->view($request, Response::HTTP_OK));
 	}

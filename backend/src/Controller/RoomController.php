@@ -17,7 +17,7 @@ class  RoomController extends \FOS\RestBundle\Controller\AbstractFOSRestControll
 	 * @Rest\Get("/rooms")
 	 * @return Response
 	 */
-	public function ActionGetRooms(): Response
+	public function routeGetRooms(): Response
 	{
 		$rooms = $this->getDoctrine()->getRepository(Room::class)->findAll();
 		return $this->handleView($this->view($rooms, Response::HTTP_OK));
@@ -29,7 +29,7 @@ class  RoomController extends \FOS\RestBundle\Controller\AbstractFOSRestControll
 	 * @param string $attr
 	 * @return Response
 	 */
-	public function ActionGetRoomAttr(Room $room, string $attr): Response
+	public function routeGetRoomAttr(Room $room, string $attr): Response
 	{
 		switch ($attr) {
 			case "requests":

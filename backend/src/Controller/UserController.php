@@ -31,7 +31,7 @@ class UserController extends AbstractFOSRestController
 	 * @Rest\Get("/users")
 	 * @return Response
 	 */
-	public function ActionGetUsers(): Response
+	public function routeGetUsers(): Response
 	{
 		$users = $this->userService->getAll();
 		$view = $this->view($users, Response::HTTP_OK);
@@ -43,7 +43,7 @@ class UserController extends AbstractFOSRestController
 	 * @param User $user
 	 * @return Response
 	 */
-	public function ActionGetUser(User $user): Response
+	public function routeGetUser(User $user): Response
 	{
 		return $this->handleView($this->view($user, Response::HTTP_OK));
 	}
@@ -54,7 +54,7 @@ class UserController extends AbstractFOSRestController
 	 * @param string $attr
 	 * @return Response
 	 */
-	public function ActionGetUserAttr(User $user, string $attr): Response
+	public function routeGetUserAttr(User $user, string $attr): Response
 	{
 		switch ($attr) {
 			case "requests":

@@ -16,7 +16,7 @@ class  BuildingController extends \FOS\RestBundle\Controller\AbstractFOSRestCont
 	 * @Rest\Get("/buildings")
 	 * @return Response
 	 */
-	public function ActionGetBuildings(): Response
+	public function routeGetBuildings(): Response
 	{
 		return $this->handleView($this->view($this->getDoctrine()->getRepository(Building::class)->findAll(), Response::HTTP_OK));
 	}
@@ -26,7 +26,7 @@ class  BuildingController extends \FOS\RestBundle\Controller\AbstractFOSRestCont
 	 * @param Building $building
 	 * @return Response
 	 */
-	public function ActionGetBuildingRooms(Building $building): Response
+	public function routeGetBuildingRooms(Building $building): Response
 	{
 		return $this->handleView($this->view($building->getRooms(), Response::HTTP_OK));
 	}
