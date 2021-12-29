@@ -19,7 +19,7 @@ class UserController extends AbstractFOSRestController
 {
 	private UserService $userService;
 
-	//--------------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * @param UserService $userService
 	 */
@@ -27,7 +27,7 @@ class UserController extends AbstractFOSRestController
 	{
 		$this->userService = $userService;
 	}
-	//--------------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * @Rest\Get("/users")
 	 * @return Response
@@ -38,7 +38,7 @@ class UserController extends AbstractFOSRestController
 		$view = $this->view($users, Response::HTTP_OK);
 		return $this->handleView($view);
 	}
-	//--------------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * @Rest\Get("/users/{id}", requirements={"id": "\d+"})
 	 * @param User $user
@@ -48,7 +48,7 @@ class UserController extends AbstractFOSRestController
 	{
 		return $this->handleView($this->view($user, Response::HTTP_OK));
 	}
-	//--------------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * @Rest\Get("/users/{id}/{attr}", requirements={"id": "\d+"})
 	 * @param User $user
@@ -80,5 +80,4 @@ class UserController extends AbstractFOSRestController
 		}
 		return $this->handleView($this->view($data, Response::HTTP_OK));
 	}
-	//--------------------------------------------------------------------------------------------------------------------
 }

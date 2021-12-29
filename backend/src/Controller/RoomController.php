@@ -22,7 +22,7 @@ class  RoomController extends \FOS\RestBundle\Controller\AbstractFOSRestControll
 	{
 		$this->service = $service;
 	}
-	//--------------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * @Rest\Get("/rooms")
 	 * @return Response
@@ -32,7 +32,7 @@ class  RoomController extends \FOS\RestBundle\Controller\AbstractFOSRestControll
 		$rooms = $this->service->getAll();
 		return $this->handleView($this->view($rooms, Response::HTTP_OK));
 	}
-	//--------------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * @Rest\Get("/rooms/{id}/{attr}", requirements={"id": "\d+"})
 	 * @param Room $room
@@ -54,7 +54,6 @@ class  RoomController extends \FOS\RestBundle\Controller\AbstractFOSRestControll
 		}
 		throw $this->createNotFoundException();
 	}
-	//--------------------------------------------------------------------------------------------------------------------
 }
 
 

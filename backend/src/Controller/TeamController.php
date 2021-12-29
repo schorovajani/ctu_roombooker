@@ -22,7 +22,7 @@ class  TeamController extends \FOS\RestBundle\Controller\AbstractFOSRestControll
 	{
 		$this->service = $service;
 	}
-	//--------------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * @Rest\Get("/teams")
 	 * @return Response
@@ -32,7 +32,7 @@ class  TeamController extends \FOS\RestBundle\Controller\AbstractFOSRestControll
 		$teams = $this->service->getAll();
 		return $this->handleView($this->view($teams, Response::HTTP_OK));
 	}
-	//--------------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * @Rest\Get("/teams/{id}/{attr}", requirements={"id": "\d+"})
 	 * @param Team $team
@@ -55,7 +55,6 @@ class  TeamController extends \FOS\RestBundle\Controller\AbstractFOSRestControll
 		}
 		throw $this->createNotFoundException();
 	}
-	//--------------------------------------------------------------------------------------------------------------------
 }
 
 
