@@ -37,7 +37,7 @@ class  RoomController extends \FOS\RestBundle\Controller\AbstractFOSRestControll
 
 			case "users":
 				$users1 = [];
-				$roles = $this->getDoctrine()->getRepository(RoomRole::class)->findBy(["room" => $room]);
+				$roles = $room->getRoomRoles();
 				foreach ($roles as $role)
 					$users1[] = $role->getUser();
 
