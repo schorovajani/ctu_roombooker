@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Account;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -14,6 +16,8 @@ class SecurityController extends AbstractFOSRestController
 {
 	/**
 	 * @Rest\Post("/login", name="app_login")
+	 *
+	 * @return Response
 	 */
 	public function login(): Response
 	{
@@ -23,10 +27,7 @@ class SecurityController extends AbstractFOSRestController
 			], Response::HTTP_BAD_REQUEST);
 		}
 
-		return $this->json([
-			'status' => 'Logged in successfully (info for testing purposes)',
-			'username' => $this->getUser()->getUserIdentifier(),
-		], Response::HTTP_OK);
+		return $this->loggedInAccountDetails();
 	}
 
 	/**
@@ -39,11 +40,29 @@ class SecurityController extends AbstractFOSRestController
 
 	/**
 	 * @Rest\Get("/logout_response", name="app_logout_response")
+	 *
+	 * @return Response
 	 */
 	public function logoutResponse(): Response
 	{
+		return $this->json(null, Response::HTTP_OK);
+	}
+
+	/**
+	 * @Rest\Get("/me")
+	 * @IsGranted("IS_AUTHENTICATED_REMEMBERED")
+	 *
+	 * @return Response
+	 */
+	public function loggedInAccountDetails(): Response
+	{
+		/* @var Account $loggedInAccount */
+		$loggedInAccount = $this->getUser();
+
 		return $this->json([
-			'status' => 'Logged out successfully (info for testing purposes)',
-		], Response::HTTP_OK); // TODO: after testing change to 204?
+			'firstName' => $loggedInAccount->getOwner()->getFirstName(),
+			'lastName' => $loggedInAccount->getOwner()->getLastName(),
+			'username' => $loggedInAccount->getUserIdentifier(),
+		], Response::HTTP_OK);
 	}
 }
