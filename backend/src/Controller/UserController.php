@@ -66,8 +66,8 @@ class UserController extends AbstractFOSRestController
 					$data = $this->getDoctrine()->getRepository(Room::class)->findAll();
 					break;
 				}
-				$rooms1 = array();
-				$rooms2 = array();
+				$rooms1 = [];
+				$rooms2 = [];
 				foreach ($user->getRoomRoles() as $roomRole)
 					$rooms1[] = $roomRole->getRoom();
 				foreach ($user->getTeamRoles() as $teamRole)
@@ -102,12 +102,12 @@ class UserController extends AbstractFOSRestController
 			function (array $carry, Team $item) {
 				return array_merge($carry, $this->getChildrenRecursive($item));
 			},
-			array($team));
+			[$team]);
 	}
 	//--------------------------------------------------------------------------------------------------------------------
 	private function arrayUnique(array $array): array
 	{
-		$res = array();
+		$res = [];
 		foreach ($array as $item)
 			if (in_array($item, $res))
 				continue;

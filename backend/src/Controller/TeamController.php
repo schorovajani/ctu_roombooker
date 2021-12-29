@@ -81,7 +81,7 @@ class  TeamController extends \FOS\RestBundle\Controller\AbstractFOSRestControll
 			function (array $carry, Team $item) {
 				return array_merge($carry, $this->getChildrenRecursive($item));
 			},
-			array($team));
+			[$team]);
 	}
 	//--------------------------------------------------------------------------------------------------------------------
 }

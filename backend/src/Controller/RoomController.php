@@ -36,15 +36,15 @@ class  RoomController extends \FOS\RestBundle\Controller\AbstractFOSRestControll
 				return $this->handleView($this->view($room->getRequests(), Response::HTTP_OK));
 
 			case "users":
-				$users1 = array();
-				$roles = $this->getDoctrine()->getRepository(RoomRole::class)->findBy(array("room" => $room));
+				$users1 = [];
+				$roles = $this->getDoctrine()->getRepository(RoomRole::class)->findBy(["room" => $room]);
 				foreach ($roles as $role)
 					$users1[] = $role->getUser();
 
-				$users2 = array();
+				$users2 = [];
 				$team = $room->getTeam();
 				while ($team !== null) {
-					$members = array();
+					$members = [];
 					foreach ($team->getTeamRoles() as $role)
 						$members[] = $role->getUser();
 					$users2 = array_merge($users2, $members);
