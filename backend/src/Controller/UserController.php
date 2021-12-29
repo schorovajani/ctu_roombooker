@@ -59,12 +59,12 @@ class UserController extends AbstractFOSRestController
 	{
 		switch ($attr) {
 			case "requests":
-				$data = $user->getRequests();
+				$viewData = $user->getRequests();
 				break;
 
 			case "rooms":
 				// TODO - admin?
-				$data = $this->userService->getUserRooms($user);
+				$viewData = $this->userService->getUserRooms($user);
 				break;
 
 			/*
@@ -75,6 +75,6 @@ class UserController extends AbstractFOSRestController
 			default:
 				throw $this->createNotFoundException();
 		}
-		return $this->handleView($this->view($data, Response::HTTP_OK));
+		return $this->handleView($this->view($viewData, Response::HTTP_OK));
 	}
 }

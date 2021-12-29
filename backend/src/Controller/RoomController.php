@@ -43,16 +43,17 @@ class  RoomController extends \FOS\RestBundle\Controller\AbstractFOSRestControll
 	{
 		switch ($attr) {
 			case "requests":
-				return $this->handleView($this->view($room->getRequests(), Response::HTTP_OK));
+				$viewData = $room->getRequests();
+				break;
 
 			case "users":
-				$users = $this->service->getRoomUsers($room);
-				return $this->handleView($this->view($users, Response::HTTP_OK));
+				$viewData = $this->service->getRoomUsers($room);
+				break;
 
 			default:
-				break;
+				throw $this->createNotFoundException();
 		}
-		throw $this->createNotFoundException();
+		return $this->handleView($this->view($viewData, Response::HTTP_OK));
 	}
 }
 

@@ -43,17 +43,17 @@ class  TeamController extends \FOS\RestBundle\Controller\AbstractFOSRestControll
 	{
 		switch ($attr) {
 			case "rooms":
-				$rooms = $this->service->getTeamRooms($team);
-				return $this->handleView($this->view($rooms, Response::HTTP_OK));
+				$viewData = $this->service->getTeamRooms($team);
+				break;
 
 			case "users":
-				$users = $this->service->getTeamMembers($team);
-				return $this->handleView($this->view($users, Response::HTTP_OK));
-
-			default:  // fallthrough to exception
+				$viewData = $this->service->getTeamMembers($team);
 				break;
+
+			default:
+				throw $this->createNotFoundException();
 		}
-		throw $this->createNotFoundException();
+		return $this->handleView($this->view($viewData, Response::HTTP_OK));
 	}
 }
 
