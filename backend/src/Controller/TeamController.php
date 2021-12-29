@@ -39,15 +39,9 @@ class  TeamController extends \FOS\RestBundle\Controller\AbstractFOSRestControll
 				$teams = $this->getChildrenRecursive($team);
 				$users = [];
 				foreach ($teams as $team)
-					foreach ($team->getTeamRoles() as $role) {
-						$user = $role->getUser();
-						// array_unique would've been a better choice, but it uses string comparison
-						// internally, i.e. (string)a == (string)b, hence isn't applicable.
-						if (in_array($user, $users))
-							continue;
-						else
-							$users[] = $role->getUser();
-					}
+					foreach ($team->getTeamRoles() as $role)
+						$users[] = $role->getUser();
+				$users = array_unique($users, SORT_REGULAR);
 				return $this->handleView($this->view($users, Response::HTTP_OK));
 
 			default:  // fallthrough to exception

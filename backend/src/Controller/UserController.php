@@ -72,7 +72,7 @@ class UserController extends AbstractFOSRestController
 					$rooms1[] = $roomRole->getRoom();
 				foreach ($user->getTeamRoles() as $teamRole)
 					$rooms2 = array_merge($rooms2, $this->findRooms($teamRole->getTeam()));
-				$data = $this->arrayUnique(array_merge($rooms1, $rooms2));
+				$data = array_unique(array_merge($rooms1, $rooms2), SORT_REGULAR);
 				break;
 
 			/*
@@ -103,17 +103,6 @@ class UserController extends AbstractFOSRestController
 				return array_merge($carry, $this->getChildrenRecursive($item));
 			},
 			[$team]);
-	}
-	//--------------------------------------------------------------------------------------------------------------------
-	private function arrayUnique(array $array): array
-	{
-		$res = [];
-		foreach ($array as $item)
-			if (in_array($item, $res))
-				continue;
-			else
-				$res[] = $item;
-		return $res;
 	}
 	//--------------------------------------------------------------------------------------------------------------------
 }
