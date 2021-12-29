@@ -63,15 +63,6 @@ class  TeamController extends \FOS\RestBundle\Controller\AbstractFOSRestControll
 		foreach ($children as $child)
 			$rooms = array_merge($rooms, $child->getRooms()->toArray());
 		return $rooms;
-		/*
-		$rooms = $team -> getRooms () -> toArray ();
-		// Terminating condition "hidden" inside foreach. If there are no children to this $team, $children will be empty
-		// and foreach becomes a no-op.
-		$children = $team -> getChildren (); // $this -> getDoctrine () -> getRepository ( Team::class ) -> findBy ( array ( "parent_id" => $team -> getId () ) );
-		foreach ( $children as $child )
-			$rooms = array_merge ( $rooms, $this -> findRooms ( $child ) );
-		return $rooms;
-		*/
 	}
 	//--------------------------------------------------------------------------------------------------------------------
 	private function getChildrenRecursive(Team $team): array
