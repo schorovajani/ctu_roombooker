@@ -46,12 +46,9 @@ class  TeamService
 	 */
 	public function getTeamMembers(Team $team): array
 	{
-		$teams = $this->getTeamChildrenRecursive($team);
 		$members = [];
-		foreach ($teams as $team)
-			foreach ($team->getTeamRoles() as $role)
-				$members[] = $role->getUser();
-		$members = array_unique($members, SORT_REGULAR);
+		foreach ($team->getTeamRoles() as $role)
+			$members[] = $role->getUser();
 		return $members;
 	}
 
