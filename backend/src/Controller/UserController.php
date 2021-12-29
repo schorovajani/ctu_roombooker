@@ -63,10 +63,7 @@ class UserController extends AbstractFOSRestController
 				break;
 
 			case "rooms":
-				if ($user->getIsAdmin()) {
-					$data = $this->getDoctrine()->getRepository(Room::class)->findAll();
-					break;
-				}
+				// TODO - admin?
 				$data = $this->userService->getUserRooms($user);
 				break;
 
