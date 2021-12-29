@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Room;
 use App\Entity\Team;
 use App\Entity\User;
+use App\Service\TeamService;
 use App\Service\UserService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -66,13 +67,7 @@ class UserController extends AbstractFOSRestController
 					$data = $this->getDoctrine()->getRepository(Room::class)->findAll();
 					break;
 				}
-				$rooms1 = [];
-				$rooms2 = [];
-				foreach ($user->getRoomRoles() as $roomRole)
-					$rooms1[] = $roomRole->getRoom();
-				foreach ($user->getTeamRoles() as $teamRole)
-					$rooms2 = array_merge($rooms2, $this->findRooms($teamRole->getTeam()));
-				$data = array_unique(array_merge($rooms1, $rooms2), SORT_REGULAR);
+				$data = $this->userService->getUserRooms($user);
 				break;
 
 			/*
@@ -84,25 +79,6 @@ class UserController extends AbstractFOSRestController
 				throw $this->createNotFoundException();
 		}
 		return $this->handleView($this->view($data, Response::HTTP_OK));
-	}
-	//--------------------------------------------------------------------------------------------------------------------
-	private function findRooms(Team $team): array
-	{
-		$children = $this->getChildrenRecursive($team);
-		$rooms = [];
-		foreach ($children as $child)
-			$rooms = array_merge($rooms, $child->getRooms()->toArray());
-		return $rooms;
-	}
-	//--------------------------------------------------------------------------------------------------------------------
-	private function getChildrenRecursive(Team $team): array
-	{
-		// result includes the $team itself
-		return array_reduce($team->getChildren()->toArray(),
-			function (array $carry, Team $item) {
-				return array_merge($carry, $this->getChildrenRecursive($item));
-			},
-			[$team]);
 	}
 	//--------------------------------------------------------------------------------------------------------------------
 }
