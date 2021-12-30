@@ -46,14 +46,6 @@ class User
 	private $lastName;
 
 	/**
-	 * @ORM\Column(type="boolean")
-	 *
-	 * @Assert\NotNull
-	 * @Assert\Type("bool")
-	 */
-	private $isAdmin;
-
-	/**
 	 * @ORM\OneToMany(targetEntity=Request::class, mappedBy="user")
 	 */
 	private $requests;
@@ -73,12 +65,18 @@ class User
 	 */
 	private $teamRoles;
 
+	/**
+	 * @ORM\OneToMany(targetEntity=Account::class, mappedBy="owner")
+	 */
+	private $accounts;
+
 	public function __construct()
 	{
 		$this->requests = new ArrayCollection();
 		$this->attendees = new ArrayCollection();
 		$this->roomRoles = new ArrayCollection();
 		$this->teamRoles = new ArrayCollection();
+		$this->accounts = new ArrayCollection();
 	}
 
 	public function getId(): ?int
@@ -106,18 +104,6 @@ class User
 	public function setLastName(string $lastName): self
 	{
 		$this->lastName = $lastName;
-
-		return $this;
-	}
-
-	public function getIsAdmin(): ?bool
-	{
-		return $this->isAdmin;
-	}
-
-	public function setIsAdmin(bool $isAdmin): self
-	{
-		$this->isAdmin = $isAdmin;
 
 		return $this;
 	}
@@ -233,6 +219,36 @@ class User
 			// set the owning side to null (unless already changed)
 			if ($teamRole->getUser() === $this) {
 				$teamRole->setUser(null);
+			}
+		}
+
+		return $this;
+	}
+
+	/**
+	 * @return Collection|Account[]
+	 */
+	public function getAccounts(): Collection
+	{
+		return $this->accounts;
+	}
+
+	public function addAccount(Account $account): self
+	{
+		if (!$this->accounts->contains($account)) {
+			$this->accounts[] = $account;
+			$account->setOwner($this);
+		}
+
+		return $this;
+	}
+
+	public function removeAccount(Account $account): self
+	{
+		if ($this->accounts->removeElement($account)) {
+			// set the owning side to null (unless already changed)
+			if ($account->getOwner() === $this) {
+				$account->setOwner(null);
 			}
 		}
 
