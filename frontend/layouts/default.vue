@@ -17,7 +17,7 @@
         <nuxt-link class="nav-item" to="/teams"> Skupiny </nuxt-link>
 
         <nuxt-link class="nav-item" to="/login"> Přihlásit se </nuxt-link>
-        <nuxt-link class="nav-item" to="/logout"> Odhlásit se </nuxt-link>
+        <button class="nav-item" @click="logout">Odhlásit se</button>
       </nav>
     </header>
     <Nuxt />
@@ -29,7 +29,14 @@
 </template>
 
 <script>
-export default {}
+export default {
+  methods: {
+    async logout() {
+      await this.$auth.logout()
+      console.log('odhlaseno')
+    },
+  },
+}
 //     <img class="header-polygon" src="~/assets/UI/light_polygon.png" />
 </script>
 
@@ -67,7 +74,7 @@ header {
   justify-content: space-between;
   align-items: center;
   background-color: #e6f5ff;
-  padding: 1.5rem 2rem 1.5rem 2rem;
+  padding: 0rem 2rem 0rem 2rem;
 }
 
 .header-polygon {

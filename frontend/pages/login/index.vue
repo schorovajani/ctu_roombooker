@@ -37,12 +37,12 @@ export default {
   },
   methods: {
     async submit() {
-      //await this.$auth.loginWith('cookie', {
-      //  data: {
-      //    username: this.username,
-      //    password: this.password,
-      //  },
-      //})
+      await this.$auth.loginWith('cookie', {
+        data: {
+          username: this.username,
+          password: this.password,
+        },
+      })
 
       console.log(this.$auth.loggedIn)
 
