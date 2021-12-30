@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Request;
-use App\Repository\RequestRepository;
+use App\Service\RequestService;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,14 +13,14 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class  RequestController extends \FOS\RestBundle\Controller\AbstractFOSRestController
 {
-	private RequestRepository $repo;
+	private RequestService $requestService;
 
 	/**
-	 * @param RequestRepository $repo
+	 * @param RequestService $service
 	 */
-	public function __construct(RequestRepository $repo)
+	public function __construct(RequestService $service)
 	{
-		$this->repo = $repo;
+		$this->requestService = $service;
 	}
 
 	/**
@@ -29,7 +29,7 @@ class  RequestController extends \FOS\RestBundle\Controller\AbstractFOSRestContr
 	 */
 	public function routeGetRequests(): Response
 	{
-		$requests = $this->repo->findAll();
+		$requests = $this->requestService->getAll();
 		return $this->handleView($this->view($requests, Response::HTTP_OK));
 	}
 

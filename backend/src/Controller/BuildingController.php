@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Building;
-use App\Repository\BuildingRepository;
+use App\Service\BuildingService;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,14 +13,14 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class  BuildingController extends \FOS\RestBundle\Controller\AbstractFOSRestController
 {
-	private BuildingRepository $repo;
+	private BuildingService $buildingService;
 
 	/**
-	 * @param BuildingRepository $repo
+	 * @param BuildingService $repo
 	 */
-	public function __construct(BuildingRepository $repo)
+	public function __construct(BuildingService $repo)
 	{
-		$this->repo = $repo;
+		$this->buildingService = $repo;
 	}
 
 	/**
@@ -29,7 +29,7 @@ class  BuildingController extends \FOS\RestBundle\Controller\AbstractFOSRestCont
 	 */
 	public function routeGetBuildings(): Response
 	{
-		return $this->handleView($this->view($this->repo->findAll(), Response::HTTP_OK));
+		return $this->handleView($this->view($this->buildingService->getAll(), Response::HTTP_OK));
 	}
 
 	/**
