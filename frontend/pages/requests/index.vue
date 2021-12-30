@@ -9,7 +9,7 @@
 export default {
   async asyncData({ $axios }) {
     const response = await $axios.$get(
-      `${$axios.defaults.baseURL}/api/cannotBeAccessed`
+      `${$axios.defaults.baseURL}/cannotBeAccessed`
     )
     console.log(response)
     return {
