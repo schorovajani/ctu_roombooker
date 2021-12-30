@@ -37,23 +37,35 @@ export default {
   },
   methods: {
     async submit() {
-      await this.$auth.loginWith('cookie', {
-        data: {
-          username: this.username,
-          password: this.password,
-        },
-      })
+      try {
+        const response = await this.$auth.loginWith('cookie', {
+          data: {
+            username: this.username,
+            password: this.password,
+          },
+        })
+        console.log(response.data) // login data, role resit zde na preroutovani
+      } catch (err) {
+        if (!err.response) {
+          //todo
+          console.log('Server neběží')
+        } else {
+          if (err.response.status === 401) {
+            console.log('Špatné přihlašovací údaje')
+          } else {
+            // Co muze byt vse za chyby
+            console.log('Jiná chyba')
+          }
+        }
+        //console.log(err.response.status)
+      }
 
-      console.log(this.$auth.loggedIn)
-
-      // await this.$axios.$post(`${this.$axios.defaults.baseURL}/api/login`, {
-      //   username: this.username,
-      //   password: this.password,
-      // })
-      const response = await this.$axios.$get(
-        `${this.$axios.defaults.baseURL}/api/cannotBeAccessed`
-      )
-      this.data = response
+      // console.log(this.$auth.loggedIn)
+      // console.log(this.$auth.user.firstName)
+      // const response = await this.$axios.$get(
+      // `${this.$axios.defaults.baseURL}/me`
+      // )
+      // this.data = response
     },
   },
 }
