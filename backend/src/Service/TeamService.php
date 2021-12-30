@@ -9,7 +9,6 @@ class  TeamService
 {
 	private TeamRepository $teamRepository;
 
-
 	/**
 	 * @param TeamRepository $teamRepository
 	 */
@@ -64,8 +63,6 @@ class  TeamService
 			},
 			[$team]);
 	}
-
 }
-
 
 ?>

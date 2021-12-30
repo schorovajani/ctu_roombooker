@@ -7,7 +7,6 @@ class  BuildingService
 {
 	private BuildingRepository $buildingRepository;
 
-
 	/**
 	 * @param BuildingRepository $buildingRepository
 	 */
@@ -24,6 +23,5 @@ class  BuildingService
 		return $this->buildingRepository->findAll();
 	}
 }
-
 
 ?>

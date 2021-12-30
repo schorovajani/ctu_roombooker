@@ -44,5 +44,4 @@ class  RequestController extends \FOS\RestBundle\Controller\AbstractFOSRestContr
 	}
 }
 
-
 ?>

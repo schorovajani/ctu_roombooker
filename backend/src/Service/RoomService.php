@@ -25,7 +25,6 @@ class  RoomService
 		return $this->roomRepository->findAll();
 	}
 
-
 	/**
 	 * Mirror repository's `findBy` method.
 	 * @param array $criteria
@@ -71,9 +70,6 @@ class  RoomService
 		$users = array_values($users);
 		return $users;
 	}
-
-
 }
-
 
 ?>

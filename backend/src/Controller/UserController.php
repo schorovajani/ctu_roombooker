@@ -19,7 +19,6 @@ class UserController extends AbstractFOSRestController
 {
 	private UserService $userService;
 
-
 	/**
 	 * @param UserService $userService
 	 */

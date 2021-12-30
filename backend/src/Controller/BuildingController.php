@@ -43,5 +43,4 @@ class  BuildingController extends \FOS\RestBundle\Controller\AbstractFOSRestCont
 	}
 }
 
-
 ?>

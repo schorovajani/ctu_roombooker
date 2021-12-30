@@ -14,7 +14,6 @@ class  TeamController extends \FOS\RestBundle\Controller\AbstractFOSRestControll
 {
 	private TeamService $teamService;
 
-
 	/**
 	 * @param TeamService $teamService
 	 */
@@ -56,6 +55,5 @@ class  TeamController extends \FOS\RestBundle\Controller\AbstractFOSRestControll
 		return $this->handleView($this->view($viewData, Response::HTTP_OK));
 	}
 }
-
 
 ?>
