@@ -71,5 +71,3 @@ class  RoomService
 		return $users;
 	}
 }
-
-?>

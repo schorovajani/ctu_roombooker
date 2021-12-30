@@ -23,5 +23,3 @@ class  BuildingService
 		return $this->buildingRepository->findAll();
 	}
 }
-
-?>

@@ -64,5 +64,3 @@ class  TeamService
 			[$team]);
 	}
 }
-
-?>

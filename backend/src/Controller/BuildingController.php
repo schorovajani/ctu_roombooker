@@ -42,5 +42,3 @@ class  BuildingController extends \FOS\RestBundle\Controller\AbstractFOSRestCont
 		return $this->handleView($this->view($building->getRooms(), Response::HTTP_OK));
 	}
 }
-
-?>

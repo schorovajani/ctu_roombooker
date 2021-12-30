@@ -24,5 +24,3 @@ class  RequestService
 		return $this->requestRepository->findAll();
 	}
 }
-
-?>

@@ -43,5 +43,3 @@ class  RequestController extends \FOS\RestBundle\Controller\AbstractFOSRestContr
 		return $this->handleView($this->view($request, Response::HTTP_OK));
 	}
 }
-
-?>
