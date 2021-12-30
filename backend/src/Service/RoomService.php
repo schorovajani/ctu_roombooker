@@ -25,6 +25,20 @@ class  RoomService
 		return $this->roomRepository->findAll();
 	}
 
+
+	/**
+	 * Mirror repository's `findBy` method.
+	 * @param array $criteria
+	 * @param array|null $orderBy
+	 * @param null $limit
+	 * @param null $offset
+	 * @return array
+	 */
+	public function getBy(array $criteria, array $orderBy = null, $limit = null, $offset = null): array
+	{
+		return $this->roomRepository->findBy($criteria, $orderBy, $limit, $offset);
+	}
+
 	/**
 	 * Get all users with access to Room $room.
 	 * @param Room $room
