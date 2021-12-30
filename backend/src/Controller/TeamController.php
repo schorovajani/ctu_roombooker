@@ -12,15 +12,15 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class  TeamController extends \FOS\RestBundle\Controller\AbstractFOSRestController
 {
-	private TeamService $service;
+	private TeamService $teamService;
 
 
 	/**
-	 * @param TeamService $service
+	 * @param TeamService $teamService
 	 */
-	public function __construct(TeamService $service)
+	public function __construct(TeamService $teamService)
 	{
-		$this->service = $service;
+		$this->teamService = $teamService;
 	}
 
 	/**
@@ -29,7 +29,7 @@ class  TeamController extends \FOS\RestBundle\Controller\AbstractFOSRestControll
 	 */
 	public function routeGetTeams(): Response
 	{
-		$teams = $this->service->getAll();
+		$teams = $this->teamService->getAll();
 		return $this->handleView($this->view($teams, Response::HTTP_OK));
 	}
 
@@ -43,11 +43,11 @@ class  TeamController extends \FOS\RestBundle\Controller\AbstractFOSRestControll
 	{
 		switch ($attr) {
 			case "rooms":
-				$viewData = $this->service->getTeamRooms($team);
+				$viewData = $this->teamService->getTeamRooms($team);
 				break;
 
 			case "users":
-				$viewData = $this->service->getTeamMembers($team);
+				$viewData = $this->teamService->getTeamMembers($team);
 				break;
 
 			default:

@@ -12,15 +12,15 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class  RoomController extends \FOS\RestBundle\Controller\AbstractFOSRestController
 {
-	private RoomService $service;
+	private RoomService $roomService;
 
 
 	/**
-	 * @param RoomService $service
+	 * @param RoomService $roomService
 	 */
-	public function __construct(RoomService $service)
+	public function __construct(RoomService $roomService)
 	{
-		$this->service = $service;
+		$this->roomService = $roomService;
 	}
 
 	/**
@@ -29,7 +29,7 @@ class  RoomController extends \FOS\RestBundle\Controller\AbstractFOSRestControll
 	 */
 	public function routeGetRooms(): Response
 	{
-		$rooms = $this->service->getAll();
+		$rooms = $this->roomService->getAll();
 		return $this->handleView($this->view($rooms, Response::HTTP_OK));
 	}
 
@@ -47,7 +47,7 @@ class  RoomController extends \FOS\RestBundle\Controller\AbstractFOSRestControll
 				break;
 
 			case "users":
-				$viewData = $this->service->getRoomUsers($room);
+				$viewData = $this->roomService->getRoomUsers($room);
 				break;
 
 			default:
