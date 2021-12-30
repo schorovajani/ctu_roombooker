@@ -7,15 +7,15 @@ use App\Repository\TeamRepository;
 
 class  TeamService
 {
-	private TeamRepository $repo;
+	private TeamRepository $teamRepository;
 
 
 	/**
-	 * @param TeamRepository $repo
+	 * @param TeamRepository $teamRepository
 	 */
-	public function __construct(TeamRepository $repo)
+	public function __construct(TeamRepository $teamRepository)
 	{
-		$this->repo = $repo;
+		$this->teamRepository = $teamRepository;
 	}
 
 	/**
@@ -23,7 +23,7 @@ class  TeamService
 	 */
 	public function getAll(): array
 	{
-		return $this->repo->findAll();
+		return $this->teamRepository->findAll();
 	}
 
 	/**

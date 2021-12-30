@@ -7,14 +7,14 @@ use App\Repository\RoomRepository;
 
 class  RoomService
 {
-	private RoomRepository $repo;
+	private RoomRepository $roomRepository;
 
 	/**
-	 * @param RoomRepository $repo
+	 * @param RoomRepository $roomRepository
 	 */
-	public function __construct(RoomRepository $repo)
+	public function __construct(RoomRepository $roomRepository)
 	{
-		$this->repo = $repo;
+		$this->roomRepository = $roomRepository;
 	}
 
 	/**
@@ -22,7 +22,7 @@ class  RoomService
 	 */
 	public function getAll(): array
 	{
-		return $this->repo->findAll();
+		return $this->roomRepository->findAll();
 	}
 
 	/**
