@@ -59,6 +59,17 @@ class UserService
 
 	/**
 	 * @param User $user
+	 * @return array
+	 */
+	public function getUserRequests(User $user): array
+	{
+		$created = $user->getRequests()->toArray();
+		$invitedTo = $user->getAttendees()->toArray();
+		return array_merge($created, $invitedTo);
+	}
+
+	/**
+	 * @param User $user
 	 */
 	public function save(User $user): void
 	{

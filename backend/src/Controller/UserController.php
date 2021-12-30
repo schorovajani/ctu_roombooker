@@ -58,7 +58,7 @@ class UserController extends AbstractFOSRestController
 	{
 		switch ($attr) {
 			case "requests":
-				$viewData = $user->getRequests();
+				$viewData = $this->userService->getUserRequests($user);
 				break;
 
 			case "rooms":
