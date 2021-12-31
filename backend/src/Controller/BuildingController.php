@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Building;
 use App\Service\BuildingService;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -11,20 +12,21 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/api")
  */
-class  BuildingController extends \FOS\RestBundle\Controller\AbstractFOSRestController
+class BuildingController extends AbstractFOSRestController
 {
 	private BuildingService $buildingService;
 
 	/**
-	 * @param BuildingService $repo
+	 * @param BuildingService $buildingService
 	 */
-	public function __construct(BuildingService $repo)
+	public function __construct(BuildingService $buildingService)
 	{
-		$this->buildingService = $repo;
+		$this->buildingService = $buildingService;
 	}
 
 	/**
 	 * @Rest\Get("/buildings")
+	 *
 	 * @return Response
 	 */
 	public function routeGetBuildings(): Response
@@ -33,12 +35,13 @@ class  BuildingController extends \FOS\RestBundle\Controller\AbstractFOSRestCont
 	}
 
 	/**
-	 * @Rest\Get("/buildings/{id}/rooms",requirements={"id":"\d+"})
+	 * @Rest\Get("/buildings/{id}/rooms", requirements={"id":"\d+"})
+	 *
 	 * @param Building $building
 	 * @return Response
 	 */
 	public function routeGetBuildingRooms(Building $building): Response
 	{
-		return $this->handleView($this->view($building->getRooms(), Response::HTTP_OK));
+		return $this->handleView($this->view($this->buildingService->getRooms($building), Response::HTTP_OK));
 	}
 }

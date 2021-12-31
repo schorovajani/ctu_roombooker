@@ -77,19 +77,18 @@
 * PUT = update information in request, __eg. accept request by manager__
 * DELETE = delete request
 
-
-=== Other endpoints
-
-==== BUILDINGS
+=== BUILDINGS (GET requests: OK)
 
 ./buildings
 * GET = return all building
+    ** Authorization: available for everyone, returns only information about building (rooms are not included)
 * POST = create new building
 
 ./buildings/{id}/rooms
 * GET = return all rooms in building with {id}
+    ** Authorization: only public rooms will be returned for unauthorized users, all rooms will be returned for authorized user
 
-==== ACCOUNTS
+=== ACCOUNTS
 All accounts of user will be return from user endpoint. If user/admin click to user account, then he knows ID of account and he can ask endpoint accounts directly.
 
 ./accounts
