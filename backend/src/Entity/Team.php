@@ -6,10 +6,13 @@ use App\Repository\TeamRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serialize;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=TeamRepository::class)
+ *
+ * @Serialize\ExclusionPolicy("none")
  */
 class Team
 {
@@ -17,6 +20,8 @@ class Team
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
 	 * @ORM\Column(type="integer")
+	 *
+	 * @Serialize\Groups({"listTeam", "listTeamDetailed"})
 	 */
 	private $id;
 
@@ -25,26 +30,37 @@ class Team
 	 *
 	 * @Assert\NotBlank
 	 * @Assert\Length(min=2, max=255)
+	 *
+	 * @Serialize\Groups({"listTeam", "listTeamDetailed"})
 	 */
 	private $name;
 
 	/**
 	 * @ORM\OneToMany(targetEntity=Room::class, mappedBy="team")
+	 *
+	 * @Serialize\Groups({"listTeamDetailed"})
 	 */
 	private $rooms;
 
 	/**
 	 * @ORM\OneToMany(targetEntity=TeamRole::class, mappedBy="team")
+	 *
+	 * @Serialize\MaxDepth(2)
 	 */
 	private $teamRoles;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=Team::class, inversedBy="children")
+	 *
+	 * @Serialize\Groups({"listTeamDetailed"})
+	 * @Serialize\MaxDepth(1)
 	 */
 	private $parent;
 
 	/**
 	 * @ORM\OneToMany(targetEntity=Team::class, mappedBy="parent")
+	 *
+	 * @Serialize\Groups({"listTeamDetailed"})
 	 */
 	private $children;
 

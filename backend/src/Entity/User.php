@@ -6,15 +6,14 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serialize;
 use Symfony\Component\Validator\Constraints as Assert;
-use JMS\Serializer\Annotation\ExclusionPolicy;
-use JMS\Serializer\Annotation\Expose;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="`user`")
  *
- * @ExclusionPolicy("all")
+ * @Serialize\ExclusionPolicy("none")
  */
 class User
 {
@@ -23,7 +22,7 @@ class User
 	 * @ORM\GeneratedValue
 	 * @ORM\Column(type="integer")
 	 *
-	 * @Expose
+	 * @Serialize\Groups({"listUser"})
 	 */
 	private $id;
 
@@ -32,7 +31,8 @@ class User
 	 *
 	 * @Assert\NotBlank
 	 * @Assert\Length(min=2, max=255)
-	 * @Expose
+	 *
+	 * @Serialize\Groups({"listUser"})
 	 */
 	private $firstName;
 
@@ -41,32 +41,45 @@ class User
 	 *
 	 * @Assert\NotBlank
 	 * @Assert\Length(min=2, max=255)
-	 * @Expose
+	 *
+	 * @Serialize\Groups({"listUser"})
 	 */
 	private $lastName;
 
 	/**
 	 * @ORM\OneToMany(targetEntity=Request::class, mappedBy="user")
+	 *
+	 * @Serialize\MaxDepth(2)
 	 */
 	private $requests;
 
 	/**
 	 * @ORM\ManyToMany(targetEntity=Request::class, mappedBy="attendees")
+	 *
+	 * @Serialize\MaxDepth(1)
 	 */
 	private $attendees;
 
 	/**
 	 * @ORM\OneToMany(targetEntity=RoomRole::class, mappedBy="user")
+	 *
+	 * @Serialize\Groups({"listRoomRole"})
+	 * @Serialize\MaxDepth(2)
 	 */
 	private $roomRoles;
 
 	/**
 	 * @ORM\OneToMany(targetEntity=TeamRole::class, mappedBy="user")
+	 *
+	 * @Serialize\Groups({"listTeamRole"})
+	 * @Serialize\MaxDepth(2)
 	 */
 	private $teamRoles;
 
 	/**
 	 * @ORM\OneToMany(targetEntity=Account::class, mappedBy="owner")
+	 *
+	 * @Serialize\Exclude
 	 */
 	private $accounts;
 

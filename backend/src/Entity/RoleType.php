@@ -4,10 +4,13 @@ namespace App\Entity;
 
 use App\Repository\RoleTypeRepository;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serialize;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=RoleTypeRepository::class)
+ *
+ * @Serialize\ExclusionPolicy("none")
  */
 class RoleType
 {
@@ -15,6 +18,8 @@ class RoleType
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
 	 * @ORM\Column(type="integer")
+	 *
+	 * @Serialize\Groups({"listRoomRole", "listTeamRole"})
 	 */
 	private $id;
 
@@ -23,6 +28,8 @@ class RoleType
 	 *
 	 * @Assert\NotBlank
 	 * @Assert\Length(min=5, max=255)
+	 *
+	 * @Serialize\Groups({"listRoomRole", "listTeamRole"})
 	 */
 	private $name;
 

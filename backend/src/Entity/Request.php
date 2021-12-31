@@ -21,6 +21,8 @@ class Request
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
 	 * @ORM\Column(type="integer")
+	 *
+	 * @Serialize\Groups({"listRequest"})
 	 */
 	private $id;
 
@@ -28,6 +30,8 @@ class Request
 	 * @ORM\Column(type="string", length=500)
 	 *
 	 * @Assert\Length(min=5, max=500)
+	 *
+	 * @Serialize\Groups({"listRequest"})
 	 */
 	private $description;
 
@@ -36,6 +40,8 @@ class Request
 	 *
 	 * @Assert\NotBlank
 	 * @Assert\DateTime
+	 *
+	 * @Serialize\Groups({"listRequest"})
 	 *
 	 * @var string A "Y-m-d H:i:s" formatted value
 	 */
@@ -47,6 +53,8 @@ class Request
 	 * @Assert\NotBlank
 	 * @Assert\DateTime
 	 *
+	 * @Serialize\Groups({"listRequest"})
+	 *
 	 * @var string A "Y-m-d H:i:s" formatted value
 	 */
 	private $eventEnd;
@@ -54,24 +62,32 @@ class Request
 	/**
 	 * @ORM\ManyToOne(targetEntity=Room::class, inversedBy="requests")
 	 * @ORM\JoinColumn(nullable=false)
+	 *
+	 * @Serialize\Groups({"listRequest"})
 	 */
 	private $room;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=User::class, inversedBy="requests")
 	 * @ORM\JoinColumn(nullable=false)
+	 *
+	 * @Serialize\Groups({"listRequest"})
 	 */
 	private $user;
 
 	/**
 	 * @ORM\ManyToMany(targetEntity=User::class, inversedBy="attendees")
 	 * @JoinTable(name="attendee")
+	 *
+	 * @Serialize\Groups({"listRequest"})
 	 */
 	private $attendees;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=Status::class, inversedBy="requests")
 	 * @ORM\JoinColumn(nullable=false)
+	 *
+	 * @Serialize\Groups({"listRequest"})
 	 */
 	private $status;
 

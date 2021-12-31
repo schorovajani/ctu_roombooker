@@ -38,7 +38,10 @@ class RoomController extends AbstractFOSRestController
 			$rooms = $this->roomService->getBy(["isPublic" => true]);
 		else
 			$rooms = $this->roomService->getAll();
-		return $this->handleView($this->view($rooms, Response::HTTP_OK));
+
+		$view = $this->view($rooms, Response::HTTP_OK);
+		$view->getContext()->setGroups(['listBuilding', 'listRoom', 'listTeam']);
+		return $this->handleView($view);
 	}
 
 	/**
@@ -64,6 +67,8 @@ class RoomController extends AbstractFOSRestController
 			default:
 				throw $this->createNotFoundException();
 		}
-		return $this->handleView($this->view($viewData, Response::HTTP_OK));
+		$view = $this->view($viewData, Response::HTTP_OK);
+		$view->getContext()->setGroups(['listBuilding', 'listRequest', 'listRoom', 'listRoomRole', 'listStatus', 'listUser']);
+		return $this->handleView($view);
 	}
 }

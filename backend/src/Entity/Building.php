@@ -20,6 +20,8 @@ class Building
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
 	 * @ORM\Column(type="integer")
+	 *
+	 * @Serialize\Groups({"listBuilding"})
 	 */
 	private $id;
 
@@ -28,6 +30,8 @@ class Building
 	 *
 	 * @Assert\NotBlank
 	 * @Assert\Length(min=2, max=255)
+	 *
+	 * @Serialize\Groups({"listBuilding"})
 	 */
 	private $name;
 

@@ -22,10 +22,11 @@
 * GET = return all accounts of user with {id}
 * POST = create account to user with {id}
 
-=== TEAMS
+=== TEAMS (GET requests: OK)
 
 ./teams
 * GET = return all teams
+    ** Authorization: available for authenticated users
 * POST = create team
 
 ./teams/{id}
@@ -34,10 +35,12 @@
 
 ./teams/{id}/rooms
 * GET = return all rooms manages by team with {id}
+    ** Authorization: available for authenticated users
 * POST = add room/s to team with {id}
 
 ./teams/{id}/users
 * GET = return all users in team with {id}
+    ** Authorization: available for authenticated users
 * POST = add user/s to team with {id}
 
 ./teams/{id_t}/users/{id_u}

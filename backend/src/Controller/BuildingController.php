@@ -42,6 +42,8 @@ class BuildingController extends AbstractFOSRestController
 	 */
 	public function routeGetBuildingRooms(Building $building): Response
 	{
-		return $this->handleView($this->view($this->buildingService->getRooms($building), Response::HTTP_OK));
+		$view = $this->view($this->buildingService->getRooms($building), Response::HTTP_OK);
+		$view->getContext()->setGroups(['listBuilding', 'listRoom', 'listTeam']);
+		return $this->handleView($view);
 	}
 }

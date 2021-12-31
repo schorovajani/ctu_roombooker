@@ -22,6 +22,7 @@ class Status
 	 * @ORM\Column(type="integer")
 	 *
 	 * @Serialize\Expose
+	 * @Serialize\Groups({"listStatus"})
 	 */
 	private $id;
 
@@ -32,6 +33,7 @@ class Status
 	 * @Assert\Length(min=3, max=255)
 	 *
 	 * @Serialize\Expose
+	 * @Serialize\Groups({"listStatus"})
 	 */
 	private $name;
 

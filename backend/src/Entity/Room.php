@@ -23,6 +23,7 @@ class Room
 	 * @ORM\Column(type="integer")
 	 *
 	 * @Serialize\Expose
+	 * @Serialize\Groups({"listRoom"})
 	 */
 	private $id;
 
@@ -33,6 +34,7 @@ class Room
 	 * @Assert\Length(min=3, max=255)
 	 *
 	 * @Serialize\Expose
+	 * @Serialize\Groups({"listRoom"})
 	 */
 	private $name;
 
@@ -43,6 +45,7 @@ class Room
 	 * @Assert\Type("bool")
 	 *
 	 * @Serialize\Expose
+	 * @Serialize\Groups({"listRoom"})
 	 */
 	private $isPublic;
 
@@ -51,8 +54,6 @@ class Room
 	 *
 	 * @Assert\NotNull
 	 * @Assert\Type("bool")
-	 *
-	 * @Serialize\Expose
 	 */
 	private $isLocked;
 
@@ -61,6 +62,7 @@ class Room
 	 * @ORM\JoinColumn(nullable=false)
 	 *
 	 * @Serialize\Expose
+	 * @Serialize\Groups({"listRoom"})
 	 * @Serialize\MaxDepth(1)
 	 */
 	private $building;
@@ -70,6 +72,7 @@ class Room
 	 * @ORM\JoinColumn(nullable=false)
 	 *
 	 * @Serialize\Expose
+	 * @Serialize\Groups({"listTeam"})
 	 * @Serialize\MaxDepth(1)
 	 */
 	private $team;

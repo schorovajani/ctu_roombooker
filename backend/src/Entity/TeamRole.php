@@ -4,9 +4,12 @@ namespace App\Entity;
 
 use App\Repository\TeamRoleRepository;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serialize;
 
 /**
  * @ORM\Entity(repositoryClass=TeamRoleRepository::class)
+ *
+ * @Serialize\ExclusionPolicy("none")
  */
 class TeamRole
 {
@@ -21,12 +24,16 @@ class TeamRole
 	 * @ORM\Id
 	 * @ORM\ManyToOne(targetEntity=Team::class, inversedBy="teamRoles")
 	 * @ORM\JoinColumn(nullable=false)
+	 *
+	 * @Serialize\Groups({"listTeamRole"})
 	 */
 	private $team;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=RoleType::class)
 	 * @ORM\JoinColumn(nullable=false)
+	 *
+	 * @Serialize\Groups({"listTeamRole"})
 	 */
 	private $roleType;
 

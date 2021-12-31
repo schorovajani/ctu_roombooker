@@ -1,16 +1,19 @@
 <?php
+
 namespace App\Controller;
 
 use App\Entity\Team;
 use App\Service\TeamService;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/api")
  */
-class  TeamController extends \FOS\RestBundle\Controller\AbstractFOSRestController
+class TeamController extends AbstractFOSRestController
 {
 	private TeamService $teamService;
 
@@ -24,16 +27,21 @@ class  TeamController extends \FOS\RestBundle\Controller\AbstractFOSRestControll
 
 	/**
 	 * @Rest\Get("/teams")
+	 * @IsGranted("IS_AUTHENTICATED_REMEMBERED")
+	 *
 	 * @return Response
 	 */
 	public function routeGetTeams(): Response
 	{
-		$teams = $this->teamService->getAll();
-		return $this->handleView($this->view($teams, Response::HTTP_OK));
+		$view = $this->view($this->teamService->getAll(), Response::HTTP_OK);
+		$view->getContext()->setGroups(['listBuilding', 'listRoom', 'listTeamDetailed']);
+		return $this->handleView($view);
 	}
 
 	/**
 	 * @Rest\Get("/teams/{id}/{attr}", requirements={"id": "\d+"})
+	 * @IsGranted("IS_AUTHENTICATED_REMEMBERED")
+	 *
 	 * @param Team $team
 	 * @param string $attr
 	 * @return Response
@@ -52,6 +60,8 @@ class  TeamController extends \FOS\RestBundle\Controller\AbstractFOSRestControll
 			default:
 				throw $this->createNotFoundException();
 		}
-		return $this->handleView($this->view($viewData, Response::HTTP_OK));
+		$view = $this->view($viewData, Response::HTTP_OK);
+		$view->getContext()->setGroups(['listBuilding', 'listRoom', 'listTeam', 'listTeamRole', 'listUser']);
+		return $this->handleView($view);
 	}
 }
