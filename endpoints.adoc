@@ -66,14 +66,16 @@
 ./rooms/{id_r}/users/{id_u}
 * DELETE = remove user room role 
 
-=== REQUESTS
+=== REQUESTS (GET requests: OK)
 
 ./requests
 * GET = return all requests
+    ** Authorization: available only for admins
 * POST = create request by everyone (will be different in sent information)
 
 ./requests/{id}
 * GET = return request with {id}
+    ** Authorization: available for authenticated users
 * PUT = update information in request, __eg. accept request by manager__
 * DELETE = delete request
 

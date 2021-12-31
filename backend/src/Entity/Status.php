@@ -6,10 +6,13 @@ use App\Repository\StatusRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serialize;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=StatusRepository::class)
+ *
+ * @Serialize\ExclusionPolicy("all")
  */
 class Status
 {
@@ -17,6 +20,8 @@ class Status
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
 	 * @ORM\Column(type="integer")
+	 *
+	 * @Serialize\Expose
 	 */
 	private $id;
 
@@ -25,6 +30,8 @@ class Status
 	 *
 	 * @Assert\NotBlank
 	 * @Assert\Length(min=3, max=255)
+	 *
+	 * @Serialize\Expose
 	 */
 	private $name;
 

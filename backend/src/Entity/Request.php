@@ -7,10 +7,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinTable;
+use JMS\Serializer\Annotation as Serialize;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=RequestRepository::class)
+ *
+ * @Serialize\ExclusionPolicy("none")
  */
 class Request
 {
@@ -33,6 +36,7 @@ class Request
 	 *
 	 * @Assert\NotBlank
 	 * @Assert\DateTime
+	 *
 	 * @var string A "Y-m-d H:i:s" formatted value
 	 */
 	private $eventStart;
@@ -42,6 +46,7 @@ class Request
 	 *
 	 * @Assert\NotBlank
 	 * @Assert\DateTime
+	 *
 	 * @var string A "Y-m-d H:i:s" formatted value
 	 */
 	private $eventEnd;
