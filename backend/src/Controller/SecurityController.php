@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Account;
+use App\Service\UserService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -14,6 +15,13 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class SecurityController extends AbstractFOSRestController
 {
+	private UserService $userService;
+
+	public function __construct(UserService $userService)
+	{
+		$this->userService = $userService;
+	}
+
 	/**
 	 * @Rest\Post("/login", name="app_login")
 	 *
@@ -63,6 +71,19 @@ class SecurityController extends AbstractFOSRestController
 			'firstName' => $loggedInAccount->getOwner()->getFirstName(),
 			'lastName' => $loggedInAccount->getOwner()->getLastName(),
 			'username' => $loggedInAccount->getUserIdentifier(),
+			'scope' => $this->getUserRoles(),
 		], Response::HTTP_OK);
+	}
+
+	/**
+	 * @return array
+	 */
+	private function getUserRoles(): array
+	{
+		$roles = $this->userService->getUserRolesOverview($this->getUser()->getOwner());
+		if ($this->isGranted('ROLE_ADMIN'))
+			$roles[] = 'admin';
+
+		return $roles;
 	}
 }

@@ -70,6 +70,24 @@ class UserService
 
 	/**
 	 * @param User $user
+	 * @return array
+	 */
+	public function getUserRolesOverview(User $user): array
+	{
+		$roles = [];
+		foreach ($user->getRoomRoles() as $role)
+			if (!in_array('room' . $role->getRoleType()->getName(), $roles))
+				$roles[] = 'room' . $role->getRoleType()->getName();
+
+		foreach ($user->getTeamRoles() as $role)
+			if (!in_array('team' . $role->getRoleType()->getName(), $roles))
+				$roles[] = 'team' . $role->getRoleType()->getName();
+
+		return $roles;
+	}
+
+	/**
+	 * @param User $user
 	 */
 	public function save(User $user): void
 	{
