@@ -39,7 +39,7 @@ class BuildingService
 	 */
 	public function getRooms(Building $building): array
 	{
-		if ($this->security->isGranted('ROLE_USER'))
+		if ($this->security->isGranted('IS_AUTHENTICATED_REMEMBERED'))
 			return $building->getRooms()->toArray();
 
 		return $this->roomRepository->findBy([

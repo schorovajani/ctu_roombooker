@@ -43,10 +43,11 @@
 ./teams/{id_t}/users/{id_u}
 * DELETE = delete user team role
 
-=== ROOMS
+=== ROOMS (GET requests: OK)
 
 ./rooms
 * GET = return all rooms
+    ** Authorization: only public rooms will be returned for unauthorized users, all rooms will be returned for authorized user
 * POST = create new room by administrator
 
 ./rooms/{id}
@@ -58,9 +59,11 @@
 
 ./rooms/{id}/requests
 * GET = return all requests for room with {id}
+    ** Authorization: available for authenticated users
 
 ./rooms/{id}/users
 * GET = return all members of room
+    ** Authorization: available only for admins and for managers of room with {id}
 * POST = add user to room role
 
 ./rooms/{id_r}/users/{id_u}
@@ -100,7 +103,3 @@ All accounts of user will be return from user endpoint. If user/admin click to u
 * GET = return account with {id}
 * PUT = update information about account with {id}
 * DELETE = delete account with {id}
-
-
-
-

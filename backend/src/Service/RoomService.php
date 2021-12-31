@@ -5,8 +5,10 @@ namespace App\Service;
 use App\Entity\Room;
 use App\Repository\RoomRepository;
 
-class  RoomService
+class RoomService
 {
+	const ROLE_MANAGER = 'Manager';
+
 	private RoomRepository $roomRepository;
 
 	/**
@@ -40,22 +42,26 @@ class  RoomService
 
 	/**
 	 * Get all users with access to Room $room.
+	 *
 	 * @param Room $room
+	 * @param bool $onlyManagers
 	 * @return array
 	 */
-	public function getRoomUsers(Room $room): array
+	public function getRoomUsers(Room $room, bool $onlyManagers = false): array
 	{
 		$users1 = [];
 		$roles = $room->getRoomRoles();
 		foreach ($roles as $role)
-			$users1[] = $role->getUser();
+			if (!$onlyManagers || $role->getRoleType()->getName() === self::ROLE_MANAGER)
+				$users1[] = $role->getUser();
 
 		$users2 = [];
 		$team = $room->getTeam();
 		while ($team !== null) {
 			$members = [];
 			foreach ($team->getTeamRoles() as $role)
-				$members[] = $role->getUser();
+				if (!$onlyManagers || $role->getRoleType()->getName() === self::ROLE_MANAGER)
+					$members[] = $role->getUser();
 			$users2 = array_merge($users2, $members);
 			$team = $team->getParent();
 		}
@@ -67,7 +73,6 @@ class  RoomService
 		// > [...] If multiple elements compare equal under the given flags, then the key and value of the first equal
 		// > element will be retained.
 		// It is possible that other places where array_unique is used are affected
-		$users = array_values($users);
-		return $users;
+		return array_values($users);
 	}
 }
