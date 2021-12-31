@@ -8,13 +8,16 @@
         <button>right</button>
       </div>
     </div>
-    <v-calendar
-      ref="calendar"
-      type="week"
-      :now="today"
-      :weekdays="weekdays"
-      :events="events"
-    ></v-calendar>
+    <v-app>
+      <v-calendar
+        ref="calendar"
+        type="week"
+        :now="today"
+        color="color"
+        :weekdays="weekdays"
+        :events="events"
+      ></v-calendar>
+    </v-app>
   </section>
 </template>
 
@@ -24,19 +27,19 @@ export default {
     return {
       building: 'T9',
       room: '343',
-      now: new Date('2021-12-15'),
+      now: new Date(),
       weekdays: [1, 2, 3, 4, 5, 6, 0],
       color: 'red',
       events: [
         {
           name: 'title1',
-          start: '2021-12-22 09:00',
-          end: '2021-12-22 11:00',
+          start: '2021-12-30 09:00',
+          end: '2021-12-30 11:00',
         },
         {
           name: 'title2',
-          start: '2021-12-21 14:00',
-          end: '2021-12-21 15:00',
+          start: '2021-12-31 14:00',
+          end: '2021-12-31 15:00',
         },
       ],
     }

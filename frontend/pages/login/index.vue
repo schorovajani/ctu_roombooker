@@ -60,7 +60,8 @@ export default {
         //console.log(err.response.status)
       }
 
-      // console.log(this.$auth.loggedIn)
+      console.log(this.$auth.loggedIn)
+      console.log(this.$auth.hasScope('roomManager'))
       // console.log(this.$auth.user.firstName)
       // const response = await this.$axios.$get(
       // `${this.$axios.defaults.baseURL}/me`

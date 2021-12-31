@@ -1,20 +1,11 @@
 <template>
   <div>
-    <h2>testing</h2>
-    <p>{{ response }}</p>
+    <h2>Rezervace</h2>
   </div>
 </template>
 
 <script>
 export default {
-  async asyncData({ $axios }) {
-    const response = await $axios.$get(
-      `${$axios.defaults.baseURL}/cannotBeAccessed`
-    )
-    console.log(response)
-    return {
-      response,
-    }
-  },
+  middleware: 'isManager',
 }
 </script>
