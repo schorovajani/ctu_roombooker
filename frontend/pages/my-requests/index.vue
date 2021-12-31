@@ -1,9 +1,9 @@
 <template>
-  <h2>Místnosti</h2>
+  <h2>Moje rezervace</h2>
 </template>
 
 <script>
 export default {
-  middleware: ['isGroupManager'],
+  middleware: ['auth'],
 }
 </script>
