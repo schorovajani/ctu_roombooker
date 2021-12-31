@@ -6,9 +6,7 @@
       <nav>
         <nuxt-link class="nav-item" to="/"> Domů </nuxt-link>
         <!-- přihlášený uživatel -->
-        <nuxt-link class="nav-item" to="/requests/user">
-          Mé rezervace
-        </nuxt-link>
+        <nuxt-link class="nav-item" to="/my-requests"> Mé rezervace </nuxt-link>
         <!-- správce místnosti, skupiny, administrátor -->
         <nuxt-link class="nav-item" to="/requests"> Rezervace </nuxt-link>
         <!-- správce skupiny, administrátor -->
@@ -21,6 +19,7 @@
       </nav>
     </header>
     <Nuxt />
+    <AlertBar />
     <footer>
       <span>Semestrální práce BI-TWA</span>
       <span>Tým Nováčci</span>
@@ -29,7 +28,9 @@
 </template>
 
 <script>
+import AlertBar from '~/components/UI/AlertBar.vue'
 export default {
+  components: { AlertBar },
   methods: {
     async logout() {
       await this.$auth.logout()
