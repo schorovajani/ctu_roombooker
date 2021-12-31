@@ -6,16 +6,28 @@
       <nav>
         <nuxt-link class="nav-item" to="/"> Domů </nuxt-link>
         <!-- přihlášený uživatel -->
-        <nuxt-link class="nav-item" to="/my-requests"> Mé rezervace </nuxt-link>
+        <nuxt-link v-if="isAuthenticated" class="nav-item" to="/my-requests">
+          Mé rezervace
+        </nuxt-link>
         <!-- správce místnosti, skupiny, administrátor -->
-        <nuxt-link class="nav-item" to="/requests"> Rezervace </nuxt-link>
+        <nuxt-link v-if="isManagerOrAdmin" class="nav-item" to="/requests">
+          Rezervace
+        </nuxt-link>
         <!-- správce skupiny, administrátor -->
-        <nuxt-link class="nav-item" to="/rooms"> Místnosti </nuxt-link>
+        <nuxt-link v-if="isGroupManagerOrAdmin" class="nav-item" to="/rooms">
+          Místnosti
+        </nuxt-link>
         <!-- administrátor -->
-        <nuxt-link class="nav-item" to="/teams"> Skupiny </nuxt-link>
+        <nuxt-link v-if="isAdmin" class="nav-item" to="/teams">
+          Skupiny
+        </nuxt-link>
 
-        <nuxt-link class="nav-item" to="/login"> Přihlásit se </nuxt-link>
-        <button class="nav-item" @click="logout">Odhlásit se</button>
+        <nuxt-link v-if="!isAuthenticated" class="nav-item" to="/login">
+          Přihlásit se
+        </nuxt-link>
+        <button v-if="isAuthenticated" class="nav-item" @click="logout">
+          Odhlásit se
+        </button>
       </nav>
     </header>
     <Nuxt />
@@ -31,6 +43,24 @@
 import AlertBar from '~/components/UI/AlertBar.vue'
 export default {
   components: { AlertBar },
+  computed: {
+    isAuthenticated() {
+      return this.$auth.loggedIn
+    },
+    isManagerOrAdmin() {
+      return (
+        this.$auth.hasScope('admin') ||
+        this.$auth.hasScope('roomManager') ||
+        this.$auth.hasScope('groupManager')
+      )
+    },
+    isGroupManagerOrAdmin() {
+      return this.$auth.hasScope('admin') || this.$auth.hasScope('groupManager')
+    },
+    isAdmin() {
+      return this.$auth.hasScope('admin')
+    },
+  },
   methods: {
     async logout() {
       await this.$auth.logout()
@@ -92,9 +122,15 @@ h1 {
   font-size: 2.2vw;
   margin-left: 3rem;
 }
-
+nav {
+  height: 4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 .nav-item {
-  padding: 1.4rem;
+  height: 100%;
+  padding: 1.5rem;
 }
 
 .nav-item:hover {
