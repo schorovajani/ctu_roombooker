@@ -86,7 +86,7 @@
 
 ./buildings
 * GET = return all building
-    ** Authorization: available for everyone, returns only information about building (rooms are not included)
+    ** Authorization: available for everyone, only public rooms will be returned for unauthorized users, all rooms will be returned for authorized user
 * POST = create new building
 
 ./buildings/{id}/rooms

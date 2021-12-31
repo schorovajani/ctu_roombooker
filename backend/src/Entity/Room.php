@@ -13,6 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass=RoomRepository::class)
  *
  * @Serialize\ExclusionPolicy("all")
+ * @Serialize\Exclude(if="!is_granted('IS_AUTHENTICATED_REMEMBERED') && !object.getIsPublic()")
  */
 class Room
 {
@@ -60,6 +61,7 @@ class Room
 	 * @ORM\JoinColumn(nullable=false)
 	 *
 	 * @Serialize\Expose
+	 * @Serialize\MaxDepth(1)
 	 */
 	private $building;
 
