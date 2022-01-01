@@ -46,7 +46,6 @@ class RoomController extends AbstractFOSRestController
 
 	/**
 	 * @Rest\Get("/rooms/{id}/{attr}", requirements={"id": "\d+"})
-	 * @IsGranted("IS_AUTHENTICATED_REMEMBERED")
 	 *
 	 * @param Room $room
 	 * @param string $attr
@@ -56,19 +55,24 @@ class RoomController extends AbstractFOSRestController
 	{
 		switch ($attr) {
 			case "requests":
-				$viewData = $room->getRequests();
-				break;
+				if (!$room->getIsPublic() && !$this->isGranted('IS_AUTHENTICATED_REMEMBERED'))
+					throw $this->createAccessDeniedException();
+
+				$view = $this->view($room->getRequests(), Response::HTTP_OK);
+				if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED'))
+					$view->getContext()->setGroups(['listBuilding', 'listRequest', 'listRoom', 'listStatus', 'listUser']);
+				else
+					$view->getContext()->setGroups(['listBuilding', 'listRequestMinimal', 'listRoom', 'listStatus']);
+				return $this->handleView($view);
 
 			case "users":
 				$this->denyAccessUnlessGranted('GET_ROOM_USERS', $room);
-				$viewData = $this->roomService->getRoomUsers($room);
-				break;
+				$view = $this->view($this->roomService->getRoomUsers($room), Response::HTTP_OK);
+				$view->getContext()->setGroups(['listRoom', 'listRoomRole', 'listUser']);
+				return $this->handleView($view);
 
 			default:
 				throw $this->createNotFoundException();
 		}
-		$view = $this->view($viewData, Response::HTTP_OK);
-		$view->getContext()->setGroups(['listBuilding', 'listRequest', 'listRoom', 'listRoomRole', 'listStatus', 'listUser']);
-		return $this->handleView($view);
 	}
 }

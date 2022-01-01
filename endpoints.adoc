@@ -22,7 +22,7 @@
 * GET = return all accounts of user with {id}
 * POST = create account to user with {id}
 
-=== TEAMS (GET requests: OK)
+=== TEAMS (GET requests: FINISHED)
 
 ./teams
 * GET = return all teams
@@ -40,13 +40,13 @@
 
 ./teams/{id}/users
 * GET = return all users in team with {id}
-    ** Authorization: available for authenticated users
+    ** Authorization: available only for admins and for managers of team with {id}
 * POST = add user/s to team with {id}
 
 ./teams/{id_t}/users/{id_u}
 * DELETE = delete user team role
 
-=== ROOMS (GET requests: OK)
+=== ROOMS (GET requests: FINISHED)
 
 ./rooms
 * GET = return all rooms
@@ -62,7 +62,7 @@
 
 ./rooms/{id}/requests
 * GET = return all requests for room with {id}
-    ** Authorization: available for authenticated users
+    ** Authorization: available for everyone, authenticated user gets also information about owner and attendees
 
 ./rooms/{id}/users
 * GET = return all members of room
@@ -72,11 +72,11 @@
 ./rooms/{id_r}/users/{id_u}
 * DELETE = remove user room role 
 
-=== REQUESTS (GET requests: OK)
+=== REQUESTS (GET requests: FINISHED)
 
 ./requests
-* GET = return all requests
-    ** Authorization: available only for admins
+* GET = returns requests which can logged-in user manage (approve/deny), it includes also requests which are already approved
+    ** Authorization: available for authenticated users
 * POST = create request by everyone (will be different in sent information)
 
 ./requests/{id}
@@ -85,7 +85,7 @@
 * PUT = update information in request, __eg. accept request by manager__
 * DELETE = delete request
 
-=== BUILDINGS (GET requests: OK)
+=== BUILDINGS (GET requests: FINISHED)
 
 ./buildings
 * GET = return all building

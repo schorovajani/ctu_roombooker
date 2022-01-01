@@ -21,7 +21,7 @@ class Team
 	 * @ORM\GeneratedValue
 	 * @ORM\Column(type="integer")
 	 *
-	 * @Serialize\Groups({"listTeam", "listTeamDetailed"})
+	 * @Serialize\Groups({"listTeam"})
 	 */
 	private $id;
 
@@ -31,14 +31,14 @@ class Team
 	 * @Assert\NotBlank
 	 * @Assert\Length(min=2, max=255)
 	 *
-	 * @Serialize\Groups({"listTeam", "listTeamDetailed"})
+	 * @Serialize\Groups({"listTeam"})
 	 */
 	private $name;
 
 	/**
 	 * @ORM\OneToMany(targetEntity=Room::class, mappedBy="team")
 	 *
-	 * @Serialize\Groups({"listTeamDetailed"})
+	 * @Serialize\Groups({"listTeamDetails"})
 	 */
 	private $rooms;
 
@@ -52,7 +52,7 @@ class Team
 	/**
 	 * @ORM\ManyToOne(targetEntity=Team::class, inversedBy="children")
 	 *
-	 * @Serialize\Groups({"listTeamDetailed"})
+	 * @Serialize\Groups({"listTeamDetails"})
 	 * @Serialize\MaxDepth(1)
 	 */
 	private $parent;
@@ -60,7 +60,7 @@ class Team
 	/**
 	 * @ORM\OneToMany(targetEntity=Team::class, mappedBy="parent")
 	 *
-	 * @Serialize\Groups({"listTeamDetailed"})
+	 * @Serialize\Groups({"listTeamDetails"})
 	 */
 	private $children;
 

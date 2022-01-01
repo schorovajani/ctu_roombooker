@@ -22,7 +22,7 @@ class Request
 	 * @ORM\GeneratedValue
 	 * @ORM\Column(type="integer")
 	 *
-	 * @Serialize\Groups({"listRequest"})
+	 * @Serialize\Groups({"listRequest", "listRequestMinimal"})
 	 */
 	private $id;
 
@@ -31,7 +31,7 @@ class Request
 	 *
 	 * @Assert\Length(min=5, max=500)
 	 *
-	 * @Serialize\Groups({"listRequest"})
+	 * @Serialize\Groups({"listRequest", "listRequestMinimal"})
 	 */
 	private $description;
 
@@ -41,7 +41,7 @@ class Request
 	 * @Assert\NotBlank
 	 * @Assert\DateTime
 	 *
-	 * @Serialize\Groups({"listRequest"})
+	 * @Serialize\Groups({"listRequest", "listRequestMinimal"})
 	 *
 	 * @var string A "Y-m-d H:i:s" formatted value
 	 */
@@ -53,7 +53,7 @@ class Request
 	 * @Assert\NotBlank
 	 * @Assert\DateTime
 	 *
-	 * @Serialize\Groups({"listRequest"})
+	 * @Serialize\Groups({"listRequest", "listRequestMinimal"})
 	 *
 	 * @var string A "Y-m-d H:i:s" formatted value
 	 */
@@ -63,7 +63,7 @@ class Request
 	 * @ORM\ManyToOne(targetEntity=Room::class, inversedBy="requests")
 	 * @ORM\JoinColumn(nullable=false)
 	 *
-	 * @Serialize\Groups({"listRequest"})
+	 * @Serialize\Groups({"listRequest", "listRequestMinimal"})
 	 */
 	private $room;
 
@@ -87,7 +87,7 @@ class Request
 	 * @ORM\ManyToOne(targetEntity=Status::class, inversedBy="requests")
 	 * @ORM\JoinColumn(nullable=false)
 	 *
-	 * @Serialize\Groups({"listRequest"})
+	 * @Serialize\Groups({"listRequest", "listRequestMinimal"})
 	 */
 	private $status;
 

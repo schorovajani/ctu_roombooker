@@ -3,10 +3,13 @@
 namespace App\Service;
 
 use App\Entity\Team;
+use App\Entity\User;
 use App\Repository\TeamRepository;
 
 class  TeamService
 {
+	const ROLE_MANAGER = 'Manager';
+
 	private TeamRepository $teamRepository;
 
 	/**
@@ -62,5 +65,22 @@ class  TeamService
 				return array_merge($carry, $this->getTeamChildrenRecursive($item));
 			},
 			[$team]);
+	}
+
+	/**
+	 * @param Team $team
+	 * @return User[]
+	 */
+	public function getTeamManagers(Team $team): array
+	{
+		$managers = [];
+		while ($team !== null) {
+			foreach ($team->getTeamRoles() as $role) {
+				if ($role->getRoleType()->getName() === self::ROLE_MANAGER)
+					$managers[] = $role->getUser();
+			}
+			$team = $team->getParent();
+		}
+		return $managers;
 	}
 }

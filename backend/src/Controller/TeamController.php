@@ -34,7 +34,7 @@ class TeamController extends AbstractFOSRestController
 	public function routeGetTeams(): Response
 	{
 		$view = $this->view($this->teamService->getAll(), Response::HTTP_OK);
-		$view->getContext()->setGroups(['listBuilding', 'listRoom', 'listTeamDetailed']);
+		$view->getContext()->setGroups(['listBuilding', 'listRoom', 'listTeam', 'listTeamDetails']);
 		return $this->handleView($view);
 	}
 
@@ -54,6 +54,7 @@ class TeamController extends AbstractFOSRestController
 				break;
 
 			case "users":
+				$this->denyAccessUnlessGranted('GET_TEAM_USERS', $team);
 				$viewData = $this->teamService->getTeamMembers($team);
 				break;
 

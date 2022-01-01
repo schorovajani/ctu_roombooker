@@ -2,10 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Room;
-use App\Entity\Team;
 use App\Entity\User;
-use App\Service\TeamService;
 use App\Service\UserService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -62,7 +59,6 @@ class UserController extends AbstractFOSRestController
 				break;
 
 			case "rooms":
-				// TODO - admin?
 				$viewData = $this->userService->getUserRooms($user);
 				break;
 

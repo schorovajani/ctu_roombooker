@@ -26,14 +26,16 @@ class RequestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * Returns requests which can logged-in user manage (approve/deny), it includes also requests which are already approved
+	 *
 	 * @Rest\Get("/requests")
-	 * @IsGranted("ROLE_ADMIN")
+	 * @IsGranted("IS_AUTHENTICATED_REMEMBERED")
 	 *
 	 * @return Response
 	 */
 	public function routeGetRequests(): Response
 	{
-		$view = $this->view($this->requestService->getAll(), Response::HTTP_OK);
+		$view = $this->view($this->requestService->getManageableRequests(), Response::HTTP_OK);
 		$view->getContext()->setGroups(['listBuilding', 'listRequest', 'listRoom', 'listStatus', 'listUser']);
 		return $this->handleView($view);
 	}
