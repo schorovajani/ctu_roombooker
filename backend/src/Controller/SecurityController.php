@@ -80,9 +80,20 @@ class SecurityController extends AbstractFOSRestController
 	 */
 	private function getUserRoles(): array
 	{
-		$roles = $this->userService->getUserRolesOverview($this->getUser()->getOwner());
+		/** @var Account $loggedInAccount */
+		$loggedInAccount = $this->getUser();
+		$roles = [];
+
 		if ($this->isGranted('ROLE_ADMIN'))
 			$roles[] = 'admin';
+
+		foreach ($loggedInAccount->getOwner()->getRoomRoles() as $role)
+			if (!in_array('room' . $role->getRoleType()->getName(), $roles))
+				$roles[] = 'room' . $role->getRoleType()->getName();
+
+		foreach ($loggedInAccount->getOwner()->getTeamRoles() as $role)
+			if (!in_array('team' . $role->getRoleType()->getName(), $roles))
+				$roles[] = 'team' . $role->getRoleType()->getName();
 
 		return $roles;
 	}

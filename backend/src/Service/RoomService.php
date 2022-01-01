@@ -2,13 +2,12 @@
 
 namespace App\Service;
 
+use App\Entity\RoleType;
 use App\Entity\Room;
 use App\Repository\RoomRepository;
 
 class RoomService
 {
-	const ROLE_MANAGER = 'Manager';
-
 	private RoomRepository $roomRepository;
 
 	/**
@@ -52,7 +51,7 @@ class RoomService
 		$users1 = [];
 		$roles = $room->getRoomRoles();
 		foreach ($roles as $role)
-			if (!$onlyManagers || $role->getRoleType()->getName() === self::ROLE_MANAGER)
+			if (!$onlyManagers || $role->getRoleType()->getName() === RoleType::ROLE_MANAGER)
 				$users1[] = $role->getUser();
 
 		$users2 = [];
@@ -60,7 +59,7 @@ class RoomService
 		while ($team !== null) {
 			$members = [];
 			foreach ($team->getTeamRoles() as $role)
-				if (!$onlyManagers || $role->getRoleType()->getName() === self::ROLE_MANAGER)
+				if (!$onlyManagers || $role->getRoleType()->getName() === RoleType::ROLE_MANAGER)
 					$members[] = $role->getUser();
 			$users2 = array_merge($users2, $members);
 			$team = $team->getParent();

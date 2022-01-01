@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\Account;
+use App\Entity\RoleType;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -10,8 +11,6 @@ use Symfony\Component\Security\Core\Security;
 
 class UserService
 {
-	const ROLE_MANAGER = 'Manager';
-
 	private UserRepository $userRepository;
 	private EntityManagerInterface $entityManager;
 	private TeamService $teamService;
@@ -70,10 +69,10 @@ class UserService
 		$rooms1 = [];
 		$rooms2 = [];
 		foreach ($user->getRoomRoles() as $roomRole)
-			if (!$onlyManagedRooms || $roomRole->getRoleType()->getName() === self::ROLE_MANAGER)
+			if (!$onlyManagedRooms || $roomRole->getRoleType()->getName() === RoleType::ROLE_MANAGER)
 				$rooms1[] = $roomRole->getRoom();
 		foreach ($user->getTeamRoles() as $teamRole)
-			if (!$onlyManagedRooms || $teamRole->getRoleType()->getName() === self::ROLE_MANAGER)
+			if (!$onlyManagedRooms || $teamRole->getRoleType()->getName() === RoleType::ROLE_MANAGER)
 				$rooms2 = array_merge($rooms2, $this->teamService->getTeamRooms($teamRole->getTeam()));
 
 		return array_unique(array_merge($rooms1, $rooms2), SORT_REGULAR);
@@ -88,24 +87,6 @@ class UserService
 		$created = $user->getRequests()->toArray();
 		$invitedTo = $user->getAttendees()->toArray();
 		return array_merge($created, $invitedTo);
-	}
-
-	/**
-	 * @param User $user
-	 * @return array
-	 */
-	public function getUserRolesOverview(User $user): array
-	{
-		$roles = [];
-		foreach ($user->getRoomRoles() as $role)
-			if (!in_array('room' . $role->getRoleType()->getName(), $roles))
-				$roles[] = 'room' . $role->getRoleType()->getName();
-
-		foreach ($user->getTeamRoles() as $role)
-			if (!in_array('team' . $role->getRoleType()->getName(), $roles))
-				$roles[] = 'team' . $role->getRoleType()->getName();
-
-		return $roles;
 	}
 
 	/**

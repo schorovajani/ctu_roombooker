@@ -2,14 +2,13 @@
 
 namespace App\Service;
 
+use App\Entity\RoleType;
 use App\Entity\Team;
 use App\Entity\User;
 use App\Repository\TeamRepository;
 
-class  TeamService
+class TeamService
 {
-	const ROLE_MANAGER = 'Manager';
-
 	private TeamRepository $teamRepository;
 
 	/**
@@ -76,7 +75,7 @@ class  TeamService
 		$managers = [];
 		while ($team !== null) {
 			foreach ($team->getTeamRoles() as $role) {
-				if ($role->getRoleType()->getName() === self::ROLE_MANAGER)
+				if ($role->getRoleType()->getName() === RoleType::ROLE_MANAGER)
 					$managers[] = $role->getUser();
 			}
 			$team = $team->getParent();

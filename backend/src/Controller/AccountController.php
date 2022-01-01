@@ -45,7 +45,7 @@ class AccountController extends AbstractFOSRestController
 	 * @param Account $account
 	 * @return Response
 	 */
-	public function routeGetRequest(Account $account): Response
+	public function routeGetAccount(Account $account): Response
 	{
 		if (!$this->isGranted('ROLE_ADMIN') && $this->getUser()->getOwner() !== $account->getOwner())
 			throw $this->createAccessDeniedException();

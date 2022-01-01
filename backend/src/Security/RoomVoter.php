@@ -50,7 +50,7 @@ class RoomVoter extends Voter
 
 	private function canGetRoomUsers(Room $room, Account $loggedInAccount): bool
 	{
-		return ($this->security->isGranted('ROLE_ADMIN') ||
-			in_array($loggedInAccount->getOwner(), $this->roomService->getRoomUsers($room, true)));
+		return ($this->security->isGranted('ROLE_ADMIN')
+			|| in_array($loggedInAccount->getOwner(), $this->roomService->getRoomUsers($room, true)));
 	}
 }

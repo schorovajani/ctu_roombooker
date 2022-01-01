@@ -50,7 +50,7 @@ class TeamVoter extends Voter
 
 	private function canGetTeamUsers(Team $team, Account $loggedInAccount): bool
 	{
-		return ($this->security->isGranted('ROLE_ADMIN') ||
-			in_array($loggedInAccount->getOwner(), $this->teamService->getTeamManagers($team)));
+		return ($this->security->isGranted('ROLE_ADMIN')
+			|| in_array($loggedInAccount->getOwner(), $this->teamService->getTeamManagers($team)));
 	}
 }

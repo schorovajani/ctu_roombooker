@@ -36,7 +36,7 @@ class  RequestService
 	/**
 	 * @return Request[]
 	 */
-	public function getManageableRequests(): array
+	public function getAdministeredRequests(): array
 	{
 		if ($this->security->isGranted('ROLE_ADMIN'))
 			return $this->getAll();

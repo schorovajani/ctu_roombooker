@@ -14,6 +14,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class RoleType
 {
+	const ROLE_MANAGER = 'Manager';
+
 	/**
 	 * @ORM\Id
 	 * @ORM\GeneratedValue

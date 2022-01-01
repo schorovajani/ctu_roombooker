@@ -35,7 +35,7 @@ class RequestController extends AbstractFOSRestController
 	 */
 	public function routeGetRequests(): Response
 	{
-		$view = $this->view($this->requestService->getManageableRequests(), Response::HTTP_OK);
+		$view = $this->view($this->requestService->getAdministeredRequests(), Response::HTTP_OK);
 		$view->getContext()->setGroups(['listBuilding', 'listRequest', 'listRoom', 'listStatus', 'listUser']);
 		return $this->handleView($view);
 	}
