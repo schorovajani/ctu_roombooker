@@ -5,7 +5,7 @@
     <p id="aside-motto-2" class="aside-motto">Potřebuješ si zavolat?</p>
     <p id="aside-motto-3" class="aside-motto">Chceš jen chvíli klid?</p>
     <p class="aside-motto">Zarezervuj si místnost!</p>
-    <div class="aside-text">
+    <div v-if="!$auth.loggedIn" class="aside-text">
       <p>Chceš vidět všechny volné místnosti?</p>
       <nuxt-link class="aside-link" to="/login"> Přihlaš se! </nuxt-link>
     </div>
