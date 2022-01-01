@@ -2,7 +2,7 @@
 
 == Endpoints
 
-=== USERS
+=== USERS (GET requests: FINISHED)
 
 ./users
 * GET = return all users
@@ -101,13 +101,15 @@
 * GET = return all rooms in building with {id}
     ** Authorization: only public rooms will be returned for unauthorized users, all rooms will be returned for authorized user
 
-=== ACCOUNTS
+=== ACCOUNTS (GET requests: FINISHED)
 All accounts of user will be return from user endpoint. If user/admin click to user account, then he knows ID of account and he can ask endpoint accounts directly.
 
 ./accounts
 * GET = return all accounts
+    ** Authorization: available only for admins
 
 ./accounts/{id}
 * GET = return account with {id}
+    ** Authorization: available only for owner of the account with id = {id} or for admins
 * PUT = update information about account with {id}
 * DELETE = delete account with {id}

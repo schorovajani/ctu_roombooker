@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Service\AccountService;
 use App\Service\UserService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -15,14 +16,17 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class UserController extends AbstractFOSRestController
 {
+	private AccountService $accountService;
 	private UserService $userService;
 
 	/**
+	 * @param AccountService $accountService
 	 * @param UserService $userService
 	 */
-	public function __construct(UserService $userService)
+	public function __construct(AccountService $accountService, UserService $userService)
 	{
 		$this->userService = $userService;
+		$this->accountService = $accountService;
 	}
 
 	/**
@@ -74,17 +78,16 @@ class UserController extends AbstractFOSRestController
 				$viewData = $this->userService->getUserRooms($user);
 				break;
 
-			/*
 			case "accounts":
+				$viewData = $this->accountService->getBy(['owner' => $user]);
 				break;
-			*/
 
 			default:
 				throw $this->createNotFoundException();
 		}
 
 		$view = $this->view($viewData, Response::HTTP_OK);
-		$view->getContext()->setGroups(['listBuilding', 'listRequest', 'listRoom', 'listStatus', 'listTeam', 'listUser']);
+		$view->getContext()->setGroups(['listAccount', 'listBuilding', 'listRequest', 'listRoom', 'listStatus', 'listTeam', 'listUser']);
 		return $this->handleView($view);
 	}
 }
