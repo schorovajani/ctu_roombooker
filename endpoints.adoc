@@ -6,20 +6,25 @@
 
 ./users
 * GET = return all users
+    ** Authorization: available only for logged-in users
 * POST = create new user
 
 ./users/{id}
 * GET = return user with {id}
+    ** Authorization: available only for logged-in users
 * PUT = update information about user with {id}
 
 ./users/{id}/rooms
 * GET = return all rooms where has user access (team or room member)
+    ** Authorization: available only for user with id = {id} or for admins
 
 ./users/{id}/requests
 * GET = return all request where is user with {id} atendee or manager
+    ** Authorization: available only for user with id = {id} or for admins
 
 ./users/{id}/accounts
 * GET = return all accounts of user with {id}
+    ** Authorization: available only for user with id = {id} or for admins
 * POST = create account to user with {id}
 
 === TEAMS (GET requests: FINISHED)
