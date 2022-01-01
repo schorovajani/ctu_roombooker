@@ -76,6 +76,16 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Sorts+Mill+Goudy&display=swap');
 @import '~/assets/reset.css';
 
+/* 
+blue-nav: #e6f5ff //very light blue
+blue-polygon: #b7dcef
+blue-dark: #768e9a // dark blue polygon
+green-aside: #dcf9f4
+green-polygon: #bee5e2
+green-dark: #77908e //dark green polygon
+grey font, border: #505050
+*/
+
 html,
 #__nuxt,
 #__layout {

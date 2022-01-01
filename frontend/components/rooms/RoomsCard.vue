@@ -12,8 +12,8 @@
           <nuxt-link :to="'/rooms/' + room.id">{{ room.name }}</nuxt-link>
         </li>
       </ul>
-      <button @click="showLess = !showLess">
-        {{ showLess ? 'více' : 'méně' }} místností
+      <button v-if="rooms.length > 6" @click="showLess = !showLess">
+        {{ showLess ? 'Více' : 'Méně' }} místností
       </button>
     </div>
   </article>
@@ -35,6 +35,7 @@ export default {
 
 <style scoped>
 article {
+  /* width: 20rem; */
   margin: 3rem;
 }
 .build-card {
@@ -70,9 +71,10 @@ li {
 button {
   text-decoration: underline;
   font-size: 0.9rem;
+  color: #77908e;
 }
 
 button:hover {
-  color: #608394;
+  color: #bee5e2;
 }
 </style>
