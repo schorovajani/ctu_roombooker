@@ -63,6 +63,7 @@ export default {
   },
   methods: {
     async logout() {
+      this.$store.dispatch('building/getAllBuildings') //reload rooms
       await this.$auth.logout()
       console.log('odhlaseno')
     },

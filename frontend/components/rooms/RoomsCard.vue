@@ -1,6 +1,6 @@
 <template>
   <article>
-    <h2>{{ building }}</h2>
+    <h2>{{ name }}</h2>
     <div class="build-card">
       <ul v-if="showLess" class="build-list">
         <li v-for="room in rooms.slice(0, 6)" :key="room.id">
@@ -21,44 +21,13 @@
 
 <script>
 export default {
+  props: {
+    name: String,
+    rooms: Array,
+  },
   data() {
     return {
       showLess: true,
-      building: 'T9',
-      rooms: [
-        {
-          id: 1,
-          name: '343',
-        },
-        {
-          id: 2,
-          name: '344',
-        },
-        {
-          id: 3,
-          name: '345',
-        },
-        {
-          id: 4,
-          name: '346',
-        },
-        {
-          id: 5,
-          name: '347',
-        },
-        {
-          id: 6,
-          name: '348',
-        },
-        {
-          id: 7,
-          name: '349',
-        },
-        {
-          id: 8,
-          name: '350',
-        },
-      ],
     }
   },
 }

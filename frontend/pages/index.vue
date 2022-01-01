@@ -13,6 +13,14 @@ import RoomsList from '~/components/rooms/RoomsList.vue'
 
 export default {
   components: { AsideBar, RoomsList },
+  created() {
+    this.loadBuildings()
+  },
+  methods: {
+    loadBuildings() {
+      this.$store.dispatch('building/getAllBuildings')
+    },
+  },
 }
 </script>
 
