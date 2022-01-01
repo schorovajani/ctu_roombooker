@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=RequestRepository::class)
  *
- * @Serialize\ExclusionPolicy("none")
+ * @Serialize\ExclusionPolicy("all")
  */
 class Request
 {
@@ -22,6 +22,7 @@ class Request
 	 * @ORM\GeneratedValue
 	 * @ORM\Column(type="integer")
 	 *
+	 * @Serialize\Expose
 	 * @Serialize\Groups({"listRequest", "listRequestMinimal"})
 	 */
 	private $id;
@@ -31,6 +32,7 @@ class Request
 	 *
 	 * @Assert\Length(min=5, max=500)
 	 *
+	 * @Serialize\Expose
 	 * @Serialize\Groups({"listRequest", "listRequestMinimal"})
 	 */
 	private $description;
@@ -41,6 +43,7 @@ class Request
 	 * @Assert\NotBlank
 	 * @Assert\DateTime
 	 *
+	 * @Serialize\Expose
 	 * @Serialize\Groups({"listRequest", "listRequestMinimal"})
 	 *
 	 * @var string A "Y-m-d H:i:s" formatted value
@@ -53,6 +56,7 @@ class Request
 	 * @Assert\NotBlank
 	 * @Assert\DateTime
 	 *
+	 * @Serialize\Expose
 	 * @Serialize\Groups({"listRequest", "listRequestMinimal"})
 	 *
 	 * @var string A "Y-m-d H:i:s" formatted value
@@ -63,6 +67,7 @@ class Request
 	 * @ORM\ManyToOne(targetEntity=Room::class, inversedBy="requests")
 	 * @ORM\JoinColumn(nullable=false)
 	 *
+	 * @Serialize\Expose
 	 * @Serialize\Groups({"listRequest", "listRequestMinimal"})
 	 */
 	private $room;
@@ -71,6 +76,7 @@ class Request
 	 * @ORM\ManyToOne(targetEntity=User::class, inversedBy="requests")
 	 * @ORM\JoinColumn(nullable=false)
 	 *
+	 * @Serialize\Expose
 	 * @Serialize\Groups({"listRequest"})
 	 */
 	private $user;
@@ -79,6 +85,7 @@ class Request
 	 * @ORM\ManyToMany(targetEntity=User::class, inversedBy="attendees")
 	 * @JoinTable(name="attendee")
 	 *
+	 * @Serialize\Expose
 	 * @Serialize\Groups({"listRequest"})
 	 */
 	private $attendees;
@@ -87,6 +94,7 @@ class Request
 	 * @ORM\ManyToOne(targetEntity=Status::class, inversedBy="requests")
 	 * @ORM\JoinColumn(nullable=false)
 	 *
+	 * @Serialize\Expose
 	 * @Serialize\Groups({"listRequest", "listRequestMinimal"})
 	 */
 	private $status;

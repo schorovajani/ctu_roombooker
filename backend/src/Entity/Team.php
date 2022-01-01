@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=TeamRepository::class)
  *
- * @Serialize\ExclusionPolicy("none")
+ * @Serialize\ExclusionPolicy("all")
  */
 class Team
 {
@@ -21,6 +21,7 @@ class Team
 	 * @ORM\GeneratedValue
 	 * @ORM\Column(type="integer")
 	 *
+	 * @Serialize\Expose
 	 * @Serialize\Groups({"listTeam"})
 	 */
 	private $id;
@@ -31,6 +32,7 @@ class Team
 	 * @Assert\NotBlank
 	 * @Assert\Length(min=2, max=255)
 	 *
+	 * @Serialize\Expose
 	 * @Serialize\Groups({"listTeam"})
 	 */
 	private $name;
@@ -38,6 +40,7 @@ class Team
 	/**
 	 * @ORM\OneToMany(targetEntity=Room::class, mappedBy="team")
 	 *
+	 * @Serialize\Expose
 	 * @Serialize\Groups({"listTeamDetails"})
 	 */
 	private $rooms;
@@ -45,6 +48,7 @@ class Team
 	/**
 	 * @ORM\OneToMany(targetEntity=TeamRole::class, mappedBy="team")
 	 *
+	 * @Serialize\Expose
 	 * @Serialize\MaxDepth(2)
 	 */
 	private $teamRoles;
@@ -52,6 +56,7 @@ class Team
 	/**
 	 * @ORM\ManyToOne(targetEntity=Team::class, inversedBy="children")
 	 *
+	 * @Serialize\Expose
 	 * @Serialize\Groups({"listTeamDetails"})
 	 * @Serialize\MaxDepth(1)
 	 */
@@ -60,6 +65,7 @@ class Team
 	/**
 	 * @ORM\OneToMany(targetEntity=Team::class, mappedBy="parent")
 	 *
+	 * @Serialize\Expose
 	 * @Serialize\Groups({"listTeamDetails"})
 	 */
 	private $children;

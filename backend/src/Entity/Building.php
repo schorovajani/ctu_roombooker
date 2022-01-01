@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=BuildingRepository::class)
  *
- * @Serialize\ExclusionPolicy("none")
+ * @Serialize\ExclusionPolicy("all")
  */
 class Building
 {
@@ -21,6 +21,7 @@ class Building
 	 * @ORM\GeneratedValue
 	 * @ORM\Column(type="integer")
 	 *
+	 * @Serialize\Expose
 	 * @Serialize\Groups({"listBuilding"})
 	 */
 	private $id;
@@ -31,6 +32,7 @@ class Building
 	 * @Assert\NotBlank
 	 * @Assert\Length(min=2, max=255)
 	 *
+	 * @Serialize\Expose
 	 * @Serialize\Groups({"listBuilding"})
 	 */
 	private $name;
@@ -38,6 +40,7 @@ class Building
 	/**
 	 * @ORM\OneToMany(targetEntity=Room::class, mappedBy="building")
 	 *
+	 * @Serialize\Expose
 	 * @Serialize\MaxDepth(1)
 	 */
 	private $rooms;

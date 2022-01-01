@@ -9,7 +9,7 @@ use JMS\Serializer\Annotation as Serialize;
 /**
  * @ORM\Entity(repositoryClass=RoomRoleRepository::class)
  *
- * @Serialize\ExclusionPolicy("none")
+ * @Serialize\ExclusionPolicy("all")
  */
 class RoomRole
 {
@@ -17,6 +17,8 @@ class RoomRole
 	 * @ORM\Id
 	 * @ORM\ManyToOne(targetEntity=User::class, inversedBy="roomRoles")
 	 * @ORM\JoinColumn(nullable=false)
+	 *
+	 * @Serialize\Expose
 	 */
 	private $user;
 
@@ -25,6 +27,7 @@ class RoomRole
 	 * @ORM\ManyToOne(targetEntity=Room::class, inversedBy="roomRoles")
 	 * @ORM\JoinColumn(nullable=false)
 	 *
+	 * @Serialize\Expose
 	 * @Serialize\Groups({"listRoomRole"})
 	 */
 	private $room;
@@ -33,6 +36,7 @@ class RoomRole
 	 * @ORM\ManyToOne(targetEntity=RoleType::class)
 	 * @ORM\JoinColumn(nullable=false)
 	 *
+	 * @Serialize\Expose
 	 * @Serialize\Groups({"listRoomRole"})
 	 */
 	private $roleType;

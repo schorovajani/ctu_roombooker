@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=RoleTypeRepository::class)
  *
- * @Serialize\ExclusionPolicy("none")
+ * @Serialize\ExclusionPolicy("all")
  */
 class RoleType
 {
@@ -21,6 +21,7 @@ class RoleType
 	 * @ORM\GeneratedValue
 	 * @ORM\Column(type="integer")
 	 *
+	 * @Serialize\Expose
 	 * @Serialize\Groups({"listRoomRole", "listTeamRole"})
 	 */
 	private $id;
@@ -31,6 +32,7 @@ class RoleType
 	 * @Assert\NotBlank
 	 * @Assert\Length(min=5, max=255)
 	 *
+	 * @Serialize\Expose
 	 * @Serialize\Groups({"listRoomRole", "listTeamRole"})
 	 */
 	private $name;

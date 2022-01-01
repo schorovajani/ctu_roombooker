@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="`user`")
  *
- * @Serialize\ExclusionPolicy("none")
+ * @Serialize\ExclusionPolicy("all")
  */
 class User
 {
@@ -22,6 +22,7 @@ class User
 	 * @ORM\GeneratedValue
 	 * @ORM\Column(type="integer")
 	 *
+	 * @Serialize\Expose
 	 * @Serialize\Groups({"listUser"})
 	 */
 	private $id;
@@ -32,6 +33,7 @@ class User
 	 * @Assert\NotBlank
 	 * @Assert\Length(min=2, max=255)
 	 *
+	 * @Serialize\Expose
 	 * @Serialize\Groups({"listUser"})
 	 */
 	private $firstName;
@@ -42,6 +44,7 @@ class User
 	 * @Assert\NotBlank
 	 * @Assert\Length(min=2, max=255)
 	 *
+	 * @Serialize\Expose
 	 * @Serialize\Groups({"listUser"})
 	 */
 	private $lastName;
@@ -49,6 +52,7 @@ class User
 	/**
 	 * @ORM\OneToMany(targetEntity=Request::class, mappedBy="user")
 	 *
+	 * @Serialize\Expose
 	 * @Serialize\MaxDepth(2)
 	 */
 	private $requests;
@@ -56,6 +60,7 @@ class User
 	/**
 	 * @ORM\ManyToMany(targetEntity=Request::class, mappedBy="attendees")
 	 *
+	 * @Serialize\Expose
 	 * @Serialize\MaxDepth(1)
 	 */
 	private $attendees;
@@ -63,6 +68,7 @@ class User
 	/**
 	 * @ORM\OneToMany(targetEntity=RoomRole::class, mappedBy="user")
 	 *
+	 * @Serialize\Expose
 	 * @Serialize\Groups({"listRoomRole"})
 	 * @Serialize\MaxDepth(2)
 	 */
@@ -71,6 +77,7 @@ class User
 	/**
 	 * @ORM\OneToMany(targetEntity=TeamRole::class, mappedBy="user")
 	 *
+	 * @Serialize\Expose
 	 * @Serialize\Groups({"listTeamRole"})
 	 * @Serialize\MaxDepth(2)
 	 */
@@ -78,8 +85,6 @@ class User
 
 	/**
 	 * @ORM\OneToMany(targetEntity=Account::class, mappedBy="owner")
-	 *
-	 * @Serialize\Exclude
 	 */
 	private $accounts;
 
