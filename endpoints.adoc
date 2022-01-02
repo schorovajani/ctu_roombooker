@@ -55,6 +55,7 @@
 
 ./teams/{id_t}/users/{id_u}
 * DELETE = delete user team role
+    ** Authorization: available only for admins and for administrators of team with {id} (including managers of parents teams)
 
 === ROOMS (GET requests: FINISHED)
 
