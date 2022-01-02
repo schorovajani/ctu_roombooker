@@ -83,7 +83,8 @@
 * POST = add user to room role
 
 ./rooms/{id_r}/users/{id_u}
-* DELETE = remove user room role 
+* DELETE = remove user room role
+    ** Authorization: available only for admins and for managers of room with {id} (available also for corresponding team managers)
 
 === REQUESTS (GET requests: FINISHED)
 
