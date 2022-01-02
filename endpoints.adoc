@@ -125,3 +125,4 @@ All accounts of user will be return from user endpoint. If user/admin click to u
     ** Authorization: available only for owner of the account with id = {id} or for admins
 * PUT = update information about account with {id}
 * DELETE = delete account with {id}
+    ** Authorization: available only for admins

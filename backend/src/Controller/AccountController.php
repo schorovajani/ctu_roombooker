@@ -54,4 +54,17 @@ class AccountController extends AbstractFOSRestController
 		$view->getContext()->setGroups(['listAccount', 'listUser']);
 		return $this->handleView($view);
 	}
+
+	/**
+	 * @Route("/accounts/{id}", requirements={"id": "\d+"}, methods={"DELETE"})
+	 * @IsGranted("ROLE_ADMIN")
+	 *
+	 * @param Account $account
+	 * @return Response
+	 */
+	public function routeDeleteAccount(Account $account): Response
+	{
+		$this->accountService->delete($account);
+		return $this->handleView($this->view(null, Response::HTTP_NO_CONTENT));
+	}
 }
