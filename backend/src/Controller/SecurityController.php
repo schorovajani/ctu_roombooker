@@ -68,6 +68,7 @@ class SecurityController extends AbstractFOSRestController
 		$loggedInAccount = $this->getUser();
 
 		return $this->json([
+			'id' => $loggedInAccount->getOwner()->getId(),
 			'firstName' => $loggedInAccount->getOwner()->getFirstName(),
 			'lastName' => $loggedInAccount->getOwner()->getLastName(),
 			'username' => $loggedInAccount->getUserIdentifier(),
