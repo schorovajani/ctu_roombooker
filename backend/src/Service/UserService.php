@@ -2,6 +2,8 @@
 
 namespace App\Service;
 
+use App\Entity\RoleType;
+use App\Entity\Team;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -33,28 +35,22 @@ class UserService
 	}
 
 	/**
-	 * @param int $id
-	 * @return User|null
-	 */
-	public function getById(int $id): ?User
-	{
-		return $this->userRepository->find($id);
-	}
-
-	/**
 	 * @param User $user
+	 * @param bool $onlyAdministeredRooms
 	 * @return array
 	 */
-	public function getUserRooms(User $user): array
+	public function getUserRooms(User $user, bool $onlyAdministeredRooms = false): array
 	{
 		$rooms1 = [];
 		$rooms2 = [];
 		foreach ($user->getRoomRoles() as $roomRole)
-			$rooms1[] = $roomRole->getRoom();
+			if (!$onlyAdministeredRooms || $roomRole->getRoleType()->getName() === RoleType::ROLE_MANAGER)
+				$rooms1[] = $roomRole->getRoom();
 		foreach ($user->getTeamRoles() as $teamRole)
-			$rooms2 = array_merge($rooms2, $this->teamService->getTeamRooms($teamRole->getTeam()));
-		$data = array_unique(array_merge($rooms1, $rooms2), SORT_REGULAR);
-		return $data;
+			if (!$onlyAdministeredRooms || $teamRole->getRoleType()->getName() === RoleType::ROLE_MANAGER)
+				$rooms2 = array_merge($rooms2, $this->teamService->getTeamRooms($teamRole->getTeam()));
+
+		return array_unique(array_merge($rooms1, $rooms2), SORT_REGULAR);
 	}
 
 	/**
@@ -75,5 +71,19 @@ class UserService
 	{
 		$this->entityManager->persist($user);
 		$this->entityManager->flush();
+	}
+
+	/**
+	 * @param User $user
+	 * @return Team[]
+	 */
+	public function getUserAdministeredTeams(User $user): array
+	{
+		$teams = [];
+		foreach ($user->getTeamRoles() as $role)
+			if ($role->getRoleType()->getName() === RoleType::ROLE_MANAGER)
+				$teams = array_merge($teams, $this->teamService->getTeamChildrenRecursive($role->getTeam()));
+
+		return array_unique($teams, SORT_REGULAR);
 	}
 }

@@ -6,10 +6,13 @@ use App\Repository\BuildingRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serialize;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=BuildingRepository::class)
+ *
+ * @Serialize\ExclusionPolicy("all")
  */
 class Building
 {
@@ -17,6 +20,9 @@ class Building
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
 	 * @ORM\Column(type="integer")
+	 *
+	 * @Serialize\Expose
+	 * @Serialize\Groups({"listBuilding"})
 	 */
 	private $id;
 
@@ -25,11 +31,17 @@ class Building
 	 *
 	 * @Assert\NotBlank
 	 * @Assert\Length(min=2, max=255)
+	 *
+	 * @Serialize\Expose
+	 * @Serialize\Groups({"listBuilding"})
 	 */
 	private $name;
 
 	/**
 	 * @ORM\OneToMany(targetEntity=Room::class, mappedBy="building")
+	 *
+	 * @Serialize\Expose
+	 * @Serialize\MaxDepth(1)
 	 */
 	private $rooms;
 

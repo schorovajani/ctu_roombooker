@@ -2,30 +2,40 @@
 
 == Endpoints
 
-=== USERS
+=== USERS (GET requests: FINISHED)
 
 ./users
 * GET = return all users
+    ** Authorization: available only for logged-in users
 * POST = create new user
 
 ./users/{id}
 * GET = return user with {id}
+    ** Authorization: available only for logged-in users
 * PUT = update information about user with {id}
 
 ./users/{id}/rooms
 * GET = return all rooms where has user access (team or room member)
+    ** Authorization: available only for user with id = {id} or for admins
 
 ./users/{id}/requests
 * GET = return all request where is user with {id} atendee or manager
+    ** Authorization: available only for user with id = {id} or for admins
 
 ./users/{id}/accounts
 * GET = return all accounts of user with {id}
+    ** Authorization: available only for user with id = {id} or for admins
 * POST = create account to user with {id}
 
-=== TEAMS
+./users/{id}/teams
+* GET = return all teams where is user with {id} manager (includes also sub-teams)
+    ** Authorization: available only for user with id = {id} or for admins
+
+=== TEAMS (GET requests: FINISHED)
 
 ./teams
 * GET = return all teams
+    ** Authorization: available for authenticated users
 * POST = create team
 
 ./teams/{id}
@@ -33,23 +43,27 @@
 * DELETE = delete team with {id}
 
 ./teams/{id}/rooms
-* GET = return all rooms manages by team with {id}
+* GET = return all rooms manages by team with {id} (includes also rooms from sub-teams)
+    ** Authorization: available for authenticated users
 * POST = add room/s to team with {id}
 
 ./teams/{id}/users
 * GET = return all users in team with {id}
+    ** Authorization: available only for admins and for managers of team with {id}
 * POST = add user/s to team with {id}
 
 ./teams/{id_t}/users/{id_u}
 * DELETE = delete user team role
 
-=== ROOMS
+=== ROOMS (GET requests: FINISHED)
 
 ./rooms
 * GET = return all rooms
+    ** Authorization: only public rooms will be returned for unauthorized users, all rooms will be returned for authorized user
 * POST = create new room by administrator
 
 ./rooms/{id}
+* PATCH = lock/unlock room with {id}
 * PUT = update information about room with {id}, __eg. add/update manager of room__
 * DELETE = delete room with {id}
 
@@ -58,48 +72,52 @@
 
 ./rooms/{id}/requests
 * GET = return all requests for room with {id}
+    ** Authorization: available for everyone, authenticated user gets also information about owner and attendees
 
 ./rooms/{id}/users
 * GET = return all members of room
+    ** Authorization: available only for admins and for managers of room with {id} (available also for corresponding team managers)
 * POST = add user to room role
 
 ./rooms/{id_r}/users/{id_u}
 * DELETE = remove user room role 
 
-=== REQUESTS
+=== REQUESTS (GET requests: FINISHED)
 
 ./requests
-* GET = return all requests
+* GET = returns requests which can logged-in user manage (approve/deny), it includes also requests which are already approved
+    ** Authorization: available for authenticated users
 * POST = create request by everyone (will be different in sent information)
 
 ./requests/{id}
 * GET = return request with {id}
+    ** Authorization: available for authenticated users
 * PUT = update information in request, __eg. accept request by manager__
 * DELETE = delete request
 
-
-=== Other endpoints
-
-==== BUILDINGS
+=== BUILDINGS (GET requests: FINISHED)
 
 ./buildings
 * GET = return all building
+    ** Authorization: available for everyone, only public rooms will be returned for unauthorized users, all rooms will be returned for authorized user
 * POST = create new building
+
+./buildings/{id}
+* DELETE = delete building
 
 ./buildings/{id}/rooms
 * GET = return all rooms in building with {id}
+    ** Authorization: only public rooms will be returned for unauthorized users, all rooms will be returned for authorized user
 
-==== ACCOUNTS
+=== ACCOUNTS (GET requests: FINISHED)
 All accounts of user will be return from user endpoint. If user/admin click to user account, then he knows ID of account and he can ask endpoint accounts directly.
 
 ./accounts
 * GET = return all accounts
+    ** Authorization: available only for admins
 
 ./accounts/{id}
 * GET = return account with {id}
+    ** Authorization: available only for owner of the account with id = {id} or for admins
 * PUT = update information about account with {id}
 * DELETE = delete account with {id}
-
-
-
-

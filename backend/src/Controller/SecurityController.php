@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Account;
+use App\Service\UserService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -14,6 +15,13 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class SecurityController extends AbstractFOSRestController
 {
+	private UserService $userService;
+
+	public function __construct(UserService $userService)
+	{
+		$this->userService = $userService;
+	}
+
 	/**
 	 * @Rest\Post("/login", name="app_login")
 	 *
@@ -60,9 +68,34 @@ class SecurityController extends AbstractFOSRestController
 		$loggedInAccount = $this->getUser();
 
 		return $this->json([
+			'id' => $loggedInAccount->getOwner()->getId(),
 			'firstName' => $loggedInAccount->getOwner()->getFirstName(),
 			'lastName' => $loggedInAccount->getOwner()->getLastName(),
 			'username' => $loggedInAccount->getUserIdentifier(),
+			'scope' => $this->getUserRoles(),
 		], Response::HTTP_OK);
+	}
+
+	/**
+	 * @return array
+	 */
+	private function getUserRoles(): array
+	{
+		/** @var Account $loggedInAccount */
+		$loggedInAccount = $this->getUser();
+		$roles = [];
+
+		if ($this->isGranted('ROLE_ADMIN'))
+			$roles[] = 'admin';
+
+		foreach ($loggedInAccount->getOwner()->getRoomRoles() as $role)
+			if (!in_array('room' . $role->getRoleType()->getName(), $roles))
+				$roles[] = 'room' . $role->getRoleType()->getName();
+
+		foreach ($loggedInAccount->getOwner()->getTeamRoles() as $role)
+			if (!in_array('team' . $role->getRoleType()->getName(), $roles))
+				$roles[] = 'team' . $role->getRoleType()->getName();
+
+		return $roles;
 	}
 }

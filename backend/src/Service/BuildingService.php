@@ -1,9 +1,10 @@
 <?php
+
 namespace App\Service;
 
 use App\Repository\BuildingRepository;
 
-class  BuildingService
+class BuildingService
 {
 	private BuildingRepository $buildingRepository;
 
