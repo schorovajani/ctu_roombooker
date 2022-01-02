@@ -74,10 +74,10 @@ class TeamService
 	{
 		$managers = [];
 		while ($team !== null) {
-			foreach ($team->getTeamRoles() as $role) {
+			foreach ($team->getTeamRoles() as $role)
 				if ($role->getRoleType()->getName() === RoleType::ROLE_MANAGER)
 					$managers[] = $role->getUser();
-			}
+
 			$team = $team->getParent();
 		}
 		return $managers;

@@ -56,23 +56,24 @@ class UserService
 
 	/**
 	 * @param User $user
-	 * @param bool $onlyManagedRooms
+	 * @param bool $onlyAdministeredRooms
 	 * @return array
 	 */
-	public function getUserRooms(User $user, bool $onlyManagedRooms = false): array
+	public function getUserRooms(User $user, bool $onlyAdministeredRooms = false): array
 	{
 		/** @var Account $loggedInAccount */
 		$loggedInAccount = $this->security->getUser();
+		// return all rooms if logged-in user is admin && this method is called with his user object
 		if ($this->security->isGranted('ROLE_ADMIN') && $loggedInAccount->getOwner() === $user)
 			return $this->roomService->getAll();
 
 		$rooms1 = [];
 		$rooms2 = [];
 		foreach ($user->getRoomRoles() as $roomRole)
-			if (!$onlyManagedRooms || $roomRole->getRoleType()->getName() === RoleType::ROLE_MANAGER)
+			if (!$onlyAdministeredRooms || $roomRole->getRoleType()->getName() === RoleType::ROLE_MANAGER)
 				$rooms1[] = $roomRole->getRoom();
 		foreach ($user->getTeamRoles() as $teamRole)
-			if (!$onlyManagedRooms || $teamRole->getRoleType()->getName() === RoleType::ROLE_MANAGER)
+			if (!$onlyAdministeredRooms || $teamRole->getRoleType()->getName() === RoleType::ROLE_MANAGER)
 				$rooms2 = array_merge($rooms2, $this->teamService->getTeamRooms($teamRole->getTeam()));
 
 		return array_unique(array_merge($rooms1, $rooms2), SORT_REGULAR);
