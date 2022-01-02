@@ -106,6 +106,7 @@
 
 ./buildings/{id}
 * DELETE = delete building
+    ** Authorization: available only for admins
 
 ./buildings/{id}/rooms
 * GET = return all rooms in building with {id}
