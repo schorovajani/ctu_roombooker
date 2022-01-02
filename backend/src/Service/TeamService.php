@@ -94,8 +94,7 @@ class TeamService
 	public function delete(Team $team): void
 	{
 		foreach ($team->getTeamRoles() as $role)
-			$team->removeTeamRole($role);
-		$this->save($team);
+			$this->entityManager->remove($role);
 
 		$this->entityManager->remove($team);
 		$this->entityManager->flush();

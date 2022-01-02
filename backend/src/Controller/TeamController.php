@@ -85,7 +85,7 @@ class TeamController extends AbstractFOSRestController
 		if (!$team->getRooms()->isEmpty())
 			$error['error'] = 'Delete or reassign rooms to the different team first';
 
-		// TODO: Is this necessary? IMO nope
+		// TODO: Is this necessary? IMO nope, but it is necessary to loop over children and set their parent to null
 		if (!$team->getChildren()->isEmpty())
 			$error['error'] = 'Delete or reassign children to the different team first';
 

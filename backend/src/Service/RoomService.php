@@ -85,10 +85,10 @@ class RoomService
 	 */
 	public function delete(Room $room): void
 	{
-		// TODO: chceme smazat i odpovidajici requesty? Pokud ne, bude pravdepodobne potreba povolit null v tabulce request v DB
 		foreach ($room->getRoomRoles() as $role)
-			$room->removeRoomRole($role);
-		$this->save($room);
+			$this->entityManager->remove($role);
+		foreach ($room->getRequests() as $request)
+			$this->entityManager->remove($request);
 
 		$this->entityManager->remove($room);
 		$this->entityManager->flush();
@@ -98,7 +98,7 @@ class RoomService
 	 * @param Room $room
 	 * @return void
 	 */
-	private function save(Room $room)
+	private function save(Room $room): void
 	{
 		$this->entityManager->persist($room);
 		$this->entityManager->flush();
