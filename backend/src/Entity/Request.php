@@ -7,10 +7,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinTable;
+use JMS\Serializer\Annotation as Serialize;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=RequestRepository::class)
+ *
+ * @Serialize\ExclusionPolicy("all")
  */
 class Request
 {
@@ -18,6 +21,9 @@ class Request
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
 	 * @ORM\Column(type="integer")
+	 *
+	 * @Serialize\Expose
+	 * @Serialize\Groups({"listRequest", "listRequestMinimal"})
 	 */
 	private $id;
 
@@ -25,6 +31,9 @@ class Request
 	 * @ORM\Column(type="string", length=500)
 	 *
 	 * @Assert\Length(min=5, max=500)
+	 *
+	 * @Serialize\Expose
+	 * @Serialize\Groups({"listRequest", "listRequestMinimal"})
 	 */
 	private $description;
 
@@ -33,6 +42,10 @@ class Request
 	 *
 	 * @Assert\NotBlank
 	 * @Assert\DateTime
+	 *
+	 * @Serialize\Expose
+	 * @Serialize\Groups({"listRequest", "listRequestMinimal"})
+	 *
 	 * @var string A "Y-m-d H:i:s" formatted value
 	 */
 	private $eventStart;
@@ -42,6 +55,10 @@ class Request
 	 *
 	 * @Assert\NotBlank
 	 * @Assert\DateTime
+	 *
+	 * @Serialize\Expose
+	 * @Serialize\Groups({"listRequest", "listRequestMinimal"})
+	 *
 	 * @var string A "Y-m-d H:i:s" formatted value
 	 */
 	private $eventEnd;
@@ -49,24 +66,36 @@ class Request
 	/**
 	 * @ORM\ManyToOne(targetEntity=Room::class, inversedBy="requests")
 	 * @ORM\JoinColumn(nullable=false)
+	 *
+	 * @Serialize\Expose
+	 * @Serialize\Groups({"listRequest", "listRequestMinimal"})
 	 */
 	private $room;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=User::class, inversedBy="requests")
 	 * @ORM\JoinColumn(nullable=false)
+	 *
+	 * @Serialize\Expose
+	 * @Serialize\Groups({"listRequest"})
 	 */
 	private $user;
 
 	/**
 	 * @ORM\ManyToMany(targetEntity=User::class, inversedBy="attendees")
 	 * @JoinTable(name="attendee")
+	 *
+	 * @Serialize\Expose
+	 * @Serialize\Groups({"listRequest"})
 	 */
 	private $attendees;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=Status::class, inversedBy="requests")
 	 * @ORM\JoinColumn(nullable=false)
+	 *
+	 * @Serialize\Expose
+	 * @Serialize\Groups({"listRequest", "listRequestMinimal"})
 	 */
 	private $status;
 

@@ -6,10 +6,14 @@ use App\Repository\RoomRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serialize;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=RoomRepository::class)
+ *
+ * @Serialize\ExclusionPolicy("all")
+ * @Serialize\Exclude(if="!is_granted('IS_AUTHENTICATED_REMEMBERED') && !object.getIsPublic()")
  */
 class Room
 {
@@ -17,6 +21,9 @@ class Room
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
 	 * @ORM\Column(type="integer")
+	 *
+	 * @Serialize\Expose
+	 * @Serialize\Groups({"listRoom"})
 	 */
 	private $id;
 
@@ -25,6 +32,9 @@ class Room
 	 *
 	 * @Assert\NotBlank
 	 * @Assert\Length(min=3, max=255)
+	 *
+	 * @Serialize\Expose
+	 * @Serialize\Groups({"listRoom"})
 	 */
 	private $name;
 
@@ -33,6 +43,9 @@ class Room
 	 *
 	 * @Assert\NotNull
 	 * @Assert\Type("bool")
+	 *
+	 * @Serialize\Expose
+	 * @Serialize\Groups({"listRoom"})
 	 */
 	private $isPublic;
 
@@ -47,12 +60,20 @@ class Room
 	/**
 	 * @ORM\ManyToOne(targetEntity=Building::class, inversedBy="rooms")
 	 * @ORM\JoinColumn(nullable=false)
+	 *
+	 * @Serialize\Expose
+	 * @Serialize\Groups({"listRoom"})
+	 * @Serialize\MaxDepth(1)
 	 */
 	private $building;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=Team::class, inversedBy="rooms")
 	 * @ORM\JoinColumn(nullable=false)
+	 *
+	 * @Serialize\Expose
+	 * @Serialize\Groups({"listTeam"})
+	 * @Serialize\MaxDepth(1)
 	 */
 	private $team;
 

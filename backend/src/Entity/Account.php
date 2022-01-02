@@ -4,11 +4,14 @@ namespace App\Entity;
 
 use App\Repository\AccountRepository;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serialize;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=AccountRepository::class)
+ *
+ * @Serialize\ExclusionPolicy("all")
  */
 class Account implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -16,16 +19,25 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
 	 * @ORM\Column(type="integer")
+	 *
+	 * @Serialize\Expose
+	 * @Serialize\Groups({"listAccount"})
 	 */
 	private $id;
 
 	/**
 	 * @ORM\Column(type="string", length=180, unique=true)
+	 *
+	 * @Serialize\Expose
+	 * @Serialize\Groups({"listAccount"})
 	 */
 	private $username;
 
 	/**
 	 * @ORM\Column(type="json")
+	 *
+	 * @Serialize\Expose
+	 * @Serialize\Groups({"listAccount"})
 	 */
 	private $roles = [];
 
@@ -38,6 +50,9 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
 	/**
 	 * @ORM\ManyToOne(targetEntity=User::class, inversedBy="accounts")
 	 * @ORM\JoinColumn(nullable=false)
+	 *
+	 * @Serialize\Expose
+	 * @Serialize\Groups({"listAccount"})
 	 */
 	private $owner;
 

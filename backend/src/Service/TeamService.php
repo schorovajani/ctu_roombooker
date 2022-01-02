@@ -2,10 +2,12 @@
 
 namespace App\Service;
 
+use App\Entity\RoleType;
 use App\Entity\Team;
+use App\Entity\User;
 use App\Repository\TeamRepository;
 
-class  TeamService
+class TeamService
 {
 	private TeamRepository $teamRepository;
 
@@ -55,12 +57,29 @@ class  TeamService
 	 * @param Team $team
 	 * @return array
 	 */
-	private function getTeamChildrenRecursive(Team $team): array
+	public function getTeamChildrenRecursive(Team $team): array
 	{
 		return array_reduce($team->getChildren()->toArray(),
 			function (array $carry, Team $item) {
 				return array_merge($carry, $this->getTeamChildrenRecursive($item));
 			},
 			[$team]);
+	}
+
+	/**
+	 * @param Team $team
+	 * @return User[]
+	 */
+	public function getTeamManagers(Team $team): array
+	{
+		$managers = [];
+		while ($team !== null) {
+			foreach ($team->getTeamRoles() as $role)
+				if ($role->getRoleType()->getName() === RoleType::ROLE_MANAGER)
+					$managers[] = $role->getUser();
+
+			$team = $team->getParent();
+		}
+		return $managers;
 	}
 }
