@@ -6,17 +6,21 @@ use App\Entity\RoleType;
 use App\Entity\Team;
 use App\Entity\User;
 use App\Repository\TeamRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 class TeamService
 {
 	private TeamRepository $teamRepository;
+	private EntityManagerInterface $entityManager;
 
 	/**
+	 * @param EntityManagerInterface $entityManager
 	 * @param TeamRepository $teamRepository
 	 */
-	public function __construct(TeamRepository $teamRepository)
+	public function __construct(EntityManagerInterface $entityManager, TeamRepository $teamRepository)
 	{
 		$this->teamRepository = $teamRepository;
+		$this->entityManager = $entityManager;
 	}
 
 	/**
@@ -81,5 +85,29 @@ class TeamService
 			$team = $team->getParent();
 		}
 		return $managers;
+	}
+
+	/**
+	 * @param Team $team
+	 * @return void
+	 */
+	public function delete(Team $team): void
+	{
+		foreach ($team->getTeamRoles() as $role)
+			$team->removeTeamRole($role);
+		$this->save($team);
+
+		$this->entityManager->remove($team);
+		$this->entityManager->flush();
+	}
+
+	/**
+	 * @param Team $team
+	 * @return void
+	 */
+	public function save(Team $team): void
+	{
+		$this->entityManager->persist($team);
+		$this->entityManager->flush();
 	}
 }

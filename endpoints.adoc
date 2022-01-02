@@ -41,6 +41,7 @@
 ./teams/{id}
 * PUT = update information about team with {id}, __eg. add/update manager of team__
 * DELETE = delete team with {id}
+    ** Authorization: available only for admins
 
 ./teams/{id}/rooms
 * GET = return all rooms manages by team with {id} (includes also rooms from sub-teams)
@@ -66,6 +67,7 @@
 * PATCH = lock/unlock room with {id}
 * PUT = update information about room with {id}, __eg. add/update manager of room__
 * DELETE = delete room with {id}
+    ** Authorization: available only for admins
 
 ./rooms?type=public
 * GET = return public rooms

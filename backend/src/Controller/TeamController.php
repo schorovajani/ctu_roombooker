@@ -65,4 +65,28 @@ class TeamController extends AbstractFOSRestController
 		$view->getContext()->setGroups(['listBuilding', 'listRoom', 'listTeam', 'listTeamRole', 'listUser']);
 		return $this->handleView($view);
 	}
+
+	/**
+	 * @Route("/teams/{id}", requirements={"id": "\d+"}, methods={"DELETE"})
+	 * @IsGranted("ROLE_ADMIN")
+	 *
+	 * @param Team $team
+	 * @return Response
+	 */
+	public function routeDeleteTeam(Team $team): Response
+	{
+		$error = [];
+		if (!$team->getRooms()->isEmpty())
+			$error['error'] =  'Delete or reassign rooms to the different team first';
+
+		// TODO: Is this necessary?
+		if (!$team->getChildren()->isEmpty())
+			$error['error'] =  'Delete or reassign children to the different team first';
+
+		if (!empty($error))
+			return $this->handleView($this->view($error, Response::HTTP_BAD_REQUEST));
+
+		$this->teamService->delete($team);
+		return $this->handleView($this->view(null, Response::HTTP_NO_CONTENT));
+	}
 }

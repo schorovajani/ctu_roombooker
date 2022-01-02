@@ -75,4 +75,17 @@ class RoomController extends AbstractFOSRestController
 				throw $this->createNotFoundException();
 		}
 	}
+
+	/**
+	 * @Route("/rooms/{id}", requirements={"id": "\d+"}, methods={"DELETE"})
+	 * @IsGranted("ROLE_ADMIN")
+	 *
+	 * @param Room $room
+	 * @return Response
+	 */
+	public function routeDeleteRoom(Room $room): Response
+	{
+		$this->roomService->delete($room);
+		return $this->handleView($this->view(null, Response::HTTP_NO_CONTENT));
+	}
 }
