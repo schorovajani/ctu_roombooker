@@ -2,40 +2,28 @@
 
 namespace App\Service;
 
-use App\Entity\Account;
 use App\Entity\RoleType;
 use App\Entity\Team;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Core\Security;
 
 class UserService
 {
 	private UserRepository $userRepository;
 	private EntityManagerInterface $entityManager;
 	private TeamService $teamService;
-	private Security $security;
-	private RoomService $roomService;
 
 	/**
 	 * @param UserRepository $userRepository
 	 * @param EntityManagerInterface $entityManager
-	 * @param RoomService $roomService
 	 * @param TeamService $teamService
-	 * @param Security $security
 	 */
-	public function __construct(UserRepository         $userRepository,
-								EntityManagerInterface $entityManager,
-								RoomService            $roomService,
-								TeamService            $teamService,
-								Security               $security)
+	public function __construct(UserRepository $userRepository, EntityManagerInterface $entityManager, TeamService $teamService)
 	{
 		$this->userRepository = $userRepository;
 		$this->entityManager = $entityManager;
 		$this->teamService = $teamService;
-		$this->security = $security;
-		$this->roomService = $roomService;
 	}
 
 	/**
@@ -47,27 +35,12 @@ class UserService
 	}
 
 	/**
-	 * @param int $id
-	 * @return User|null
-	 */
-	public function getById(int $id): ?User
-	{
-		return $this->userRepository->find($id);
-	}
-
-	/**
 	 * @param User $user
 	 * @param bool $onlyAdministeredRooms
 	 * @return array
 	 */
 	public function getUserRooms(User $user, bool $onlyAdministeredRooms = false): array
 	{
-		/** @var Account $loggedInAccount */
-		$loggedInAccount = $this->security->getUser();
-		// return all rooms if logged-in user is admin && this method is called with his user object
-		if ($this->security->isGranted('ROLE_ADMIN') && $loggedInAccount->getOwner() === $user)
-			return $this->roomService->getAll();
-
 		$rooms1 = [];
 		$rooms2 = [];
 		foreach ($user->getRoomRoles() as $roomRole)
@@ -106,12 +79,6 @@ class UserService
 	 */
 	public function getUserAdministeredTeams(User $user): array
 	{
-		/** @var Account $loggedInAccount */
-		$loggedInAccount = $this->security->getUser();
-		// return all teams if logged-in user is admin && this method is called with his user object
-		if ($this->security->isGranted('ROLE_ADMIN') && $loggedInAccount->getOwner() === $user)
-			return $this->teamService->getAll();
-
 		$teams = [];
 		foreach ($user->getTeamRoles() as $role)
 			if ($role->getRoleType()->getName() === RoleType::ROLE_MANAGER)

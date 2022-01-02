@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Account;
 use App\Entity\User;
 use App\Service\AccountService;
+use App\Service\RoomService;
+use App\Service\TeamService;
 use App\Service\UserService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -18,15 +21,24 @@ class UserController extends AbstractFOSRestController
 {
 	private AccountService $accountService;
 	private UserService $userService;
+	private RoomService $roomService;
+	private TeamService $teamService;
 
 	/**
 	 * @param AccountService $accountService
+	 * @param RoomService $roomService
+	 * @param TeamService $teamService
 	 * @param UserService $userService
 	 */
-	public function __construct(AccountService $accountService, UserService $userService)
+	public function __construct(AccountService $accountService,
+								RoomService    $roomService,
+								TeamService    $teamService,
+								UserService    $userService)
 	{
 		$this->userService = $userService;
 		$this->accountService = $accountService;
+		$this->roomService = $roomService;
+		$this->teamService = $teamService;
 	}
 
 	/**
@@ -66,7 +78,10 @@ class UserController extends AbstractFOSRestController
 	 */
 	public function routeGetUserAttr(User $user, string $attr): Response
 	{
-		if (!$this->isGranted('ROLE_ADMIN') && $this->getUser()->getOwner() !== $user)
+		/** @var Account $loggedInAccount */
+		$loggedInAccount = $this->getUser();
+
+		if (!$this->isGranted('ROLE_ADMIN') && $loggedInAccount->getOwner() !== $user)
 			throw $this->createAccessDeniedException();
 
 		switch ($attr) {
@@ -75,7 +90,11 @@ class UserController extends AbstractFOSRestController
 				break;
 
 			case "rooms":
-				$viewData = $this->userService->getUserRooms($user);
+				// return all rooms if logged-in user is admin && this method is called with his user object
+				if ($this->isGranted('ROLE_ADMIN') && $loggedInAccount->getOwner() === $user)
+					$viewData = $this->roomService->getAll();
+				else
+					$viewData = $this->userService->getUserRooms($user);
 				break;
 
 			case "accounts":
@@ -83,7 +102,11 @@ class UserController extends AbstractFOSRestController
 				break;
 
 			case "teams":
-				$viewData = $this->userService->getUserAdministeredTeams($user);
+				// return all teams if logged-in user is admin && this method is called with his user object
+				if ($this->isGranted('ROLE_ADMIN') && $loggedInAccount->getOwner() === $user)
+					$viewData = $this->teamService->getAll();
+				else
+					$viewData = $this->userService->getUserAdministeredTeams($user);
 				break;
 
 			default:
