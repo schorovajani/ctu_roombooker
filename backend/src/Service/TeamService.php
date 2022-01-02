@@ -57,7 +57,7 @@ class TeamService
 	 * @param Team $team
 	 * @return array
 	 */
-	private function getTeamChildrenRecursive(Team $team): array
+	public function getTeamChildrenRecursive(Team $team): array
 	{
 		return array_reduce($team->getChildren()->toArray(),
 			function (array $carry, Team $item) {

@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\Account;
 use App\Entity\RoleType;
+use App\Entity\Team;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -97,5 +98,25 @@ class UserService
 	{
 		$this->entityManager->persist($user);
 		$this->entityManager->flush();
+	}
+
+	/**
+	 * @param User $user
+	 * @return Team[]
+	 */
+	public function getUserAdministeredTeams(User $user): array
+	{
+		/** @var Account $loggedInAccount */
+		$loggedInAccount = $this->security->getUser();
+		// return all teams if logged-in user is admin && this method is called with his user object
+		if ($this->security->isGranted('ROLE_ADMIN') && $loggedInAccount->getOwner() === $user)
+			return $this->teamService->getAll();
+
+		$teams = [];
+		foreach ($user->getTeamRoles() as $role)
+			if ($role->getRoleType()->getName() === RoleType::ROLE_MANAGER)
+				$teams = array_merge($teams, $this->teamService->getTeamChildrenRecursive($role->getTeam()));
+
+		return array_unique($teams, SORT_REGULAR);
 	}
 }

@@ -27,6 +27,10 @@
     ** Authorization: available only for user with id = {id} or for admins
 * POST = create account to user with {id}
 
+./users/{id}/teams
+* GET = return all teams where is user with {id} manager (includes also sub-teams)
+    ** Authorization: available only for user with id = {id} or for admins
+
 === TEAMS (GET requests: FINISHED)
 
 ./teams
@@ -39,7 +43,7 @@
 * DELETE = delete team with {id}
 
 ./teams/{id}/rooms
-* GET = return all rooms manages by team with {id}
+* GET = return all rooms manages by team with {id} (includes also rooms from sub-teams)
     ** Authorization: available for authenticated users
 * POST = add room/s to team with {id}
 

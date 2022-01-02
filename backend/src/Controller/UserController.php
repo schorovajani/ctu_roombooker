@@ -82,6 +82,10 @@ class UserController extends AbstractFOSRestController
 				$viewData = $this->accountService->getBy(['owner' => $user]);
 				break;
 
+			case "teams":
+				$viewData = $this->userService->getUserAdministeredTeams($user);
+				break;
+
 			default:
 				throw $this->createNotFoundException();
 		}
