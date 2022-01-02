@@ -98,6 +98,7 @@
     ** Authorization: available for authenticated users
 * PUT = update information in request, __eg. accept request by manager__
 * DELETE = delete request
+    ** Authorization: available only for user who created the request and for admins
 
 === BUILDINGS (GET requests: FINISHED)
 

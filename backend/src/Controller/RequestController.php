@@ -53,4 +53,19 @@ class RequestController extends AbstractFOSRestController
 		$view->getContext()->setGroups(['listBuilding', 'listRequest', 'listRoom', 'listStatus', 'listUser']);
 		return $this->handleView($view);
 	}
+
+	/**
+	 * @Route("/requests/{id}", requirements={"id": "\d+"}, methods={"DELETE"})
+	 * @IsGranted("IS_AUTHENTICATED_REMEMBERED")
+	 *
+	 * @param Request $request
+	 * @return Response
+	 */
+	public function routeDeleteRequest(Request $request): Response
+	{
+		if (!$this->isGranted('ROLE_ADMIN') && $this->getUser()->getOwner() !== $request->getUser())
+			throw $this->createAccessDeniedException();
+		$this->requestService->delete($request);
+		return $this->handleView($this->view(null, Response::HTTP_NO_CONTENT));
+	}
 }
