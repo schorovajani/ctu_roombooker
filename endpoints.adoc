@@ -59,6 +59,7 @@
 * POST = create new room by administrator
 
 ./rooms/{id}
+* PATCH = lock/unlock room with {id}
 * PUT = update information about room with {id}, __eg. add/update manager of room__
 * DELETE = delete room with {id}
 
@@ -71,7 +72,7 @@
 
 ./rooms/{id}/users
 * GET = return all members of room
-    ** Authorization: available only for admins and for managers of room with {id}
+    ** Authorization: available only for admins and for managers of room with {id} (available also for corresponding team managers)
 * POST = add user to room role
 
 ./rooms/{id_r}/users/{id_u}
@@ -96,6 +97,9 @@
 * GET = return all building
     ** Authorization: available for everyone, only public rooms will be returned for unauthorized users, all rooms will be returned for authorized user
 * POST = create new building
+
+./buildings/{id}
+* DELETE = delete building
 
 ./buildings/{id}/rooms
 * GET = return all rooms in building with {id}
