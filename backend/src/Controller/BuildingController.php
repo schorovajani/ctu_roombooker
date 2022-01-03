@@ -79,6 +79,7 @@ class BuildingController extends AbstractFOSRestController
 
 	/**
 	 * @Rest\Post("/buildings")
+	 * @IsGranted("ROLE_ADMIN")
 	 * @ParamConverter("building", converter="fos_rest.request_body")
 	 *
 	 * @param Building $building
