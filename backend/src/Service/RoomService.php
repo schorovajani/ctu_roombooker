@@ -5,17 +5,21 @@ namespace App\Service;
 use App\Entity\RoleType;
 use App\Entity\Room;
 use App\Repository\RoomRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 class RoomService
 {
 	private RoomRepository $roomRepository;
+	private EntityManagerInterface $entityManager;
 
 	/**
+	 * @param EntityManagerInterface $entityManager
 	 * @param RoomRepository $roomRepository
 	 */
-	public function __construct(RoomRepository $roomRepository)
+	public function __construct(EntityManagerInterface $entityManager, RoomRepository $roomRepository)
 	{
 		$this->roomRepository = $roomRepository;
+		$this->entityManager = $entityManager;
 	}
 
 	/**
@@ -73,5 +77,30 @@ class RoomService
 		// > element will be retained.
 		// It is possible that other places where array_unique is used are affected
 		return array_values($users);
+	}
+
+	/**
+	 * @param Room $room
+	 * @return void
+	 */
+	public function delete(Room $room): void
+	{
+		foreach ($room->getRoomRoles() as $role)
+			$this->entityManager->remove($role);
+		foreach ($room->getRequests() as $request)
+			$this->entityManager->remove($request);
+
+		$this->entityManager->remove($room);
+		$this->entityManager->flush();
+	}
+
+	/**
+	 * @param Room $room
+	 * @return void
+	 */
+	private function save(Room $room): void
+	{
+		$this->entityManager->persist($room);
+		$this->entityManager->flush();
 	}
 }
