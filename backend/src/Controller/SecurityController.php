@@ -53,7 +53,7 @@ class SecurityController extends AbstractFOSRestController
 	 */
 	public function logoutResponse(): Response
 	{
-		return $this->json(null, Response::HTTP_OK);
+		return $this->json(null, Response::HTTP_NO_CONTENT);
 	}
 
 	/**
