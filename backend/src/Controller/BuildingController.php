@@ -7,9 +7,8 @@ use App\Service\BuildingService;
 use App\Service\RoomService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use JMS\Serializer\SerializerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -20,18 +19,15 @@ class BuildingController extends AbstractFOSRestController
 {
 	private BuildingService $buildingService;
 	private RoomService $roomService;
-	private SerializerInterface $serializer;
 
 	/**
 	 * @param BuildingService $buildingService
 	 * @param RoomService $roomService
-	 * @param SerializerInterface $serializer
 	 */
-	public function __construct(BuildingService $buildingService, RoomService $roomService, SerializerInterface $serializer)
+	public function __construct(BuildingService $buildingService, RoomService $roomService)
 	{
 		$this->buildingService = $buildingService;
 		$this->roomService = $roomService;
-		$this->serializer = $serializer;
 	}
 
 	/**
@@ -82,15 +78,15 @@ class BuildingController extends AbstractFOSRestController
 
 	/**
 	 * @Rest\Post("/buildings")
+	 * @ParamConverter("building", converter="fos_rest.request_body")
 	 *
-	 * @param Request $request
+	 * @param Building $building
 	 * @return Response
 	 */
-	public function routePostBuilding(Request $request): Response
+	public function routePostBuilding(Building $building): Response
 	{
 		// https://insights.project-a.com/serializing-data-in-php-a-simple-primer-on-the-jms-serializer-and-fos-rest-f469d7d5b902
-		$building = $this->serializer->deserialize($request->getContent(), Building::class, 'json');
 		$this->buildingService->save($building);
-		return new Response($this->serializer->serialize($building, "xml"));
+		return $this->handleView($this->view($building));
 	}
 }
