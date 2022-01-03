@@ -68,7 +68,7 @@ class BuildingController extends AbstractFOSRestController
 	{
 		if (!$building->getRooms()->isEmpty())
 			return $this->handleView($this->view([
-				'error' => 'Delete or reassign rooms to the different building first',
+				'error' => 'Delete or reassign rooms to a different building first',
 			], Response::HTTP_BAD_REQUEST));
 
 		$this->buildingService->delete($building);

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\RoleType;
 use App\Entity\Room;
 use App\Entity\User;
 use App\Service\RoomRoleService;
@@ -106,10 +107,13 @@ class RoomController extends AbstractFOSRestController
 	 */
 	public function routeDeleteUserRoomRole(Room $room, User $user): Response
 	{
-		if (!$this->isGranted('ROLE_ADMIN')
-			&& !in_array($this->getUser()->getOwner(), $this->roomService->getRoomUsers($room, true)))
-			throw $this->createAccessDeniedException();
-		$this->roomRoleService->deleteRoomRole($room, $user);
+		$roomRole = $this->roomRoleService->get(['user' => $user, 'room' => $room]);
+		if (!$this->isGranted('ROLE_ADMIN'))
+			if ($roomRole->getRoleType()->getName() === RoleType::ROLE_MANAGER
+				|| !in_array($this->getUser()->getOwner(), $this->roomService->getRoomUsers($room, true)))
+				throw $this->createAccessDeniedException();
+
+		$this->roomRoleService->delete($roomRole);
 		return $this->handleView($this->view(null, Response::HTTP_NO_CONTENT));
 	}
 }

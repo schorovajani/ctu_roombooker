@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\RoleType;
 use App\Entity\Team;
 use App\Entity\User;
 use App\Service\TeamRoleService;
@@ -83,11 +84,11 @@ class TeamController extends AbstractFOSRestController
 	{
 		$error = [];
 		if (!$team->getRooms()->isEmpty())
-			$error['error'] = 'Delete or reassign rooms to the different team first';
+			$error['error'] = 'Delete or reassign rooms to a different team first';
 
 		// TODO: Is this necessary? IMO nope, but it is necessary to loop over children and set their parent to null
 		if (!$team->getChildren()->isEmpty())
-			$error['error'] = 'Delete or reassign children to the different team first';
+			$error['error'] = 'Delete or reassign children to a different team first';
 
 		if (!empty($error))
 			return $this->handleView($this->view($error, Response::HTTP_BAD_REQUEST));
@@ -107,10 +108,13 @@ class TeamController extends AbstractFOSRestController
 	 */
 	public function routeDeleteUserTeamRole(Team $team, User $user): Response
 	{
-		if (!$this->isGranted('ROLE_ADMIN')
-			&& !in_array($this->getUser()->getOwner(), $this->teamService->getTeamManagers($team)))
-			throw $this->createAccessDeniedException();
-		$this->teamRoleService->deleteTeamRole($team, $user);
+		$teamRole = $this->teamRoleService->get(['user' => $user, 'team' => $team]);
+		if (!$this->isGranted('ROLE_ADMIN'))
+			if ($teamRole->getRoleType()->getName() === RoleType::ROLE_MANAGER
+				|| !in_array($this->getUser()->getOwner(), $this->teamService->getTeamManagers($team)))
+				throw $this->createAccessDeniedException();
+
+		$this->teamRoleService->delete($teamRole);
 		return $this->handleView($this->view(null, Response::HTTP_NO_CONTENT));
 	}
 }

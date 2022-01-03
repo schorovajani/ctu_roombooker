@@ -2,8 +2,7 @@
 
 namespace App\Service;
 
-use App\Entity\Team;
-use App\Entity\User;
+use App\Entity\TeamRole;
 use App\Repository\TeamRoleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -23,14 +22,25 @@ class TeamRoleService
 	}
 
 	/**
-	 * @param Team $team
-	 * @param User $user
+	 * @param TeamRole $teamRole
 	 * @return void
 	 */
-	public function deleteTeamRole(Team $team, User $user): void
+	public function delete(TeamRole $teamRole): void
 	{
-		$teamRole = $this->teamRoleRepository->find(['user' => $user, 'team' => $team]);
 		$this->entityManager->remove($teamRole);
 		$this->entityManager->flush();
+	}
+
+	/**
+	 * Mirror repository's `find` method.
+	 *
+	 * @param array $ids
+	 * @param $lockMode
+	 * @param $lockVersion
+	 * @return TeamRole|null
+	 */
+	public function get(array $ids, $lockMode = null, $lockVersion = null): ?TeamRole
+	{
+		return $this->teamRoleRepository->find($ids, $lockMode, $lockVersion);
 	}
 }

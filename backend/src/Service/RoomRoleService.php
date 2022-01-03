@@ -2,8 +2,7 @@
 
 namespace App\Service;
 
-use App\Entity\Room;
-use App\Entity\User;
+use App\Entity\RoomRole;
 use App\Repository\RoomRoleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -23,14 +22,25 @@ class RoomRoleService
 	}
 
 	/**
-	 * @param Room $room
-	 * @param User $user
+	 * @param RoomRole $roomRole
 	 * @return void
 	 */
-	public function deleteRoomRole(Room $room, User $user): void
+	public function delete(RoomRole $roomRole): void
 	{
-		$roomRole = $this->roomRoleRepository->find(['user' => $user, 'room' => $room]);
 		$this->entityManager->remove($roomRole);
 		$this->entityManager->flush();
+	}
+
+	/**
+	 * Mirror repository's `find` method.
+	 *
+	 * @param array $ids
+	 * @param $lockMode
+	 * @param $lockVersion
+	 * @return RoomRole|null
+	 */
+	public function get(array $ids, $lockMode = null, $lockVersion = null): ?RoomRole
+	{
+		return $this->roomRoleRepository->find($ids, $lockMode, $lockVersion);
 	}
 }
