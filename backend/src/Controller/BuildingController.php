@@ -11,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 /**
  * @Route("/api")
@@ -81,10 +82,14 @@ class BuildingController extends AbstractFOSRestController
 	 * @ParamConverter("building", converter="fos_rest.request_body")
 	 *
 	 * @param Building $building
+	 * @param ConstraintViolationListInterface $validationErrors
 	 * @return Response
 	 */
-	public function routePostBuilding(Building $building): Response
+	public function routePostBuilding(Building $building, ConstraintViolationListInterface $validationErrors): Response
 	{
+		if (count($validationErrors) > 0)
+			return $this->handleView($this->view(['error' => $validationErrors], Response::HTTP_BAD_REQUEST));
+
 		// https://insights.project-a.com/serializing-data-in-php-a-simple-primer-on-the-jms-serializer-and-fos-rest-f469d7d5b902
 		$this->buildingService->save($building);
 		return $this->handleView($this->view($building));
