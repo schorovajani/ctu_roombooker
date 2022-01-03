@@ -56,7 +56,7 @@ class AccountController extends AbstractFOSRestController
 	}
 
 	/**
-	 * @Route("/accounts/{id}", requirements={"id": "\d+"}, methods={"DELETE"})
+	 * @Rest\Delete("/accounts/{id}", requirements={"id": "\d+"})
 	 * @IsGranted("ROLE_ADMIN")
 	 *
 	 * @param Account $account

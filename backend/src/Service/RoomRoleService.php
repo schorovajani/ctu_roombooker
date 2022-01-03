@@ -27,7 +27,7 @@ class RoomRoleService
 	 * @param User $user
 	 * @return void
 	 */
-	public function removeRoomRole(Room $room, User $user): void
+	public function deleteRoomRole(Room $room, User $user): void
 	{
 		$roomRole = $this->roomRoleRepository->find(['user' => $user, 'room' => $room]);
 		$this->entityManager->remove($roomRole);

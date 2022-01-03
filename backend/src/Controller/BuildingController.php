@@ -58,7 +58,7 @@ class BuildingController extends AbstractFOSRestController
 	}
 
 	/**
-	 * @Route("/buildings/{id}", requirements={"id": "\d+"}, methods={"DELETE"})
+	 * @Rest\Delete("/buildings/{id}", requirements={"id": "\d+"})
 	 * @IsGranted("ROLE_ADMIN")
 	 *
 	 * @param Building $building

@@ -73,7 +73,7 @@ class TeamController extends AbstractFOSRestController
 	}
 
 	/**
-	 * @Route("/teams/{id}", requirements={"id": "\d+"}, methods={"DELETE"})
+	 * @Rest\Delete("/teams/{id}", requirements={"id": "\d+"})
 	 * @IsGranted("ROLE_ADMIN")
 	 *
 	 * @param Team $team
@@ -97,7 +97,7 @@ class TeamController extends AbstractFOSRestController
 	}
 
 	/**
-	 * @Route("/teams/{id}/users/{user_id}", requirements={"id": "\d+", "user_id": "\d+"}, methods={"DELETE"})
+	 * @Rest\Delete("/teams/{id}/users/{user_id}", requirements={"id": "\d+", "user_id": "\d+"})
 	 * @Entity("user", expr="repository.find(user_id)")
 	 * @IsGranted("IS_AUTHENTICATED_REMEMBERED")
 	 *
@@ -110,7 +110,7 @@ class TeamController extends AbstractFOSRestController
 		if (!$this->isGranted('ROLE_ADMIN')
 			&& !in_array($this->getUser()->getOwner(), $this->teamService->getTeamManagers($team)))
 			throw $this->createAccessDeniedException();
-		$this->teamRoleService->removeTeamRole($team, $user);
+		$this->teamRoleService->deleteTeamRole($team, $user);
 		return $this->handleView($this->view(null, Response::HTTP_NO_CONTENT));
 	}
 }

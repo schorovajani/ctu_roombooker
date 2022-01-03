@@ -55,7 +55,7 @@ class RequestController extends AbstractFOSRestController
 	}
 
 	/**
-	 * @Route("/requests/{id}", requirements={"id": "\d+"}, methods={"DELETE"})
+	 * @Rest\Delete("/requests/{id}", requirements={"id": "\d+"})
 	 * @IsGranted("IS_AUTHENTICATED_REMEMBERED")
 	 *
 	 * @param Request $request

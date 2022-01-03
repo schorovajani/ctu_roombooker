@@ -83,7 +83,7 @@ class RoomController extends AbstractFOSRestController
 	}
 
 	/**
-	 * @Route("/rooms/{id}", requirements={"id": "\d+"}, methods={"DELETE"})
+	 * @Rest\Delete("/rooms/{id}", requirements={"id": "\d+"})
 	 * @IsGranted("ROLE_ADMIN")
 	 *
 	 * @param Room $room
@@ -96,7 +96,7 @@ class RoomController extends AbstractFOSRestController
 	}
 
 	/**
-	 * @Route("/rooms/{id}/users/{user_id}", requirements={"id": "\d+", "user_id": "\d+"}, methods={"DELETE"})
+	 * @Rest\Delete("/rooms/{id}/users/{user_id}", requirements={"id": "\d+", "user_id": "\d+"})
 	 * @Entity("user", expr="repository.find(user_id)")
 	 * @IsGranted("IS_AUTHENTICATED_REMEMBERED")
 	 *
@@ -104,12 +104,12 @@ class RoomController extends AbstractFOSRestController
 	 * @param User $user
 	 * @return Response
 	 */
-	public function routeDeleteRoomRole(Room $room, User $user): Response
+	public function routeDeleteUserRoomRole(Room $room, User $user): Response
 	{
 		if (!$this->isGranted('ROLE_ADMIN')
 			&& !in_array($this->getUser()->getOwner(), $this->roomService->getRoomUsers($room, true)))
 			throw $this->createAccessDeniedException();
-		$this->roomRoleService->removeRoomRole($room, $user);
+		$this->roomRoleService->deleteRoomRole($room, $user);
 		return $this->handleView($this->view(null, Response::HTTP_NO_CONTENT));
 	}
 }

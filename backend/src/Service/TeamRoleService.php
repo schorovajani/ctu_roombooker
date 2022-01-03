@@ -27,7 +27,7 @@ class TeamRoleService
 	 * @param User $user
 	 * @return void
 	 */
-	public function removeTeamRole(Team $team, User $user): void
+	public function deleteTeamRole(Team $team, User $user): void
 	{
 		$teamRole = $this->teamRoleRepository->find(['user' => $user, 'team' => $team]);
 		$this->entityManager->remove($teamRole);
