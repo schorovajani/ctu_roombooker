@@ -2,10 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\RoleType;
 use App\Entity\Room;
+use App\Entity\User;
+use App\Service\RoomRoleService;
 use App\Service\RoomService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,13 +21,16 @@ use Symfony\Component\Routing\Annotation\Route;
 class RoomController extends AbstractFOSRestController
 {
 	private RoomService $roomService;
+	private RoomRoleService $roomRoleService;
 
 	/**
+	 * @param RoomRoleService $roomRoleService
 	 * @param RoomService $roomService
 	 */
-	public function __construct(RoomService $roomService)
+	public function __construct(RoomRoleService $roomRoleService, RoomService $roomService)
 	{
 		$this->roomService = $roomService;
+		$this->roomRoleService = $roomRoleService;
 	}
 
 	/**
@@ -74,5 +81,39 @@ class RoomController extends AbstractFOSRestController
 			default:
 				throw $this->createNotFoundException();
 		}
+	}
+
+	/**
+	 * @Rest\Delete("/rooms/{id}", requirements={"id": "\d+"})
+	 * @IsGranted("ROLE_ADMIN")
+	 *
+	 * @param Room $room
+	 * @return Response
+	 */
+	public function routeDeleteRoom(Room $room): Response
+	{
+		$this->roomService->delete($room);
+		return $this->handleView($this->view(null, Response::HTTP_NO_CONTENT));
+	}
+
+	/**
+	 * @Rest\Delete("/rooms/{id}/users/{user_id}", requirements={"id": "\d+", "user_id": "\d+"})
+	 * @Entity("user", expr="repository.find(user_id)")
+	 * @IsGranted("IS_AUTHENTICATED_REMEMBERED")
+	 *
+	 * @param Room $room
+	 * @param User $user
+	 * @return Response
+	 */
+	public function routeDeleteUserRoomRole(Room $room, User $user): Response
+	{
+		$roomRole = $this->roomRoleService->get(['user' => $user, 'room' => $room]);
+		if (!$this->isGranted('ROLE_ADMIN'))
+			if ($roomRole->getRoleType()->getName() === RoleType::ROLE_MANAGER
+				|| !in_array($this->getUser()->getOwner(), $this->roomService->getRoomUsers($room, true)))
+				throw $this->createAccessDeniedException();
+
+		$this->roomRoleService->delete($roomRole);
+		return $this->handleView($this->view(null, Response::HTTP_NO_CONTENT));
 	}
 }

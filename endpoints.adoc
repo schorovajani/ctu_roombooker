@@ -41,6 +41,7 @@
 ./teams/{id}
 * PUT = update information about team with {id}, __eg. add/update manager of team__
 * DELETE = delete team with {id}
+    ** Authorization: available only for admins
 
 ./teams/{id}/rooms
 * GET = return all rooms manages by team with {id} (includes also rooms from sub-teams)
@@ -54,6 +55,7 @@
 
 ./teams/{id_t}/users/{id_u}
 * DELETE = delete user team role
+    ** Authorization: available only for admins and for administrators of team with {id} (including managers of parents teams)
 
 === ROOMS (GET requests: FINISHED)
 
@@ -66,6 +68,7 @@
 * PATCH = lock/unlock room with {id}
 * PUT = update information about room with {id}, __eg. add/update manager of room__
 * DELETE = delete room with {id}
+    ** Authorization: available only for admins
 
 ./rooms?type=public
 * GET = return public rooms
@@ -80,7 +83,8 @@
 * POST = add user to room role
 
 ./rooms/{id_r}/users/{id_u}
-* DELETE = remove user room role 
+* DELETE = remove user room role
+    ** Authorization: available only for admins and for managers of room with {id} (available also for corresponding team managers)
 
 === REQUESTS (GET requests: FINISHED)
 
@@ -94,6 +98,7 @@
     ** Authorization: available for authenticated users
 * PUT = update information in request, __eg. accept request by manager__
 * DELETE = delete request
+    ** Authorization: available only for user who created the request and for admins
 
 === BUILDINGS (GET requests: FINISHED)
 
@@ -104,6 +109,7 @@
 
 ./buildings/{id}
 * DELETE = delete building
+    ** Authorization: available only for admins
 
 ./buildings/{id}/rooms
 * GET = return all rooms in building with {id}
@@ -121,3 +127,4 @@ All accounts of user will be return from user endpoint. If user/admin click to u
     ** Authorization: available only for owner of the account with id = {id} or for admins
 * PUT = update information about account with {id}
 * DELETE = delete account with {id}
+    ** Authorization: available only for admins
