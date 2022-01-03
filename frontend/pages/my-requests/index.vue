@@ -35,9 +35,8 @@ export default {
 
 <style scoped>
 main {
-  height: 100%;
   width: 60%;
-  margin: 4rem auto 6rem auto;
+  margin: 4rem auto 4rem auto;
 }
 
 h2 {
