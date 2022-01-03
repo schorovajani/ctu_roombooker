@@ -82,16 +82,10 @@ class TeamController extends AbstractFOSRestController
 	 */
 	public function routeDeleteTeam(Team $team): Response
 	{
-		$error = [];
 		if (!$team->getRooms()->isEmpty())
-			$error['error'] = 'Delete or reassign rooms to a different team first';
-
-		// TODO: Is this necessary? IMO nope, but it is necessary to loop over children and set their parent to null
+			return $this->handleView($this->view(['error' => 'Delete or reassign rooms to a different team first'], Response::HTTP_BAD_REQUEST));
 		if (!$team->getChildren()->isEmpty())
-			$error['error'] = 'Delete or reassign children to a different team first';
-
-		if (!empty($error))
-			return $this->handleView($this->view($error, Response::HTTP_BAD_REQUEST));
+			return $this->handleView($this->view(['error' => 'Delete or reassign children to a different team first'], Response::HTTP_BAD_REQUEST));
 
 		$this->teamService->delete($team);
 		return $this->handleView($this->view(null, Response::HTTP_NO_CONTENT));
