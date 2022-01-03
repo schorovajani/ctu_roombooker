@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\RoleType;
 use App\Entity\Room;
+use App\Entity\User;
 use App\Repository\RoomRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -48,7 +49,7 @@ class RoomService
 	 *
 	 * @param Room $room
 	 * @param bool $onlyManagers
-	 * @return array
+	 * @return User[]
 	 */
 	public function getRoomUsers(Room $room, bool $onlyManagers = false): array
 	{

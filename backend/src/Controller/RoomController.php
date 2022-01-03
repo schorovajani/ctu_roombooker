@@ -7,6 +7,7 @@ use App\Entity\Room;
 use App\Entity\User;
 use App\Service\RoomRoleService;
 use App\Service\RoomService;
+use App\Service\UserService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
@@ -22,15 +23,18 @@ class RoomController extends AbstractFOSRestController
 {
 	private RoomService $roomService;
 	private RoomRoleService $roomRoleService;
+	private UserService $userService;
 
 	/**
 	 * @param RoomRoleService $roomRoleService
 	 * @param RoomService $roomService
+	 * @param UserService $userService
 	 */
-	public function __construct(RoomRoleService $roomRoleService, RoomService $roomService)
+	public function __construct(RoomRoleService $roomRoleService, RoomService $roomService, UserService $userService)
 	{
 		$this->roomService = $roomService;
 		$this->roomRoleService = $roomRoleService;
+		$this->userService = $userService;
 	}
 
 	/**
@@ -74,8 +78,11 @@ class RoomController extends AbstractFOSRestController
 
 			case "users":
 				$this->denyAccessUnlessGranted('GET_ROOM_USERS', $room);
-				$view = $this->view($this->roomService->getRoomUsers($room), Response::HTTP_OK);
-				$view->getContext()->setGroups(['listRoom', 'listRoomRole', 'listUser']);
+				$users = $this->roomService->getRoomUsers($room);
+				foreach ($users as $user)
+					$this->userService->filterUserRolesByRoom($user, $room);
+				$view = $this->view($users, Response::HTTP_OK);
+				$view->getContext()->setGroups(['listRoom', 'listRoomRole', 'listTeam', 'listTeamRole', 'listUser']);
 				return $this->handleView($view);
 
 			default:
