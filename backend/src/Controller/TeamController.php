@@ -7,6 +7,7 @@ use App\Entity\Team;
 use App\Entity\User;
 use App\Service\TeamRoleService;
 use App\Service\TeamService;
+use App\Service\UserService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
@@ -21,15 +22,18 @@ class TeamController extends AbstractFOSRestController
 {
 	private TeamRoleService $teamRoleService;
 	private TeamService $teamService;
+	private UserService $userService;
 
 	/**
 	 * @param TeamService $teamService
 	 * @param TeamRoleService $teamRoleService
+	 * @param UserService $userService
 	 */
-	public function __construct(TeamService $teamService, TeamRoleService $teamRoleService)
+	public function __construct(TeamService $teamService, TeamRoleService $teamRoleService, UserService $userService)
 	{
 		$this->teamRoleService = $teamRoleService;
 		$this->teamService = $teamService;
+		$this->userService = $userService;
 	}
 
 	/**
@@ -62,7 +66,10 @@ class TeamController extends AbstractFOSRestController
 
 			case "users":
 				$this->denyAccessUnlessGranted('GET_TEAM_USERS', $team);
-				$viewData = $this->teamService->getTeamMembers($team);
+				$users = $this->teamService->getTeamMembers($team);
+				foreach ($users as $user)
+					$this->userService->filterUserRolesByTeam($user, $team);
+				$viewData = $users;
 				break;
 
 			default:

@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\RoleType;
+use App\Entity\Room;
 use App\Entity\Team;
 use App\Entity\User;
 use App\Repository\UserRepository;
@@ -85,5 +86,42 @@ class UserService
 				$teams = array_merge($teams, $this->teamService->getTeamChildrenRecursive($role->getTeam()));
 
 		return array_unique($teams, SORT_REGULAR);
+	}
+
+	/**
+	 * Remove all $user's roomRoles and teamRoles which are not connected with given room, changes are not saved to database
+	 *
+	 * @param User $user
+	 * @param Room $room
+	 * @return User
+	 */
+	public function filterUserRolesByRoom(User $user, Room $room): User
+	{
+		foreach ($user->getRoomRoles() as $roomRole)
+			if ($roomRole->getRoom() !== $room)
+				$user->removeRoomRole($roomRole);
+		foreach ($user->getTeamRoles() as $teamRole)
+			if (!in_array($room, $this->teamService->getTeamRooms($teamRole->getTeam())))
+				$user->removeTeamRole($teamRole);
+
+		return $user;
+	}
+
+	/**
+	 * Remove all $user's roomRoles and teamRoles which are not connected with given team, changes are not saved to database
+	 *
+	 * @param User $user
+	 * @param Team $team
+	 * @return User
+	 */
+	public function filterUserRolesByTeam(User $user, Team $team): User
+	{
+		foreach ($user->getRoomRoles() as $roomRole)
+			$user->removeRoomRole($roomRole);
+		foreach ($user->getTeamRoles() as $teamRole)
+			if (!in_array($team, $this->teamService->getTeamChildrenRecursive($teamRole->getTeam())))
+				$user->removeTeamRole($teamRole);
+
+		return $user;
 	}
 }
