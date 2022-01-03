@@ -124,10 +124,12 @@ hr {
 }
 .btn-green {
   background-color: #dcf9f4;
+  border: #a7d8c0 2px solid;
 }
 
 .btn-red {
   background-color: #f9dce1;
+  border: #d8a7bf 2px solid;
 }
 
 .more-info {
@@ -146,8 +148,9 @@ h4 {
 
 .icons button {
   margin: 0.5rem;
-  padding: 1rem;
-  border: solid 1px #505050;
+  padding: 0.6rem 1rem 0.6rem 1rem;
+  background-color: #e6f5ff;
+  border: solid 2px #b1d4df;
 }
 
 .info {
