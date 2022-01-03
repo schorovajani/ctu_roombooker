@@ -89,7 +89,7 @@ class UserService
 	}
 
 	/**
-	 * Remove user roomRoles and teamRoles which are not connected with given room, changes are not saved to database
+	 * Remove user his roomRoles and teamRoles which are not connected with given room, changes are not saved to database
 	 *
 	 * @param User $user
 	 * @param Room $room
@@ -102,6 +102,24 @@ class UserService
 				$user->removeRoomRole($roomRole);
 		foreach ($user->getTeamRoles() as $teamRole)
 			if (!in_array($room, $this->teamService->getTeamRooms($teamRole->getTeam())))
+				$user->removeTeamRole($teamRole);
+
+		return $user;
+	}
+
+	/**
+	 * Remove user all his roomRoles and that teamRoles which are not connected with given team, changes are not saved to database
+	 *
+	 * @param User $user
+	 * @param Team $team
+	 * @return User
+	 */
+	public function filterUserRolesByTeam(User $user, Team $team): User
+	{
+		foreach ($user->getRoomRoles() as $roomRole)
+			$user->removeRoomRole($roomRole);
+		foreach ($user->getTeamRoles() as $teamRole)
+			if (!in_array($team, $this->teamService->getTeamChildrenRecursive($teamRole->getTeam())))
 				$user->removeTeamRole($teamRole);
 
 		return $user;
