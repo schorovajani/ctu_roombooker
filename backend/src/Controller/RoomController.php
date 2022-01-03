@@ -56,6 +56,19 @@ class RoomController extends AbstractFOSRestController
 	}
 
 	/**
+	 * @Rest\Get("/rooms/{id}", requirements={"id": "\d+"})
+	 *
+	 * @param Room $room
+	 * @return Response
+	 */
+	public function routeGetRoom(Room $room): Response
+	{
+		$view = $this->view($room, Response::HTTP_OK);
+		$view->getContext()->setGroups(['listBuilding', 'listRoom', 'listTeam']);
+		return $this->handleView($view);
+	}
+
+	/**
 	 * @Rest\Get("/rooms/{id}/{attr}", requirements={"id": "\d+"})
 	 *
 	 * @param Room $room

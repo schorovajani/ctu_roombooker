@@ -89,7 +89,7 @@ class UserService
 	}
 
 	/**
-	 * Remove user his roomRoles and teamRoles which are not connected with given room, changes are not saved to database
+	 * Remove all $user's roomRoles and teamRoles which are not connected with given room, changes are not saved to database
 	 *
 	 * @param User $user
 	 * @param Room $room
@@ -108,7 +108,7 @@ class UserService
 	}
 
 	/**
-	 * Remove user all his roomRoles and that teamRoles which are not connected with given team, changes are not saved to database
+	 * Remove all $user's roomRoles and teamRoles which are not connected with given team, changes are not saved to database
 	 *
 	 * @param User $user
 	 * @param Team $team
