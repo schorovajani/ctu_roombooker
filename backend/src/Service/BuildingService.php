@@ -48,4 +48,17 @@ class BuildingService
 		$this->entityManager->persist($building);
 		$this->entityManager->flush();
 	}
+
+	/**
+	 * @param int $id
+	 * @param Building $building
+	 * @return void
+	 */
+	public function update(int $id, Building $building): void
+	{
+		$building->setId($id);
+		/** @var Building $building */
+		$building = $this->entityManager->merge($building);
+		$this->save($building);
+	}
 }

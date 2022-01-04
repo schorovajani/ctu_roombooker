@@ -95,4 +95,23 @@ class BuildingController extends AbstractFOSRestController
 		$this->buildingService->save($building);
 		return $this->handleView($this->view($building, Response::HTTP_CREATED));
 	}
+
+	/**
+	 * @Rest\Put("/buildings/{id}", requirements={"id": "\d+"})
+	 * @ParamConverter("building", converter="fos_rest.request_body")
+	 * @IsGranted("ROLE_ADMIN")
+	 *
+	 * @param int $id
+	 * @param Building $building
+	 * @param ConstraintViolationListInterface $validationErrors
+	 * @return Response
+	 */
+	public function routePutBuilding(int $id, Building $building, ConstraintViolationListInterface $validationErrors): Response
+	{
+		if (count($validationErrors) > 0)
+			return $this->handleView($this->view(['error' => $validationErrors], Response::HTTP_BAD_REQUEST));
+
+		$this->buildingService->update($id, $building);
+		return $this->handleView($this->view($building, Response::HTTP_OK));
+	}
 }
