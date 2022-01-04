@@ -131,9 +131,8 @@ class TeamController extends AbstractFOSRestController
 	 */
 	public function routePostTeam(Team $team, ConstraintViolationListInterface $validationErrors): Response
 	{
-		if (count($validationErrors) > 0) {
+		if (count($validationErrors) > 0)
 			return $this->handleView($this->view(["error" => $validationErrors], Response::HTTP_BAD_REQUEST));
-		}
 
 		$this->teamService->save($team);
 		$view = $this->view($team, Response::HTTP_CREATED);

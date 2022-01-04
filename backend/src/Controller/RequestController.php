@@ -81,9 +81,8 @@ class RequestController extends AbstractFOSRestController
 	 */
 	public function routePostRequest(Request $request, ConstraintViolationListInterface $validationErrors): Response
 	{
-		if (count($validationErrors) > 0) {
+		if (count($validationErrors) > 0)
 			return $this->handleView($this->view(["error" => $validationErrors], Response::HTTP_BAD_REQUEST));
-		}
 
 		$this->requestService->save($request);
 		$view = $this->view($request, Response::HTTP_CREATED);
