@@ -93,6 +93,6 @@ class BuildingController extends AbstractFOSRestController
 
 		// https://insights.project-a.com/serializing-data-in-php-a-simple-primer-on-the-jms-serializer-and-fos-rest-f469d7d5b902
 		$this->buildingService->save($building);
-		return $this->handleView($this->view($building));
+		return $this->handleView($this->view($building, Response::HTTP_CREATED));
 	}
 }
