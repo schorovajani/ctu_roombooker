@@ -41,7 +41,7 @@ class Request
 	 * @ORM\Column(type="datetime")
 	 *
 	 * @Assert\NotBlank
-	 * @Assert\DateTime
+	 * @Assert\Type("datetime")
 	 *
 	 * @Serialize\Expose
 	 * @Serialize\Groups({"listRequest", "listRequestMinimal"})
@@ -54,7 +54,7 @@ class Request
 	 * @ORM\Column(type="datetime")
 	 *
 	 * @Assert\NotBlank
-	 * @Assert\DateTime
+	 * @Assert\Type("datetime")
 	 *
 	 * @Serialize\Expose
 	 * @Serialize\Groups({"listRequest", "listRequestMinimal"})
