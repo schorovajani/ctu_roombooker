@@ -56,6 +56,8 @@ export default {
     },
     deleteTeam() {
       this.$store.dispatch('team/deleteTeam', this.team.id)
+      this.$emit('usersClick', this.team)
+      this.alert = false
     },
   },
 }

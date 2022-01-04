@@ -57,6 +57,7 @@ export default {
     },
     deleteRoom() {
       this.$store.dispatch('room/deleteRoom', this.room.id)
+      this.$emit('usersClick', this.room)
       this.alert = false
     },
   },
