@@ -2,6 +2,9 @@ export default {
   filteredRooms(state) {
     return state.filteredRooms
   },
+  managerRooms(state) {
+    return state.managerRooms
+  },
   manager(state) {
     console.log('getter')
     console.log(state.roomManager)

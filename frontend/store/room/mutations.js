@@ -6,13 +6,13 @@ export default {
     let filteredRooms = []
     rooms.forEach((room) => {
       const findObject = filteredRooms.find(
-        (ro) => ro['buildName'] && ro['buildName'] === room.building.name
+        (ro) => ro['name'] && ro['name'] === room.building.name
       )
 
       if (!findObject) {
         filteredRooms.push({
           id: room.building.id,
-          buildName: room.building.name,
+          name: room.building.name,
           rooms: [room],
         })
       } else if (findObject) {
@@ -23,6 +23,10 @@ export default {
     // console.log('mutations')
     // console.log(filteredRooms)
     state.filteredRooms = filteredRooms
+  },
+
+  setManagerRooms(state, rooms) {
+    state.managerRooms = rooms
   },
   setRoomManager(state, roomUsers) {
     state.roomManager = roomUsers.find((user) => {
@@ -60,5 +64,12 @@ export default {
     console.log('events')
     console.log(events)
     state.roomRequests = events
+  },
+
+  deleteRoom(state, id) {
+    state.rooms = state.rooms.filter((room) => room.id !== id)
+    state.filteredRooms.forEach((build) => {
+      build.rooms = build.rooms.filter((room) => room.id !== id)
+    })
   },
 }

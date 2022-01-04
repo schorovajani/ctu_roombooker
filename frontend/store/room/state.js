@@ -5,4 +5,5 @@ export default () => ({
   roomMembers: [],
   room: {},
   roomRequests: [],
+  managerRooms: [],
 })
