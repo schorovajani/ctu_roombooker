@@ -10,4 +10,10 @@ export default {
   members(state) {
     return state.roomMembers
   },
+  room(state) {
+    return state.room
+  },
+  roomRequests(state) {
+    return state.roomRequests
+  },
 }

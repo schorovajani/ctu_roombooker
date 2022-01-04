@@ -1,21 +1,23 @@
 <template>
   <section>
     <div>
-      <h2>{{ building }}:{{ room }}</h2>
+      <h2>{{ room.name }}</h2>
       <div>
-        <button>left</button>
+        <button @click="prev">left</button>
         <span>{{ month }}</span>
-        <button>right</button>
+        <button @click="next">right</button>
       </div>
     </div>
     <v-app>
       <v-calendar
         ref="calendar"
-        type="week"
-        :now="today"
-        color="color"
-        :weekdays="weekdays"
+        v-model="focus"
         :events="events"
+        event-color="#4c6978"
+        type="week"
+        :weekdays="weekdays"
+        locale="cs-CZ"
+        :light="true"
       ></v-calendar>
     </v-app>
   </section>
@@ -23,33 +25,47 @@
 
 <script>
 export default {
+  created() {
+    this.loadData()
+  },
+  mounted() {
+    this.$refs.calendar.checkChange()
+  },
   data() {
     return {
-      building: 'T9',
-      room: '343',
-      now: new Date(),
+      focus: '',
       weekdays: [1, 2, 3, 4, 5, 6, 0],
-      color: 'red',
-      events: [
-        {
-          name: 'title1',
-          start: '2021-12-30 09:00',
-          end: '2021-12-30 11:00',
-        },
-        {
-          name: 'title2',
-          start: '2021-12-31 14:00',
-          end: '2021-12-31 15:00',
-        },
-      ],
+      // events: [
+      //   {
+      //     name: 'title2',
+      //     start: '2022-01-03 14:00',
+      //     end: '2022-01-03 15:00',
+      //   },
+      // ],
     }
   },
   computed: {
-    today() {
-      return this.now.toISOString().substring(0, 10)
-    },
     month() {
-      return this.now.getMonth()
+      const test = new Date()
+      return test.getMonth()
+    },
+    room() {
+      return this.$store.getters['room/room']
+    },
+    events() {
+      return this.$store.getters['room/roomRequests']
+    },
+  },
+  methods: {
+    loadData() {
+      this.$store.dispatch('room/getRoom', this.$route.params.id)
+      this.$store.dispatch('room/getRoomRequests', this.$route.params.id)
+    },
+    prev() {
+      this.$refs.calendar.prev()
+    },
+    next() {
+      this.$refs.calendar.next()
     },
   },
 }

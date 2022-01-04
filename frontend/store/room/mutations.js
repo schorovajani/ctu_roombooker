@@ -34,4 +34,31 @@ export default {
       return user.roomRoles.some((role) => role.roleType.name === 'Member')
     })
   },
+  setRoom(state, room) {
+    state.room = room
+  },
+  setRoomRequests(state, requests) {
+    console.log('nenjedn')
+    console.log(requests)
+    let events = []
+    requests.forEach((req) => {
+      const start = new Date(req.eventStart).toISOString()
+      const startString = `${start.substring(0, 10)} ${start.substring(11, 16)}`
+
+      const end = new Date(req.eventEnd).toISOString()
+      const endString = `${end.substring(0, 10)} ${end.substring(11, 16)}`
+
+      events.push({
+        name: req.description,
+        start: startString,
+        end: endString,
+        user: req.user,
+        status: req.status.name,
+      })
+    })
+
+    console.log('events')
+    console.log(events)
+    state.roomRequests = events
+  },
 }
