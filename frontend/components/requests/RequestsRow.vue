@@ -114,27 +114,20 @@ hr {
   display: flex;
   justify-content: space-between;
 }
-.btn-green,
-.btn-red {
-  margin: 0 0.5rem 0 0.5rem;
-  padding: 0 1rem 0 1rem;
-}
+
 .btn-more img {
   height: 2.5rem;
-}
-.btn-green {
-  background-color: #dcf9f4;
-  border: #a7d8c0 2px solid;
-}
-
-.btn-red {
-  background-color: #f9dce1;
-  border: #d8a7bf 2px solid;
 }
 
 .more-info {
   display: flex;
   justify-content: space-between;
+}
+
+.btn-green,
+.btn-red {
+  margin: 0 0.5rem 0 0.5rem;
+  padding: 0 1rem 0 1rem;
 }
 
 h4 {

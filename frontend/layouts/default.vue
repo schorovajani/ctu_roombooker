@@ -161,4 +161,49 @@ footer {
   display: flex;
   flex-direction: column;
 }
+
+.btn-red {
+  background-color: #f9dce1;
+  border: #d8a7bf 2px solid;
+}
+
+.btn-red:hover {
+  background-color: #d8a7bf;
+}
+
+.btn-green {
+  background-color: #dcf9f4;
+  border: #a7d8c0 2px solid;
+}
+
+.btn-green:hover {
+  background-color: #a7d8c0;
+}
+
+.btn-blue {
+  background-color: #e6f5ff;
+  border: solid 2px #b1d4df;
+}
+
+.btn-blue:hover {
+  background-color: #b1d4df;
+}
+
+.btn-orange {
+  background-color: #fff0e6;
+  border: solid 2px #dfbcb1;
+}
+
+.btn-orange:hover {
+  background-color: #dfbcb1;
+}
+
+.btn-white {
+  background-color: #f9f9f9;
+  border: solid 2px #c6c8cb;
+}
+
+.btn-white:hover {
+  background-color: #c6c8cb;
+}
 </style>
