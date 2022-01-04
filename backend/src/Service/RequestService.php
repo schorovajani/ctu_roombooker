@@ -4,7 +4,9 @@ namespace App\Service;
 
 use App\Entity\Account;
 use App\Entity\Request;
+use App\Entity\Status;
 use App\Repository\RequestRepository;
+use App\Repository\StatusRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
 
@@ -14,6 +16,7 @@ class  RequestService
 	private Security $security;
 	private UserService $userService;
 	private EntityManagerInterface $entityManager;
+	private StatusRepository $statusRepository;
 
 	/**
 	 * @param EntityManagerInterface $entityManager
@@ -22,14 +25,16 @@ class  RequestService
 	 * @param UserService $userService
 	 */
 	public function __construct(EntityManagerInterface $entityManager,
-								RequestRepository      $requestRepository,
-								Security               $security,
-								UserService            $userService)
+															RequestRepository      $requestRepository,
+															Security               $security,
+															UserService            $userService,
+															StatusRepository       $statusRepository)
 	{
 		$this->requestRepository = $requestRepository;
 		$this->security = $security;
 		$this->userService = $userService;
 		$this->entityManager = $entityManager;
+		$this->statusRepository = $statusRepository;
 	}
 
 	/**
@@ -67,6 +72,18 @@ class  RequestService
 	public function delete(Request $request): void
 	{
 		$this->entityManager->remove($request);
+		$this->entityManager->flush();
+	}
+
+	/**
+	 * @param Request $request
+	 * @return void
+	 */
+	public function save(Request $request): void
+	{
+		if ($request->getStatus() === null)
+			$request->setStatus($this->statusRepository->find(Status::PENDING_ID));
+		$this->entityManager->persist($request);
 		$this->entityManager->flush();
 	}
 }

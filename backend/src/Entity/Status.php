@@ -16,6 +16,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Status
 {
+	const PENDING_ID = 1;
+
 	/**
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
