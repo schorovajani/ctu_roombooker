@@ -41,12 +41,10 @@ class Request
 	 * @ORM\Column(type="datetime")
 	 *
 	 * @Assert\NotBlank
-	 * @Assert\Type("datetime")
 	 *
+	 * @Serialize\Type("DateTime<'Y-m-d\TH:i:s.vO'>")
 	 * @Serialize\Expose
 	 * @Serialize\Groups({"listRequest", "listRequestMinimal"})
-	 *
-	 * @var string A "Y-m-d H:i:s" formatted value
 	 */
 	private $eventStart;
 
@@ -54,12 +52,10 @@ class Request
 	 * @ORM\Column(type="datetime")
 	 *
 	 * @Assert\NotBlank
-	 * @Assert\Type("datetime")
 	 *
+	 * @Serialize\Type("DateTime<'Y-m-d\TH:i:s.vO'>")
 	 * @Serialize\Expose
 	 * @Serialize\Groups({"listRequest", "listRequestMinimal"})
-	 *
-	 * @var string A "Y-m-d H:i:s" formatted value
 	 */
 	private $eventEnd;
 
