@@ -12,15 +12,17 @@ class TeamService
 {
 	private TeamRepository $teamRepository;
 	private EntityManagerInterface $entityManager;
+	private RoomService $roomService;
 
 	/**
 	 * @param EntityManagerInterface $entityManager
 	 * @param TeamRepository $teamRepository
 	 */
-	public function __construct(EntityManagerInterface $entityManager, TeamRepository $teamRepository)
+	public function __construct(EntityManagerInterface $entityManager, TeamRepository $teamRepository, RoomService $roomService)
 	{
 		$this->teamRepository = $teamRepository;
 		$this->entityManager = $entityManager;
+		$this->roomService = $roomService;
 	}
 
 	/**
@@ -106,7 +108,11 @@ class TeamService
 	 */
 	public function save(Team $team): void
 	{
+		foreach ($team->getRooms() as $room)
+			$room->setTeam($team);
+
 		$this->entityManager->persist($team);
 		$this->entityManager->flush();
+		$this->entityManager->refresh($team);
 	}
 }

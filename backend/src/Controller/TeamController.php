@@ -12,8 +12,10 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 /**
  * @Route("/api")
@@ -117,5 +119,25 @@ class TeamController extends AbstractFOSRestController
 
 		$this->teamRoleService->delete($teamRole);
 		return $this->handleView($this->view(null, Response::HTTP_NO_CONTENT));
+	}
+
+	/**
+	 * @Rest\Post("/teams")
+	 * @ParamConverter("team", converter="fos_rest.request_body")
+	 *
+	 * @param Team $team
+	 * @param ConstraintViolationListInterface $validationErrors
+	 * @return Response
+	 */
+	public function routePostTeam(Team $team, ConstraintViolationListInterface $validationErrors): Response
+	{
+		if (count($validationErrors) > 0) {
+			return $this->handleView($this->view(["error" => $validationErrors], Response::HTTP_BAD_REQUEST));
+		}
+
+		$this->teamService->save($team);
+		$view = $this->view($team, Response::HTTP_CREATED);
+		$view->getContext()->setGroups(['listBuilding', 'listRoom', 'listTeam', 'listTeamDetails']);
+		return $this->handleView($view);
 	}
 }

@@ -99,7 +99,7 @@ class RoomService
 	 * @param Room $room
 	 * @return void
 	 */
-	private function save(Room $room): void
+	public function save(Room $room): void
 	{
 		$this->entityManager->persist($room);
 		$this->entityManager->flush();
