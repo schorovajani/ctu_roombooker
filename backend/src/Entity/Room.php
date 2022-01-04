@@ -69,7 +69,7 @@ class Room
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=Team::class, inversedBy="rooms")
-	 * @ORM\JoinColumn(nullable=false)
+	 * @ORM\JoinColumn(nullable=true)
 	 *
 	 * @Serialize\Expose
 	 * @Serialize\Groups({"listTeam"})
