@@ -47,20 +47,31 @@
       </div>
       <div class="icons">
         <button>Upravit</button>
-        <button>Smazat</button>
+        <button @click="askDelete">Smazat</button>
       </div>
     </div>
+    <AlertWindow
+      v-if="alert"
+      @accepted="deleteRequest"
+      @cancel="alert = false"
+      :message="`Opravdu chcete rezervaci ${request.description} smazat?`"
+      btn1="Smazat"
+      btn2="Zrušit"
+    />
   </article>
 </template>
 
 <script>
+import AlertWindow from '../UI/AlertWindow.vue'
 export default {
+  components: { AlertWindow },
   props: {
     request: Object,
   },
   data() {
     return {
       less: true,
+      alert: false,
     }
   },
   computed: {
@@ -89,6 +100,15 @@ export default {
     },
     isPending() {
       return this.request.status.name === 'Pending'
+    },
+  },
+  methods: {
+    askDelete() {
+      this.alert = true
+    },
+    deleteRequest() {
+      this.$store.dispatch('request/deleteRequest', this.request.id)
+      this.alert = false
     },
   },
 }
