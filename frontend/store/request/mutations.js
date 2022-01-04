@@ -25,7 +25,20 @@ export default {
         filteredRequests[index].requests.push(req)
       }
     })
-    //console.log(filteredRequests)
+    console.log('hhehehehehe')
+    console.log(filteredRequests)
     state.filteredRequests = filteredRequests
+  },
+
+  deleteMyRequest(state, id) {
+    state.myRequests = state.myRequests.filter((req) => req.id !== id)
+  },
+
+  deleteRequest(state, id) {
+    state.requests = state.requests.filter((req) => req.id !== id)
+
+    state.filteredRequests = state.filteredRequests.forEach((room) => {
+      room.request = room.requests.filter((req) => req.id !== id)
+    })
   },
 }

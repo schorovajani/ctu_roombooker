@@ -27,4 +27,30 @@ export default {
     context.commit('setRequests', response)
     context.commit('setFilteredRequests', response)
   },
+
+  async deleteMyRequest(context, payload) {
+    try {
+      await this.$axios.$delete(
+        `${this.$axios.defaults.baseURL}/requests/${payload}`
+      )
+    } catch (error) {
+      console.log(error)
+      return
+    }
+
+    context.commit('deleteMyRequest', payload)
+  },
+
+  async deleteRequest(context, payload) {
+    try {
+      await this.$axios.$delete(
+        `${this.$axios.defaults.baseURL}/requests/${payload}`
+      )
+    } catch (error) {
+      console.log(error)
+      return
+    }
+
+    context.commit('deleteRequest', payload)
+  },
 }

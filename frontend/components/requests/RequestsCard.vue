@@ -15,7 +15,14 @@
         <span>{{ statusValue }}</span>
       </div>
     </div>
-    <button @click="showDetail = true">Více informací</button>
+    <div class="buttons">
+      <button class="delete-btn btn-red" @click="askDeleteRequest">
+        <img alt="Vymazat" :src="require(`@/assets/UI/delete_icon.png`)" />
+      </button>
+      <button class="more-info" @click="showDetail = true">
+        Více informací
+      </button>
+    </div>
     <div v-if="showDetail" class="modal" @click="showDetail = false">
       <div class="modal-info">
         <button @click="showDetail = false">
@@ -57,17 +64,28 @@
         </div>
       </div>
     </div>
+    <AlertWindow
+      v-if="alert"
+      @accepted="deleteRequest"
+      @cancel="alert = false"
+      :message="`Opravdu chcete rezervaci ${request.description} smazat?`"
+      btn1="Smazat"
+      btn2="Zrušit"
+    />
   </article>
 </template>
 
 <script>
+import AlertWindow from '../UI/AlertWindow.vue'
 export default {
+  components: { AlertWindow },
   props: {
     request: Object,
   },
   data() {
     return {
       showDetail: false,
+      alert: false,
     }
   },
   computed: {
@@ -91,7 +109,14 @@ export default {
         return 'Nevyřízena'
       }
     },
-    attendees() {},
+  },
+  methods: {
+    askDeleteRequest() {
+      this.alert = true
+    },
+    deleteRequest() {
+      this.$store.dispatch('request/deleteMyRequest', this.request.id)
+    },
   },
 }
 </script>
@@ -124,7 +149,20 @@ h3 {
 .request-info-detail span {
   margin: 0.5rem;
 }
-button {
+
+.buttons {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.delete-btn img {
+  height: 2rem;
+  opacity: 0.8;
+}
+
+.more-info {
   margin: 0.5rem 0 0 0;
   align-self: flex-end;
   text-decoration: underline;
@@ -160,7 +198,7 @@ button:hover {
 .cross-icon {
   height: 1.5rem;
   align-self: flex-end;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 .attendees {
   margin: 0.5rem 0 0.5rem 0;
