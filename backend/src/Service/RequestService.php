@@ -82,7 +82,7 @@ class  RequestService
 	public function save(Request $request): void
 	{
 		if ($request->getStatus() === null)
-			$request->setStatus($this->statusRepository->find(Status::PENDING_ID));
+			$request->setStatus($this->statusRepository->findOneBy(["name"=> Status::STATUS_PENDING]));
 		$this->entityManager->persist($request);
 		$this->entityManager->flush();
 	}
