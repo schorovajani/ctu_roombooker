@@ -38,4 +38,14 @@ class BuildingService
 		$this->entityManager->remove($building);
 		$this->entityManager->flush();
 	}
+
+	/**
+	 * @param Building $building
+	 * @return void
+	 */
+	public function save(Building $building): void
+	{
+		$this->entityManager->persist($building);
+		$this->entityManager->flush();
+	}
 }

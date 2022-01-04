@@ -4,7 +4,11 @@ namespace App\Service;
 
 use App\Entity\Account;
 use App\Entity\Request;
+use App\Entity\Room;
+use App\Entity\Status;
+use App\Entity\User;
 use App\Repository\RequestRepository;
+use App\Repository\StatusRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
 
@@ -14,6 +18,8 @@ class  RequestService
 	private Security $security;
 	private UserService $userService;
 	private EntityManagerInterface $entityManager;
+	private StatusRepository $statusRepository;
+	private RoomService $roomService;
 
 	/**
 	 * @param EntityManagerInterface $entityManager
@@ -22,14 +28,18 @@ class  RequestService
 	 * @param UserService $userService
 	 */
 	public function __construct(EntityManagerInterface $entityManager,
-								RequestRepository      $requestRepository,
-								Security               $security,
-								UserService            $userService)
+															RequestRepository      $requestRepository,
+															Security               $security,
+															UserService            $userService,
+															RoomService            $roomService,
+															StatusRepository       $statusRepository)
 	{
 		$this->requestRepository = $requestRepository;
 		$this->security = $security;
 		$this->userService = $userService;
 		$this->entityManager = $entityManager;
+		$this->statusRepository = $statusRepository;
+		$this->roomService = $roomService;
 	}
 
 	/**
@@ -61,6 +71,30 @@ class  RequestService
 	}
 
 	/**
+	 * Check if $user is permitted to create a request for $room.
+	 * @note admin needs to be checked externally
+	 * @param User $user
+	 * @param Room $room
+	 * @return bool
+	 */
+	public function canCreateRequest(User $user, Room $room): bool
+	{
+		return in_array($user, $this->roomService->getRoomUsers($room));
+	}
+
+	/**
+	 * Check if $user can create assign other users as request creators.
+	 * @note admin needs to be checked externally
+	 * @param User $user
+	 * @param Room $room
+	 * @return bool
+	 */
+	public function canCreateRequestForOthers(User $user, Room $room): bool
+	{
+		return in_array($user, $this->roomService->getRoomUsers($room, true));
+	}
+
+	/**
 	 * @param Request $request
 	 * @return void
 	 */
@@ -68,5 +102,24 @@ class  RequestService
 	{
 		$this->entityManager->remove($request);
 		$this->entityManager->flush();
+	}
+
+	/**
+	 * @param Request $request
+	 * @return void
+	 */
+	public function save(Request $request): void
+	{
+		$this->entityManager->persist($request);
+		$this->entityManager->flush();
+	}
+
+	/**
+	 * @param Request $request
+	 * @return void
+	 */
+	public function setPending(Request $request): void
+	{
+		$request->setStatus($this->statusRepository->findOneBy(["name" => Status::STATUS_PENDING]));
 	}
 }
