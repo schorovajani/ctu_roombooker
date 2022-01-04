@@ -3,7 +3,7 @@ export default function ({ $auth, redirect, store }) {
     $auth.user &&
     ($auth.hasScope('admin') ||
       $auth.hasScope('roomManager') ||
-      $auth.hasScope('groupManager'))
+      $auth.hasScope('teamManager'))
   ) {
     //let go
   } else {

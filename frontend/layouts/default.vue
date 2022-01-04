@@ -51,11 +51,11 @@ export default {
       return (
         this.$auth.hasScope('admin') ||
         this.$auth.hasScope('roomManager') ||
-        this.$auth.hasScope('groupManager')
+        this.$auth.hasScope('teamManager')
       )
     },
     isGroupManagerOrAdmin() {
-      return this.$auth.hasScope('admin') || this.$auth.hasScope('groupManager')
+      return this.$auth.hasScope('admin') || this.$auth.hasScope('teamManager')
     },
     isAdmin() {
       return this.$auth.hasScope('admin')

@@ -1,40 +1,82 @@
 <template>
   <main>
     <h2>Místnosti</h2>
-    <section>
-      <div class="building" v-for="build in buildings" :key="build.id">
-        <h3>{{ build.buildName }}</h3>
-        <div class="rooms">
-          <RoomsDetail
-            v-for="room in build.rooms"
-            :key="room.id"
-            :room="room"
-          />
+    <div class="rooms">
+      <section class="rooms-info">
+        <div class="title" v-for="title in titles" :key="title.id">
+          <h3>{{ title.name }}</h3>
+          <div class="rooms-detail">
+            <RoomsDetail
+              @usersClick="getRoomUsers"
+              v-for="room in title.rooms"
+              :key="room.id"
+              :room="room"
+            />
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+      <section v-if="showUsers" class="rooms-users">
+        <UserOf
+          type="room"
+          :name="title"
+          :manager="manager"
+          :members="members"
+        />
+      </section>
+    </div>
   </main>
 </template>
 
 <script>
 import RoomsDetail from '~/components/rooms/RoomsDetails.vue'
+import UserOf from '~/components/users/UsersOf.vue'
+
 export default {
-  components: { RoomsDetail },
+  components: { RoomsDetail, UserOf },
   middleware: ['isGroupManager'],
+  data() {
+    return {
+      title: '',
+      id: null,
+      showUsers: false,
+    }
+  },
   created() {
     this.loadRooms()
   },
   computed: {
-    buildings() {
-      return this.$store.getters['room/filteredRooms']
+    titles() {
+      if (this.$auth.hasScope('admin')) {
+        return this.$store.getters['room/filteredRooms']
+      } else {
+        return this.$store.getters['room/managerRooms']
+      }
+    },
+    manager() {
+      return this.$store.getters['room/manager']
     },
     members() {
-      return [{ user: 'JAJA' }]
+      return this.$store.getters['room/members']
     },
   },
   methods: {
     loadRooms() {
-      this.$store.dispatch('room/getAllRooms')
+      if (this.$auth.hasScope('admin')) {
+        this.$store.dispatch('room/getAllRooms')
+      } else {
+        this.$store.dispatch('room/getManagerRooms')
+      }
+    },
+    getRoomUsers(room) {
+      if (this.id === room.id) {
+        this.showUsers = false
+        this.id = null
+      } else {
+        this.$store.dispatch('room/getRoomUsers', room.id)
+        this.title = `${room.building.name}:${room.name}`
+        this.id = room.id
+        this.showUsers = true
+      }
     },
   },
 }
@@ -42,7 +84,7 @@ export default {
 
 <style scoped>
 main {
-  width: 60%;
+  width: 70%;
   margin: 4rem auto 4rem auto;
 }
 
@@ -51,13 +93,26 @@ h2 {
   font-size: 1.5rem;
 }
 
-.building h3 {
+.title h3 {
   font-size: 1.3rem;
   margin: 2rem 0 0 0.5rem;
 }
 
 .rooms {
   display: flex;
-  flex-wrap: wrap;
+}
+
+.rooms-info {
+  width: 60%;
+}
+
+.rooms-detail {
+  display: flex;
+  flex-direction: column;
+}
+
+.rooms-users {
+  margin: 4rem 0 1rem 0;
+  width: 40%;
 }
 </style>

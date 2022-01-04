@@ -1,7 +1,7 @@
 export default function ({ $auth, redirect, store }) {
   if (
     $auth.user &&
-    ($auth.hasScope('admin') || $auth.hasScope('groupManager'))
+    ($auth.hasScope('admin') || $auth.hasScope('teamManager'))
   ) {
     //let go
   } else {

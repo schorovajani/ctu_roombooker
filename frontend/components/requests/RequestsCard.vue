@@ -16,54 +16,49 @@
       </div>
     </div>
     <div class="buttons">
-      <button class="delete-btn btn-red" @click="askDeleteRequest">
+      <button
+        v-if="isCreator"
+        class="delete-btn btn-red"
+        @click="askDeleteRequest"
+      >
         <img alt="Vymazat" :src="require(`@/assets/UI/delete_icon.png`)" />
       </button>
       <button class="more-info" @click="showDetail = true">
         Více informací
       </button>
     </div>
-    <div v-if="showDetail" class="modal" @click="showDetail = false">
-      <div class="modal-info">
-        <button @click="showDetail = false">
-          <img
-            alt="cross icon"
-            :src="require(`@/assets/UI/cross_icon.png`)"
-            class="cross-icon"
-          />
-        </button>
-        <h3>{{ request.description }}</h3>
-        <div class="request-info">
-          <div class="request-info-detail">
-            <span>Místnost:</span>
-            <span>Datum:</span>
-            <span>Čas:</span>
-            <span>Status:</span>
-            <span>Účastníci:</span>
-            <span>Rezervaci vytvořil:</span>
-          </div>
-          <div class="request-info-detail">
-            <span>{{
-              request.room.building.name + ':' + request.room.name
-            }}</span>
-            <span>{{ requestDate }}</span>
-            <span>{{ timeString }}</span>
-            <span>{{ statusValue }}</span>
-            <div class="attendees">
-              <span v-for="attendee in request.attendees" :key="attendee.id">
-                {{ attendee.firstName }} {{ attendee.lastName }}
-              </span>
-              <span>
-                {{ request.user.firstName }} {{ request.user.lastName }}
-              </span>
-            </div>
+    <ModalWindow v-if="showDetail" @hideModal="showDetail = false">
+      <h3>{{ request.description }}</h3>
+      <div class="request-info">
+        <div class="request-info-detail">
+          <span>Místnost:</span>
+          <span>Datum:</span>
+          <span>Čas:</span>
+          <span>Status:</span>
+          <span>Účastníci:</span>
+          <span>Rezervaci vytvořil:</span>
+        </div>
+        <div class="request-info-detail">
+          <span>{{
+            request.room.building.name + ':' + request.room.name
+          }}</span>
+          <span>{{ requestDate }}</span>
+          <span>{{ timeString }}</span>
+          <span>{{ statusValue }}</span>
+          <div class="attendees">
+            <span v-for="attendee in request.attendees" :key="attendee.id">
+              {{ attendee.firstName }} {{ attendee.lastName }}
+            </span>
             <span>
               {{ request.user.firstName }} {{ request.user.lastName }}
             </span>
           </div>
+          <span>
+            {{ request.user.firstName }} {{ request.user.lastName }}
+          </span>
         </div>
       </div>
-    </div>
+    </ModalWindow>
     <AlertWindow
       v-if="alert"
       @accepted="deleteRequest"
@@ -76,9 +71,11 @@
 </template>
 
 <script>
-import AlertWindow from '../UI/AlertWindow.vue'
+import AlertWindow from '~/components/UI/AlertWindow.vue'
+import ModalWindow from '~/components/UI/ModalWindow.vue'
+
 export default {
-  components: { AlertWindow },
+  components: { AlertWindow, ModalWindow },
   props: {
     request: Object,
   },
@@ -109,6 +106,9 @@ export default {
         return 'Nevyřízena'
       }
     },
+    isCreator() {
+      return this.request.user.id === this.$auth.user.id
+    },
   },
   methods: {
     askDeleteRequest() {
@@ -116,6 +116,7 @@ export default {
     },
     deleteRequest() {
       this.$store.dispatch('request/deleteMyRequest', this.request.id)
+      this.alert = false
     },
   },
 }
@@ -164,41 +165,14 @@ h3 {
 
 .more-info {
   margin: 0.5rem 0 0 0;
-  align-self: flex-end;
+  /* justify-self: flex-end; */
+  justify-self: end;
   text-decoration: underline;
   color: #77908e;
 }
 
 button:hover {
   color: #bee5e2;
-}
-
-.modal {
-  z-index: 1;
-  position: fixed;
-  top: 0;
-  left: 0;
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #50505050;
-}
-
-.modal-info {
-  padding: 2rem 3rem 4rem 4rem;
-  background-color: #dcf9f4;
-  display: flex;
-  flex-direction: column;
-}
-
-.cross-icon {
-  height: 1.5rem;
-  align-self: flex-end;
-  margin-bottom: 0.5rem;
 }
 .attendees {
   margin: 0.5rem 0 0.5rem 0;
