@@ -116,4 +116,33 @@ class RequestController extends AbstractFOSRestController
 		$view->getContext()->setGroups(['listBuilding', 'listRequest', 'listRoom', 'listStatus', 'listUser']);
 		return $this->handleView($view);
 	}
+
+	/**
+	 * @Rest\Put("/requests/{id}", requirements={"id": "\d+"})
+	 * @ParamConverter("request")
+	 * @ParamConverter("newRequest", converter="fos_rest.request_body")
+	 * @IsGranted("IS_AUTHENTICATED_REMEMBERED")
+	 *
+	 * @param Request $request
+	 * @param Request $newRequest
+	 * @param ConstraintViolationListInterface $validationErrors
+	 * @return Response
+	 */
+	public function routePutRequest(Request $request, Request $newRequest, ConstraintViolationListInterface $validationErrors): Response
+	{
+		if (count($validationErrors) > 0)
+			return $this->handleView($this->view(['error' => $validationErrors], Response::HTTP_BAD_REQUEST));
+
+		if (!in_array($request, $this->requestService->getAdministeredRequests()))
+			throw $this->createAccessDeniedException();
+
+		if (!$newRequest->getUser() || !$newRequest->getStatus() || !$newRequest->getRoom() || in_array(null, $newRequest->getAttendees()->toArray()))
+			return $this->handleView($this->view(['error' => 'Invalid data'], Response::HTTP_BAD_REQUEST));
+
+		$this->requestService->update($request, $newRequest);
+
+		$view = $this->view($request, Response::HTTP_OK);
+		$view->getContext()->setGroups(['listBuilding', 'listRequest', 'listRoom', 'listStatus', 'listUser']);
+		return $this->handleView($view);
+	}
 }
