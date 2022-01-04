@@ -128,3 +128,8 @@ All accounts of user will be return from user endpoint. If user/admin click to u
 * PUT = update information about account with {id}
 * DELETE = delete account with {id}
     ** Authorization: available only for admins
+
+=== TEAM ROLES
+
+./teamRoles
+* POST = create a new team role

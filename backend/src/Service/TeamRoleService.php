@@ -43,4 +43,14 @@ class TeamRoleService
 	{
 		return $this->teamRoleRepository->find($ids, $lockMode, $lockVersion);
 	}
+
+	/**
+	 * @param TeamRole $teamRole
+	 * @return void
+	 */
+	public function save(TeamRole $teamRole): void
+	{
+		$this->entityManager->persist($teamRole);
+		$this->entityManager->flush();
+	}
 }
