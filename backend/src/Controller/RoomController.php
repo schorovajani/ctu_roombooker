@@ -45,12 +45,13 @@ class RoomController extends AbstractFOSRestController
 	 */
 	public function routeGetRooms(Request $request): Response
 	{
+		$criteria = [];
 		if ($request->query->get("type") === "public" || !$this->isGranted('IS_AUTHENTICATED_REMEMBERED'))
-			$rooms = $this->roomService->getBy(["isPublic" => true]);
-		else
-			$rooms = $this->roomService->getAll();
+			$criteria["isPublic"] = true;
+		if ($request->query->get("team") === "null")
+			$criteria["team"] = null;
 
-		$view = $this->view($rooms, Response::HTTP_OK);
+		$view = $this->view($this->roomService->getBy($criteria), Response::HTTP_OK);
 		$view->getContext()->setGroups(['listBuilding', 'listRoom', 'listTeam']);
 		return $this->handleView($view);
 	}
