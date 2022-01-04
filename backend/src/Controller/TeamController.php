@@ -123,6 +123,7 @@ class TeamController extends AbstractFOSRestController
 
 	/**
 	 * @Rest\Post("/teams")
+	 * @IsGranted("ROLE_ADMIN")
 	 * @ParamConverter("team", converter="fos_rest.request_body")
 	 *
 	 * @param Team $team
@@ -133,6 +134,8 @@ class TeamController extends AbstractFOSRestController
 	{
 		if (count($validationErrors) > 0)
 			return $this->handleView($this->view(["error" => $validationErrors], Response::HTTP_BAD_REQUEST));
+		if (in_array(null, $team->getRooms()))
+			return $this->handleView($this->view(["error" => "Some of the room were invalid"], Response::HTTP_BAD_REQUEST));
 
 		$this->teamService->save($team);
 		$view = $this->view($team, Response::HTTP_CREATED);
