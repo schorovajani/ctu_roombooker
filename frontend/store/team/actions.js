@@ -27,4 +27,17 @@ export default {
     context.commit('setManager', response)
     context.commit('setMembers', response)
   },
+
+  async deleteTeam(context, payload) {
+    try {
+      await this.$axios.$delete(
+        `${this.$axios.defaults.baseURL}/teams/${payload}`
+      )
+    } catch (error) {
+      console.log(error)
+      return
+    }
+
+    context.commit('deleteTeam', payload)
+  },
 }

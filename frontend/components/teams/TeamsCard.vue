@@ -22,18 +22,40 @@
     <div class="buttons">
       <button @click="showUsers">Členové</button>
       <button>Upravit</button>
+      <button @click="askDelete">Smazat</button>
     </div>
+    <AlertWindow
+      v-if="alert"
+      @accepted="deleteTeam"
+      @cancel="alert = false"
+      :message="`Opravdu chcete skupinu ${team.name} smazat?`"
+      btn1="Smazat"
+      btn2="Zrušit"
+    />
   </article>
 </template>
 
 <script>
+import AlertWindow from '../UI/AlertWindow.vue'
 export default {
+  components: { AlertWindow },
   props: {
     team: Object,
+  },
+  data() {
+    return {
+      alert: false,
+    }
   },
   methods: {
     showUsers() {
       this.$emit('usersClick', this.team)
+    },
+    askDelete() {
+      this.alert = true
+    },
+    deleteTeam() {
+      this.$store.dispatch('team/deleteTeam', this.team.id)
     },
   },
 }

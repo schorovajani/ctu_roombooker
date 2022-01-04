@@ -18,4 +18,8 @@ export default {
     console.log(test)
     state.members = test
   },
+
+  deleteTeam(state, id) {
+    state.teams = state.teams.filter((team) => team.id !== id)
+  },
 }
