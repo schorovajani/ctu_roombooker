@@ -50,15 +50,15 @@ class BuildingService
 	}
 
 	/**
-	 * @param int $id
 	 * @param Building $building
+	 * @param Building $newBuilding
 	 * @return void
 	 */
-	public function update(int $id, Building $building): void
+	public function update(Building $building, Building $newBuilding): void
 	{
-		$building->setId($id);
-		/** @var Building $building */
-		$building = $this->entityManager->merge($building);
-		$this->save($building);
+		$newBuilding->setId($building->getId());
+		/** @var Building $newBuilding */
+		$newBuilding = $this->entityManager->merge($newBuilding);
+		$this->save($newBuilding);
 	}
 }
