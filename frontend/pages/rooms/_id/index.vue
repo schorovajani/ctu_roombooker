@@ -1,11 +1,15 @@
 <template>
   <section>
-    <div>
+    <div class="info">
       <h2>{{ room.name }}</h2>
-      <div>
-        <button @click="prev">left</button>
+      <div class="buttons">
+        <button @click="prev">
+          <img alt="prev" :src="require(`@/assets/UI/left_icon.png`)" />
+        </button>
         <span>{{ month }}</span>
-        <button @click="next">right</button>
+        <button @click="next">
+          <img alt="next" :src="require(`@/assets/UI/right_icon.png`)" />
+        </button>
       </div>
     </div>
     <v-app>
@@ -33,7 +37,7 @@ export default {
   },
   data() {
     return {
-      focus: '',
+      focus: '2022-01-05',
       weekdays: [1, 2, 3, 4, 5, 6, 0],
       // events: [
       //   {
@@ -46,8 +50,36 @@ export default {
   },
   computed: {
     month() {
-      const test = new Date()
-      return test.getMonth()
+      const test = new Date(this.focus)
+      const i = test.getMonth()
+      switch (i) {
+        case 0:
+          return 'Leden'
+        case 1:
+          return 'Únor'
+        case 2:
+          return 'Březen'
+        case 3:
+          return 'Duben'
+        case 4:
+          return 'Květen'
+        case 5:
+          return 'Červen'
+        case 6:
+          return 'Červenec'
+        case 7:
+          return 'Srpen'
+        case 8:
+          return 'Září'
+        case 9:
+          return 'Říjen'
+        case 10:
+          return 'Listopad'
+        case 11:
+          return 'Prosinec'
+        default:
+          return '...'
+      }
     },
     room() {
       return this.$store.getters['room/room']
@@ -73,7 +105,21 @@ export default {
 
 <style scoped>
 section {
-  margin: 10rem auto;
-  width: 90%;
+  margin: 4rem auto;
+  width: 70%;
+}
+
+h2 {
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+.buttons img {
+  height: 1.5rem;
+}
+.info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
 }
 </style>
