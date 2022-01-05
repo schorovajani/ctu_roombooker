@@ -144,6 +144,27 @@ class RoomController extends AbstractFOSRestController
 	}
 
 	/**
+	 * @Rest\Post("/rooms")
+	 * @ParamConverter("room", converter="fos_rest.request_body")
+	 * @IsGranted("ROLE_ADMIN")
+	 *
+	 * @param Room $room
+	 * @param ConstraintViolationListInterface $validationErrors
+	 * @return Response
+	 */
+	public function routePostRoom(Room $room, ConstraintViolationListInterface $validationErrors): Response
+	{
+		if (count($validationErrors) > 0)
+			return $this->handleView($this->view(["error" => $validationErrors], Response::HTTP_BAD_REQUEST));
+
+		$this->roomService->save($room);
+
+		$view = $this->view($room, Response::HTTP_CREATED);
+		$view->getContext()->setGroups(['listBuilding', 'listRoom', 'listTeam']);
+		return $this->handleView($view);
+	}
+
+	/**
 	 * @Rest\Put("/rooms/{id}", requirements={"id": "\d+"})
 	 * @ParamConverter("rooms")
 	 * @ParamConverter("newRoom", converter="fos_rest.request_body")
