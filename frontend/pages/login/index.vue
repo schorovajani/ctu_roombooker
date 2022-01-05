@@ -27,8 +27,8 @@ export default {
   data() {
     return {
       valid: false,
-      username: 'tomas',
-      password: 'tomas',
+      username: 'Admin',
+      password: 'Admin',
       show: false,
       userRules: [(v) => !!v || 'Zadejte prosím uživatelské jméno'],
       passRules: [(v) => !!v || 'Zadejte heslo'],
@@ -61,7 +61,7 @@ export default {
       }
 
       console.log(this.$auth.loggedIn)
-      console.log(this.$auth.hasScope('roomManager'))
+      //console.log(this.$auth.hasScope('roomManager'))
       // console.log(this.$auth.user.firstName)
       // const response = await this.$axios.$get(
       // `${this.$axios.defaults.baseURL}/me`

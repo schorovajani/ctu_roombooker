@@ -1,0 +1,218 @@
+= RoomBooker
+
+== How Frontend works
+
+=== Pages
+
+==== HOME
+
+Show all building with rooms (if you are not auth, show public rooms in building)
+
+.GET /buildings
+* [{id,name,rooms:[{id,name}]}]
+* not auth: show public / auth: show public and private
+* Role: not auth / auth
+
+Click to room. Show page with calendar.
+
+.GET /rooms/id/requests
+* {id,name,requests: [{description,eventStart,eventEnd,user?}]}
+* not auth and auth: same view
+* Role: not auth / auth
+
+==== MY REQUESTS
+
+User is authenticated.
+
+Show all requests where auth user is an attendee or manages request. 
+
+.GET /users/id/requests
+* [{id,decription,room{building},eventStart,eventEnd,status,attendees,user}]
+* auth: show requests, where user is attendee or manager
+* Role: auth
+
+Role room user, room manager, team user, team manager, admin: see button New Request = Form
+
+.GET /users/id/rooms
+* [{id,name,building}]
+* auth: show rooms, where user is a manager or user of room
+* user choose room
+* Role: roomUser, roomManager, teamUser, teamManager, admin
+
+.GET /rooms/id/requests
+* [{id,description,eventStart,eventEnd,user?}]
+* show all requests in that room - needs to calendar
+* user choose date and time
+* Role: roomUser, roomManager, teamUser, teamManager, admin
+
+.GET /users
+* [{id,firstName,lastName,username}]
+* show all users
+* user choose attendees
+* Role: roomUser, roomManager, teamUser, teamManager, admin
+
+.POST /requests
+* {description,room,eventStart,eventEnd,attendees:[{user}],user(api/me)}
+* room -- (takovej, jakej dostanu v users/id/rooms)
+* user -- (takovej, jakej dostanu v users)
+* Role: roomUser, roomManager, teamUser, teamManager, admin
+
+Role room manager, team manager, admin: see button New Request for Other User = Form
+
+1. choose user who will be manager of this request
+2. choose room
+3. choose date and time
+4. choose attendees
+5. add description
+
+Same endpoints for GET.
+
+.POST /requests
+* {description,room,eventStart,eventEnd,attendees:[{user}],user(other user from list),status(Approved)}
+
+
+==== REQUESTS
+
+User is authenticated and has one of following roles: roomManager, teamManager, admin
+
+Show all requests, which user can approve or edit. Button to approved or rejected request. Button to edit request.
+
+.GET /requests
+* [{id,decription,room{building},eventStart,eventEnd,user,status}]
+* show all requests, which user can approve or edit
+* Role: roomManager, teamManager, admin
+
+Click to request. Show detail of reequest. Button to approved or rejected, button to edit.
+
+.GET /requests/id
+* [{id,decription,room{building},eventStart,eventEnd,user,attendees,status}]
+* show detail of request
+* Role: roomManager, teamManager, admin
+
+Click to button to approved or rejected request
+
+.PUT /request/id
+* {status:"Approved/Rejected"}
+* Role: roomManager, teamManager, admin
+
+Click to button edit request. 
+
+Need: 
+
+* GET /request/id
+* GET /users
+* GET /users/id/rooms
+* GET /rooms/id/requests
+
+.PUT /request/id
+* {description,room,eventStart,eventEnd,attendees:[{user}],user,status}
+* Role: roomManager, teamManager, admin
+
+==== ROOMS
+
+User is authenticated and has one of following roles: teamManager, admin
+
+Show all rooms.
+
+.GET /rooms
+* [{id,name,building}]
+* show all rooms in team or all rooms
+* Role: admin
+
+As Team Manager, I have to get IDs of teams where I am manager or childrens of teams
+
+.GET /users/id/teams
+* [{teamId, name}]
+* get IDs of teams
+
+.GET /teams/id/rooms
+* [{id,name,bulding}]
+* Role: teamManager
+
+Click to room. Show detail of room.
+
+.GET /rooms/id
+* {id,name,building,team,manager,status,requests}
+* show room detail
+* Role: teamManager, admin
+
+Click to button Set Manager of room. Need GET /users.
+
+.PUT /rooms/id
+* {manager: user}
+* Role: teamManager, admin
+
+Click to edit room. Only Admin.
+
+Need:
+ 
+* GET /buildings
+* GET /users
+
+.PUT /rooms/id
+* {name,building,status,manager}
+* Role: admin
+
+Click to button Add room.
+
+Need:
+ 
+* GET /buildings
+* GET /users
+
+.POST /rooms
+* {name,building,manager}
+
+==== TEAMS
+
+User is authenticated and is admin.
+
+Show all teams.
+
+.GET /teams
+* [{name,manager,parent,children,rooms,users}]
+* show all teams
+* Role: admin
+
+Click team. I will take data from last endpoint.
+
+Click button Set Manager. Need GET /users
+
+.PUT /teams/id
+* {manager: user}
+* Role: admin
+
+Click button Edit. 
+
+Need: 
+
+* GET /users
+* GET /rooms (chtěla bych tu jen volné???)
+
+.PUT /teams/id
+* {name,manager,users,rooms}
+* Role: admin
+
+Click button New Team/SubTeam
+
+Need: 
+
+* GET /teams
+* GET /teams/id/rooms
+* GET /rooms (only rooms without team)
+* GET /users
+
+.POST /teams
+* {name, manager, users, rooms, parent}
+* Role: admin
+
+===== Move room between teams
+
+.GET /teams
+* show name and rooms
+
+Click room, choosen option. Show team menu, choose team, where I want move choosen room. Submit.
+
+.PATCH /room/id
+* {team: team}
+* change team of room

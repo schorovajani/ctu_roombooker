@@ -15,7 +15,9 @@
     <div class="right">
       <button class="btn-blue" @click="showUsers">Členové</button>
       <button class="btn-blue">Upravit</button>
-      <button class="btn-blue" @click="askDeleteRoom">Smazat</button>
+      <button v-if="isAdmin" class="btn-blue" @click="askDeleteRoom">
+        Smazat
+      </button>
     </div>
     <AlertWindow
       v-if="alert"
@@ -59,6 +61,9 @@ export default {
       this.$store.dispatch('room/deleteRoom', this.room.id)
       this.$emit('usersClick', this.room)
       this.alert = false
+    },
+    isAdmin() {
+      return this.$auth.hasScope('admin')
     },
   },
 }
