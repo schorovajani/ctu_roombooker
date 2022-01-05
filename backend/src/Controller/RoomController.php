@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Account;
 use App\Entity\RoleType;
 use App\Entity\Room;
+use App\Entity\RoomRole;
 use App\Entity\User;
 use App\Service\RoomRoleService;
 use App\Service\RoomService;
@@ -231,10 +232,26 @@ class RoomController extends AbstractFOSRestController
 		if (!($this->isGranted('ROLE_ADMIN')
 			|| in_array($loggedInUser->getOwner(), $this->roomService->getRoomUsers($room, true))))
 			throw $this->createAccessDeniedException();
-		if (in_array(null, $newRoom->getRoomRoles()->toArray()))
+		if (in_array(null, $newRoom->getRoomRoles()->toArray())
+			|| $this->hasDuplicates($newRoom->getRoomRoles()->toArray()))
 			return $this->handleView($this->view(['error' => 'Invalid data'], Response::HTTP_BAD_REQUEST));
 
 		$this->roomService->updateRoles($room, $newRoom);
 		return $this->routeGetRoomAttr($room, "users");
+	}
+
+	/**
+	 * A dirty way to find duplicates among incoming room roles.
+	 * @param RoomRole[] $roles
+	 * @return bool
+	 */
+	private function hasDuplicates(array $roles): bool
+	{
+		for ($i = 0; $i < count($roles); $i++)
+			for ($j = $i + 1; $j < count($roles); $j++)
+				if ($roles[$i]->getUser() === $roles[$j]->getUser()
+					&& $roles[$i]->getRoom() === $roles[$j]->getRoom())
+					return true;
+		return false;
 	}
 }
