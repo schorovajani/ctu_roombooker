@@ -108,7 +108,7 @@ class  RequestService
 			return false;
 
 		// overlapping
-		$requests = $this->getAll();
+		$requests = $this->requestRepository->findBy(["room" => $request->getRoom()]);
 		foreach ($requests as $xRequest)
 			if ($this->overlap($request, $xRequest))
 				return false;
