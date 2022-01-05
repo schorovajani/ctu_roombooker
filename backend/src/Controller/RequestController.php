@@ -105,9 +105,10 @@ class RequestController extends AbstractFOSRestController
 			return $this->handleView($this->view(["error" => "Invalid data"], Response::HTTP_BAD_REQUEST));
 
 		// creating requests for others
-		if (!($this->isGranted('ROLE_ADMIN')
-			|| $this->requestService->canCreateRequestForOthers($request->getUser(), $request->getRoom())))
-			return $this->handleView($this->view(["error" => "You cannot create requests on behalf of other users"], Response::HTTP_BAD_REQUEST));
+		if ($request->getUser() !== $loggedInUser->getOwner())
+			if (!($this->isGranted('ROLE_ADMIN')
+				|| $this->requestService->canCreateRequestForOthers($request->getUser(), $request->getRoom())))
+				return $this->handleView($this->view(["error" => "You cannot create requests on behalf of other users"], Response::HTTP_BAD_REQUEST));
 
 		// self-approval
 		if ($request->getStatus() === null
