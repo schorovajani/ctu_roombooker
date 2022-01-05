@@ -147,6 +147,9 @@ class RequestController extends AbstractFOSRestController
 		if (!$newRequest->getUser() || !$newRequest->getStatus() || !$newRequest->getRoom() || in_array(null, $newRequest->getAttendees()->toArray()))
 			return $this->handleView($this->view(['error' => 'Invalid data'], Response::HTTP_BAD_REQUEST));
 
+		if (!$this->requestService->validateDate($newRequest))
+			return $this->handleView($this->view(['error' => 'Invalid date'], Response::HTTP_BAD_REQUEST));
+
 		$this->requestService->update($request, $newRequest);
 
 		$view = $this->view($request, Response::HTTP_OK);
