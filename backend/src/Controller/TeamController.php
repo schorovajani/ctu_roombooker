@@ -142,4 +142,30 @@ class TeamController extends AbstractFOSRestController
 		$view->getContext()->setGroups(['listBuilding', 'listRoom', 'listTeam', 'listTeamDetails']);
 		return $this->handleView($view);
 	}
+
+	/**
+	 * @Rest\Put("/teams/{id}", requirements={"id": "\d+"})
+	 * @ParamConverter("team")
+	 * @ParamConverter("newTeam", converter="fos_rest.request_body")
+	 * @IsGranted("ROLE_ADMIN")
+	 *
+	 * @param Team $team
+	 * @param Team $newTeam
+	 * @param ConstraintViolationListInterface $validationErrors
+	 * @return Response
+	 */
+	public function routePutTeam(Team $team, Team $newTeam, ConstraintViolationListInterface $validationErrors): Response
+	{
+		if (count($validationErrors) > 0)
+			return $this->handleView($this->view(['error' => $validationErrors], Response::HTTP_BAD_REQUEST));
+
+		if ($newTeam->getParent() === null || in_array(null, $newTeam->getRooms()->toArray()))
+			return $this->handleView($this->view(null, Response::HTTP_BAD_REQUEST));
+
+		$this->teamService->update($team, $newTeam);
+
+		$view = $this->view($team, Response::HTTP_OK);
+		$view->getContext()->setGroups(['listBuilding', 'listRoom', 'listTeam', 'listTeamDetails']);
+		return $this->handleView($view);
+	}
 }

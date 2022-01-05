@@ -26,13 +26,13 @@ class  RequestService
 	 * @param RequestRepository $requestRepository
 	 * @param Security $security
 	 * @param UserService $userService
+	 * @param StatusRepository $statusRepository
 	 */
 	public function __construct(EntityManagerInterface $entityManager,
-															RequestRepository      $requestRepository,
-															Security               $security,
-															UserService            $userService,
-															RoomService            $roomService,
-															StatusRepository       $statusRepository)
+								RequestRepository      $requestRepository,
+								Security               $security,
+								UserService            $userService,
+								StatusRepository       $statusRepository)
 	{
 		$this->requestRepository = $requestRepository;
 		$this->security = $security;
@@ -121,5 +121,27 @@ class  RequestService
 	public function setPending(Request $request): void
 	{
 		$request->setStatus($this->statusRepository->findOneBy(["name" => Status::STATUS_PENDING]));
+	}
+
+	/**
+	 * @param Request $request
+	 * @param Request $newRequest
+	 * @return void
+	 */
+	public function update(Request $request, Request $newRequest): void
+	{
+		$request->setDescription($newRequest->getDescription());
+		$request->setEventStart($newRequest->getEventStart());
+		$request->setEventEnd($newRequest->getEventEnd());
+		$request->setStatus($newRequest->getStatus());
+		$request->setUser($newRequest->getUser());
+
+		foreach ($request->getAttendees() as $attendee)
+			$request->removeAttendee($attendee);
+
+		foreach ($newRequest->getAttendees() as $attendee)
+			$request->addAttendee($attendee);
+
+		$this->save($request);
 	}
 }

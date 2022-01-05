@@ -55,7 +55,7 @@ class Room
 	 * @Assert\NotNull
 	 * @Assert\Type("bool")
 	 */
-	private $isLocked;
+	private $isLocked = true;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=Building::class, inversedBy="rooms")

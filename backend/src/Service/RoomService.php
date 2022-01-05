@@ -104,4 +104,19 @@ class RoomService
 		$this->entityManager->persist($room);
 		$this->entityManager->flush();
 	}
+
+	/**
+	 * @param Room $room
+	 * @param Room $newRoom
+	 * @return void
+	 */
+	public function update(Room $room, Room $newRoom): void
+	{
+		$room->setBuilding($newRoom->getBuilding());
+		$room->setTeam($newRoom->getTeam());
+		$room->setName($newRoom->getName());
+		$room->setIsPublic($newRoom->getIsPublic());
+
+		$this->save($room);
+	}
 }

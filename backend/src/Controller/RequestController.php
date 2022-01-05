@@ -6,6 +6,7 @@ use App\Entity\Account;
 use App\Entity\Request;
 use App\Entity\Status;
 use App\Service\RequestService;
+use App\Service\StatusService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -20,13 +21,16 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 class RequestController extends AbstractFOSRestController
 {
 	private RequestService $requestService;
+	private StatusService $statusService;
 
 	/**
 	 * @param RequestService $requestService
+	 * @param StatusService $statusService
 	 */
-	public function __construct(RequestService $requestService)
+	public function __construct(RequestService $requestService, StatusService $statusService)
 	{
 		$this->requestService = $requestService;
+		$this->statusService = $statusService;
 	}
 
 	/**
@@ -113,6 +117,63 @@ class RequestController extends AbstractFOSRestController
 		$this->requestService->save($request);
 
 		$view = $this->view($request, Response::HTTP_CREATED);
+		$view->getContext()->setGroups(['listBuilding', 'listRequest', 'listRoom', 'listStatus', 'listUser']);
+		return $this->handleView($view);
+	}
+
+	/**
+	 * @Rest\Put("/requests/{id}", requirements={"id": "\d+"})
+	 * @ParamConverter("request")
+	 * @ParamConverter("newRequest", converter="fos_rest.request_body")
+	 * @IsGranted("IS_AUTHENTICATED_REMEMBERED")
+	 *
+	 * @param Request $request
+	 * @param Request $newRequest
+	 * @param ConstraintViolationListInterface $validationErrors
+	 * @return Response
+	 */
+	public function routePutRequest(Request $request, Request $newRequest, ConstraintViolationListInterface $validationErrors): Response
+	{
+		if (count($validationErrors) > 0)
+			return $this->handleView($this->view(['error' => $validationErrors], Response::HTTP_BAD_REQUEST));
+
+		if (!in_array($request, $this->requestService->getAdministeredRequests()))
+			throw $this->createAccessDeniedException();
+
+		if (!$newRequest->getUser() || !$newRequest->getStatus() || !$newRequest->getRoom() || in_array(null, $newRequest->getAttendees()->toArray()))
+			return $this->handleView($this->view(['error' => 'Invalid data'], Response::HTTP_BAD_REQUEST));
+
+		$this->requestService->update($request, $newRequest);
+
+		$view = $this->view($request, Response::HTTP_OK);
+		$view->getContext()->setGroups(['listBuilding', 'listRequest', 'listRoom', 'listStatus', 'listUser']);
+		return $this->handleView($view);
+	}
+
+	/**
+	 * @Rest\Patch("/requests/{id}", requirements={"id": "\d+"})
+	 * @IsGranted("IS_AUTHENTICATED_REMEMBERED")
+	 *
+	 * @param Request $request
+	 * @param \Symfony\Component\HttpFoundation\Request $httpRequest
+	 * @return Response
+	 */
+	public function routePatchRequest(Request $request, \Symfony\Component\HttpFoundation\Request $httpRequest): Response
+	{
+		if (!in_array($request, $this->requestService->getAdministeredRequests()))
+			throw $this->createAccessDeniedException();
+
+		$newStatusId = $httpRequest->request->get("status");
+		if (!is_int($newStatusId))
+			return $this->handleView($this->view(['error' => 'Invalid data'], Response::HTTP_BAD_REQUEST));
+		$newStatus = $this->statusService->get($newStatusId);
+		if (!$newStatus)
+			return $this->handleView($this->view(['error' => 'Invalid data'], Response::HTTP_BAD_REQUEST));
+
+		$request->setStatus($newStatus);
+		$this->requestService->save($request);
+
+		$view = $this->view($request, Response::HTTP_OK);
 		$view->getContext()->setGroups(['listBuilding', 'listRequest', 'listRoom', 'listStatus', 'listUser']);
 		return $this->handleView($view);
 	}
