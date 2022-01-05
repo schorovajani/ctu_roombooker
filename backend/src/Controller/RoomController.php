@@ -250,7 +250,8 @@ class RoomController extends AbstractFOSRestController
 		for ($i = 0; $i < count($roles); $i++)
 			for ($j = $i + 1; $j < count($roles); $j++)
 				if ($roles[$i]->getUser() === $roles[$j]->getUser()
-					&& $roles[$i]->getRoom() === $roles[$j]->getRoom())
+					|| ($roles[$i]->getRoleType() === $roles[$j]->getRoleType()
+						&& $roles[$i]->getRoleType()->getName() == RoleType::ROLE_MANAGER))
 					return true;
 		return false;
 	}
