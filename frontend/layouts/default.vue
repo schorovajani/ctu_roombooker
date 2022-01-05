@@ -25,9 +25,18 @@
         <nuxt-link v-if="!isAuthenticated" class="nav-item" to="/login">
           Přihlásit se
         </nuxt-link>
-        <button v-if="isAuthenticated" class="nav-item" @click="logout">
-          Odhlásit se
-        </button>
+        <div v-if="isAuthenticated" class="dropdown">
+          <button class="nav-item">
+            {{ this.$auth.user.username }}
+          </button>
+          <div class="dropdown-content">
+            <p>
+              Jméno: {{ this.$auth.user.firstName }}
+              {{ this.$auth.user.lastName }}
+            </p>
+            <button class="btn-blue" @click="logout">Odhlásit se</button>
+          </div>
+        </div>
       </nav>
     </header>
     <Nuxt />
@@ -205,5 +214,33 @@ footer {
 
 .btn-white:hover {
   background-color: #c6c8cb;
+}
+
+.dropdown {
+  display: inline-block;
+  position: relative;
+}
+.dropdown-content {
+  display: none;
+  position: absolute;
+  left: -10rem;
+  width: 17rem;
+  overflow: auto;
+  background-color: #dcf9f4;
+  padding: 1rem;
+  /* box-shadow: 0px 10px 10px 0px rgba(0, 0, 0, 0.4); */
+}
+.dropdown:hover .dropdown-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.dropdown-content p {
+  margin: 1rem;
+}
+.dropdown-content button {
+  margin-top: 1remrem;
+  padding: 1rem;
 }
 </style>

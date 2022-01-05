@@ -27,8 +27,8 @@ export default {
   data() {
     return {
       valid: false,
-      username: 'Admin',
-      password: 'Admin',
+      username: '',
+      password: '',
       show: false,
       userRules: [(v) => !!v || 'Zadejte prosím uživatelské jméno'],
       passRules: [(v) => !!v || 'Zadejte heslo'],
