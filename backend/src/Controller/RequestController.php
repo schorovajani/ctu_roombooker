@@ -110,8 +110,8 @@ class RequestController extends AbstractFOSRestController
 			return $this->handleView($this->view(["error" => "You cannot create requests on behalf of other users"], Response::HTTP_BAD_REQUEST));
 
 		// self-approval
-		if ($request->getStatus() == null
-			|| $request->getStatus()->getName() != Status::STATUS_PENDING)
+		if ($request->getStatus() === null
+			|| $request->getStatus()->getName() !== Status::STATUS_PENDING)
 			$this->requestService->setPending($request);
 
 		// time range

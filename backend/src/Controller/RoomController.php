@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Account;
 use App\Entity\RoleType;
 use App\Entity\Room;
+use App\Entity\RoomRole;
 use App\Entity\User;
 use App\Service\RoomRoleService;
 use App\Service\RoomService;
@@ -144,6 +146,27 @@ class RoomController extends AbstractFOSRestController
 	}
 
 	/**
+	 * @Rest\Post("/rooms")
+	 * @ParamConverter("room", converter="fos_rest.request_body")
+	 * @IsGranted("ROLE_ADMIN")
+	 *
+	 * @param Room $room
+	 * @param ConstraintViolationListInterface $validationErrors
+	 * @return Response
+	 */
+	public function routePostRoom(Room $room, ConstraintViolationListInterface $validationErrors): Response
+	{
+		if (count($validationErrors) > 0)
+			return $this->handleView($this->view(["error" => $validationErrors], Response::HTTP_BAD_REQUEST));
+
+		$this->roomService->save($room);
+
+		$view = $this->view($room, Response::HTTP_CREATED);
+		$view->getContext()->setGroups(['listBuilding', 'listRoom', 'listTeam']);
+		return $this->handleView($view);
+	}
+
+	/**
 	 * @Rest\Put("/rooms/{id}", requirements={"id": "\d+"})
 	 * @ParamConverter("rooms")
 	 * @ParamConverter("newRoom", converter="fos_rest.request_body")
@@ -190,5 +213,46 @@ class RoomController extends AbstractFOSRestController
 		$this->roomService->save($room);
 
 		return $this->handleView($this->view(null, Response::HTTP_NO_CONTENT));
+	}
+
+	/**
+	 * @Rest\Put("/rooms/{id}/users", requirements={"id": "\d+"})
+	 * @ParamConverter("room")
+	 * @ParamConverter("newRoom", converter="fos_rest.request_body")
+	 * @IsGranted("IS_AUTHENTICATED_REMEMBERED")
+	 *
+	 * @param Room $room
+	 * @param Room $newRoom
+	 * @return Response
+	 */
+	public function routePutUserRoomRole(Room $room, Room $newRoom): Response
+	{
+		/** @var Account $loggedInUser */
+		$loggedInUser = $this->getUser();
+		if (!($this->isGranted('ROLE_ADMIN')
+			|| in_array($loggedInUser->getOwner(), $this->roomService->getRoomUsers($room, true))))
+			throw $this->createAccessDeniedException();
+		if (in_array(null, $newRoom->getRoomRoles()->toArray())
+			|| $this->hasDuplicates($newRoom->getRoomRoles()->toArray()))
+			return $this->handleView($this->view(['error' => 'Invalid data'], Response::HTTP_BAD_REQUEST));
+
+		$this->roomService->updateRoles($room, $newRoom);
+		return $this->routeGetRoomAttr($room, "users");
+	}
+
+	/**
+	 * A dirty way to find duplicates among incoming room roles.
+	 * @param RoomRole[] $roles
+	 * @return bool
+	 */
+	private function hasDuplicates(array $roles): bool
+	{
+		for ($i = 0; $i < count($roles); $i++)
+			for ($j = $i + 1; $j < count($roles); $j++)
+				if ($roles[$i]->getUser() === $roles[$j]->getUser()
+					|| ($roles[$i]->getRoleType() === $roles[$j]->getRoleType()
+						&& $roles[$i]->getRoleType()->getName() === RoleType::ROLE_MANAGER))
+					return true;
+		return false;
 	}
 }

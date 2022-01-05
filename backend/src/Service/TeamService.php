@@ -134,4 +134,24 @@ class TeamService
 
 		$this->save($team);
 	}
+
+	/**
+	 * @param Team $team
+	 * @param Team $newTeam
+	 * @return void
+	 */
+	public function updateRoles(Team $team, Team $newTeam): void
+	{
+		foreach ($team->getTeamRoles() as $role) {
+			$this->entityManager->remove($role);
+			$this->entityManager->flush();
+		}
+		foreach ($newTeam->getTeamRoles() as $role) {
+			$role->setTeam($team);
+			$this->entityManager->persist($role);
+			$this->entityManager->flush();
+			$team->addTeamRole($role);
+		}
+		$this->save($team);
+	}
 }
