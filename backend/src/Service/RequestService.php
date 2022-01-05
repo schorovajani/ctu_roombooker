@@ -12,7 +12,7 @@ use App\Repository\StatusRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
 
-class  RequestService
+class RequestService
 {
 	private RequestRepository $requestRepository;
 	private Security $security;
@@ -26,6 +26,7 @@ class  RequestService
 	 * @param RequestRepository $requestRepository
 	 * @param Security $security
 	 * @param UserService $userService
+	 * @param RoomService $roomService
 	 * @param StatusRepository $statusRepository
 	 */
 	public function __construct(EntityManagerInterface $entityManager,
@@ -115,7 +116,8 @@ class  RequestService
 				return false;
 
 		// 15+ minutes
-		if (date_diff($request->getEventStart(), $request->getEventEnd())->i < 15)
+		$length = ($request->getEventEnd()->getTimestamp() - $request->getEventStart()->getTimestamp()) / 60;
+		if ($length < 15)
 			return false;
 		return true;
 	}
