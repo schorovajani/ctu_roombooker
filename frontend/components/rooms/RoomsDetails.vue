@@ -25,6 +25,7 @@
       @cancel="alert = false"
       :message="`Opravdu chcete místnost ${room.building.name}:${room.name} smazat?`"
       btn1="Smazat"
+      btn1Color="btn-red"
       btn2="Zrušit"
     />
   </article>

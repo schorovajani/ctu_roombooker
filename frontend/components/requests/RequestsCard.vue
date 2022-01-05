@@ -65,6 +65,7 @@
       @cancel="alert = false"
       :message="`Opravdu chcete rezervaci ${request.description} smazat?`"
       btn1="Smazat"
+      btn1Color="btn-red"
       btn2="Zrušit"
     />
   </article>
