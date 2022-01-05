@@ -45,6 +45,7 @@
             <v-date-picker
               v-model="date"
               @input="dateMenu = false"
+              locale="cs-CZ"
             ></v-date-picker>
           </v-menu>
           <div class="time-pickers">
@@ -54,6 +55,17 @@
             <v-time-picker v-model="endTime" format="24hr"></v-time-picker>
           </div>
           <v-text-field label="Popis" v-model="description"></v-text-field>
+          <v-radio-group v-if="edit" v-model="choosenStatus">
+            <template v-slot:label>
+              <div>Status</div>
+            </template>
+            <v-radio
+              v-for="s in status"
+              :key="s.id"
+              :label="s.name"
+              :value="s.id"
+            ></v-radio>
+          </v-radio-group>
           <v-autocomplete
             v-model="attendees"
             :items="users"
@@ -64,7 +76,9 @@
             deletable-chips
             multiple
           ></v-autocomplete>
-          <v-btn type="submit">Zarezervovat</v-btn>
+          <v-btn type="submit">{{
+            edit ? 'Upravit rezervaci' : 'Zarezervovat'
+          }}</v-btn>
         </v-form>
         <v-calendar
           v-model="date"
@@ -80,23 +94,53 @@
 </template>
 
 <script>
+import isManager from '~/middleware/isManager'
 export default {
+  created() {
+    this.$store.dispatch('user/getUsers')
+    this.$store.dispatch('room/getAllRooms')
+    if (this.request) {
+      this.$store.dispatch('room/getRoomRequests', this.request.room.id)
+    }
+  },
   props: {
     isManager: Boolean,
+    request: Object,
   },
   data() {
     return {
-      manager: {},
-      choosenRoom: null,
-      showCalendar: false,
+      edit: this.request ? true : false,
+      manager: this.request?.user.id || null,
+      choosenRoom: this.request?.room.id || null,
+      date: this.request
+        ? new Date(this.request.eventStart).toISOString().slice(0, 10)
+        : new Date().toISOString().slice(0, 10),
+      startTime: this.request
+        ? new Date(this.request.eventStart).toISOString().slice(11, 16)
+        : '',
+      endTime: this.request
+        ? new Date(this.request.eventEnd).toISOString().slice(11, 16)
+        : '',
+      attendees: this.request?.attendees || [], // jen ids [1,2,3]
+      description: this.request?.description || '',
+      choosenStatus: this.request?.status.id || 1,
+      showCalendar: this.request ? true : false,
       dateMenu: false,
-      date: new Date().toISOString().slice(0, 10),
-      startTime: null,
-      endTime: null,
-      attendees: [],
-      focus: '',
       valid: false,
-      description: '',
+      status: [
+        {
+          id: 1,
+          name: 'nevyřízeno',
+        },
+        {
+          id: 2,
+          name: 'potvrdit',
+        },
+        {
+          id: 3,
+          name: 'zamítnout',
+        },
+      ],
     }
   },
   mounted() {
@@ -121,18 +165,50 @@ export default {
   },
   methods: {
     submit() {
+      console.log(this.startTime)
+      console.log(this.attendees)
+      if (!this.isManager) {
+        this.manager = this.$auth.user.id
+      }
       let att = []
       this.attendees.forEach((aid) => {
-        att.push({ id: aid })
+        if (this.edit) {
+          att.push({ id: aid.id })
+        } else {
+          att.push({ id: aid })
+        }
       })
-      this.$store.dispatch('request/postRequest', {
-        description: this.description,
-        eventStart: new Date(`${this.date} ${this.startTime}`).toISOString(),
-        eventEnd: new Date(`${this.date} ${this.endTime}`).toISOString(),
-        room: { id: this.choosenRoom },
-        user: { id: this.manager },
-        attendees: att,
-      })
+      console.log(att)
+      if (this.edit) {
+        this.$store.dispatch('request/editRequest', {
+          id: this.request.id,
+          data: {
+            description: this.description,
+            eventStart: new Date(
+              `${this.date} ${this.startTime}`
+            ).toISOString(),
+            eventEnd: new Date(`${this.date} ${this.endTime}`).toISOString(),
+            room: { id: this.choosenRoom },
+            user: { id: this.manager },
+            attendees: this.attendees,
+            status: { id: this.choosenStatus },
+          },
+        })
+      } else {
+        this.$store.dispatch('request/postRequest', {
+          description: this.description,
+          eventStart: new Date(`${this.date} ${this.startTime}`).toISOString(),
+          eventEnd: new Date(`${this.date} ${this.endTime}`).toISOString(),
+          room: { id: this.choosenRoom },
+          user: { id: this.manager },
+          attendees: att,
+        })
+      }
+      if (this.isManager || this.edit) {
+        this.$router.replace('/requests')
+      } else {
+        this.$router.replace('/my-requests')
+      }
     },
   },
 }

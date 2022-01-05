@@ -23,7 +23,7 @@ export default {
       return
     }
 
-    console.log(response)
+    //console.log(response)
     context.commit('setRequests', response)
     context.commit('setFilteredRequests', response)
   },
@@ -65,5 +65,50 @@ export default {
       console.log(error)
       return
     }
+  },
+
+  async getRequest(context, payload) {
+    let response
+    try {
+      response = await this.$axios.$get(
+        `${this.$axios.defaults.baseURL}/requests/${payload}`
+      )
+    } catch (error) {
+      console.log(error)
+      return
+    }
+    //console.log(response)
+    context.commit('setRequest', response)
+  },
+
+  async editRequest(context, payload) {
+    let response
+    try {
+      response = await this.$axios.$put(
+        `${this.$axios.defaults.baseURL}/requests/${payload.id}`,
+        payload.data
+      )
+    } catch (error) {
+      console.log(error)
+      return
+    }
+    console.log(response)
+    context.commit('editRequest', { id: payload.id, data: response })
+  },
+
+  async editStatus(context, payload) {
+    let response
+    try {
+      response = await this.$axios.$patch(
+        `${this.$axios.defaults.baseURL}/requests/${payload.id}`,
+        payload.data
+      )
+    } catch (err) {
+      console.log(err)
+      return
+    }
+
+    console.log(response)
+    context.commit('editRequest', { id: payload.id, data: response })
   },
 }

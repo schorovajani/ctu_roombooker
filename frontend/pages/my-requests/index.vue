@@ -1,9 +1,11 @@
 <template>
   <main>
-    <nuxt-link to="/my-requests/new">
-      <button class="new-request">Nová rezervace</button>
-    </nuxt-link>
-    <h2>Moje rezervace</h2>
+    <div class="list-header">
+      <nuxt-link class="new-request" to="/my-requests/new">
+        <button class="btn-blue">Nová rezervace</button>
+      </nuxt-link>
+      <h2>Moje rezervace</h2>
+    </div>
     <section>
       <RequestsCard
         v-for="request in requests"
@@ -51,5 +53,16 @@ section {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+}
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row-reverse;
+  align-items: flex-end;
+}
+
+.new-request button {
+  padding: 1rem;
 }
 </style>

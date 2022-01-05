@@ -4,7 +4,9 @@
       <h3>Upozornění</h3>
       <p>{{ message }}</p>
       <div class="buttons">
-        <button class="btn-red" @click="$emit('accepted')">{{ btn1 }}</button>
+        <button :class="btn1Color" @click="$emit('accepted')">
+          {{ btn1 }}
+        </button>
         <button class="btn-white" @click="$emit('cancel')">{{ btn2 }}</button>
       </div>
     </div>
@@ -17,6 +19,7 @@ export default {
     message: String,
     btn1: String,
     btn2: String,
+    btn1Color: String,
   },
 }
 </script>

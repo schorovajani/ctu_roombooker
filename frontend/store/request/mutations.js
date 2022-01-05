@@ -41,4 +41,24 @@ export default {
       room.requests = room.requests.filter((req) => req.id !== id)
     })
   },
+
+  setRequest(state, request) {
+    state.request = request
+  },
+
+  editRequest(state, payload) {
+    //console.log(payload.data)
+    let index1 = state.requests.indexOf(payload.data)
+    state.requests[index1] = payload.data
+
+    state.filteredRequests.every((room) => {
+      let findObject = room.requests.find((req) => req.id === payload.id)
+      if (findObject) {
+        let index2 = room.requests.indexOf(findObject)
+        room[index2] = payload.data
+        return false
+      }
+      return true
+    })
+  },
 }

@@ -1,7 +1,7 @@
 <template>
   <main>
     <h2>Nová rezervace</h2>
-    <RequestsForm :isManager="false" />
+    <RequestsForm :isManager="true" />
   </main>
 </template>
 

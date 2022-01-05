@@ -8,4 +8,7 @@ export default {
   filteredRequests(state) {
     return state.filteredRequests
   },
+  request(state) {
+    return state.request
+  },
 }
