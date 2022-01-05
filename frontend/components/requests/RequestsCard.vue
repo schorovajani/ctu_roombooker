@@ -125,7 +125,7 @@ export default {
 
 <style scoped>
 article {
-  width: 30rem;
+  width: 28rem;
   margin: 2rem;
   border: solid 1px #505050;
   padding: 3rem 3rem 2rem 3rem;
