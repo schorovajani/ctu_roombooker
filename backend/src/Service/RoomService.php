@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\RoleType;
 use App\Entity\Room;
+use App\Entity\RoomRole;
 use App\Entity\User;
 use App\Repository\RoomRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -117,6 +118,26 @@ class RoomService
 		$room->setName($newRoom->getName());
 		$room->setIsPublic($newRoom->getIsPublic());
 
+		$this->save($room);
+	}
+
+	/**
+	 * @param Room $room
+	 * @param Room $newRoom
+	 * @return void
+	 */
+	public function updateRoles(Room $room, Room $newRoom): void
+	{
+		foreach ($room->getRoomRoles() as $role) {
+			$this->entityManager->remove($role);
+			$this->entityManager->flush();
+		}
+		foreach ($newRoom->getRoomRoles() as $role) {
+			$role->setRoom($room);
+			$this->entityManager->persist($role);
+			$this->entityManager->flush();
+			$room->addRoomRole($role);
+		}
 		$this->save($room);
 	}
 }

@@ -84,6 +84,7 @@ class Room
 
 	/**
 	 * @ORM\OneToMany(targetEntity=RoomRole::class, mappedBy="room")
+	 * @Serialize\Expose
 	 */
 	private $roomRoles;
 
