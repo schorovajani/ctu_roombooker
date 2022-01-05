@@ -2,7 +2,9 @@ export default {
   async getAllRooms(context) {
     let response
     try {
-      response = await this.$axios.$get(`${this.$axios.defaults.baseURL}/rooms`)
+      response = await this.$axios.$get(
+        `${this.$axios.defaults.baseURL}/users/${this.$auth.user.id}/rooms/`
+      )
     } catch (error) {
       console.log(error)
       return
