@@ -140,7 +140,7 @@ class TeamService
 	 * @param Team $newTeam
 	 * @return void
 	 */
-	public function updateRoles(Team $team, Team $newTeam)
+	public function updateRoles(Team $team, Team $newTeam): void
 	{
 		foreach ($team->getTeamRoles() as $role) {
 			$this->entityManager->remove($role);
