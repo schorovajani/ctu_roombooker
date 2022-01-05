@@ -114,6 +114,10 @@ class RequestController extends AbstractFOSRestController
 			|| $request->getStatus()->getName() != Status::STATUS_PENDING)
 			$this->requestService->setPending($request);
 
+		// time range
+		if (!$this->requestService->validateDate($request))
+			return $this->handleView($this->view(["error" => "Invalid date"], Response::HTTP_BAD_REQUEST));
+
 		$this->requestService->save($request);
 
 		$view = $this->view($request, Response::HTTP_CREATED);

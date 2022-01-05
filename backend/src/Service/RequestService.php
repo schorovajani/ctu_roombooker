@@ -32,6 +32,7 @@ class  RequestService
 								RequestRepository      $requestRepository,
 								Security               $security,
 								UserService            $userService,
+								RoomService            $roomService,
 								StatusRepository       $statusRepository)
 	{
 		$this->requestRepository = $requestRepository;
@@ -92,6 +93,47 @@ class  RequestService
 	public function canCreateRequestForOthers(User $user, Room $room): bool
 	{
 		return in_array($user, $this->roomService->getRoomUsers($room, true));
+	}
+
+	/**
+	 * Validate $request's timestamps
+	 * @param Request $request
+	 * @return bool
+	 */
+	public function validateDate(Request $request): bool
+	{
+		// sensible dates
+		$now = date_create('now');
+		if ($request->getEventStart() >= $request->getEventEnd()
+			|| $request->getEventStart() < $now)
+			return false;
+
+		// overlapping
+		$requests = $this->requestRepository->findBy(["room" => $request->getRoom()]);
+		foreach ($requests as $xRequest)
+			if ($this->overlap($request, $xRequest))
+				return false;
+
+		// 15+ minutes
+		if (date_diff($request->getEventStart(), $request->getEventEnd())->i < 15)
+			return false;
+		return true;
+	}
+
+	/**
+	 * Check if two requests overlap time-wise.
+	 * @param Request $a
+	 * @param Request $b
+	 * @return bool
+	 */
+	public function overlap(Request $a, Request $b): bool
+	{
+		if ($a->getEventStart() <= $b->getEventStart() && $a->getEventEnd() >= $b->getEventEnd())
+			return true;
+		return ($a->getEventStart() >= $b->getEventStart()
+				&& $a->getEventStart() <= $b->getEventEnd())
+			|| ($a->getEventEnd() >= $b->getEventStart()
+				&& $a->getEventEnd() <= $b->getEventEnd());
 	}
 
 	/**
