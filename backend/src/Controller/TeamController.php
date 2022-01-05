@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Account;
 use App\Entity\RoleType;
 use App\Entity\Team;
+use App\Entity\TeamRole;
 use App\Entity\User;
 use App\Service\TeamRoleService;
 use App\Service\TeamService;
@@ -167,5 +169,46 @@ class TeamController extends AbstractFOSRestController
 		$view = $this->view($team, Response::HTTP_OK);
 		$view->getContext()->setGroups(['listBuilding', 'listRoom', 'listTeam', 'listTeamDetails']);
 		return $this->handleView($view);
+	}
+
+	/**
+	 * @Rest\Put("/teams/{id}/users", requirements={"id": "\d+"})
+	 * @ParamConverter("team")
+	 * @ParamConverter("newTeam", converter="fos_rest.request_body")
+	 * @IsGranted("IS_AUTHENTICATED_REMEMBERED")
+	 *
+	 * @param Team $team
+	 * @param Team $newTeam
+	 * @return Response
+	 */
+	public function routePutUserTeamRole(Team $team, Team $newTeam): Response
+	{
+		/** @var Account $loggedInUser */
+		$loggedInUser = $this->getUser();
+		if (!($this->isGranted('ROLE_ADMIN')
+			|| in_array($loggedInUser->getOwner(), $this->teamService->getTeamManagers($team))))
+			throw $this->createAccessDeniedException();
+		if (in_array(null, $newTeam->getTeamRoles()->toArray())
+			|| $this->hasDuplicates($newTeam->getTeamRoles()->toArray()))
+			return $this->handleView($this->view(['error' => 'Invalid data'], Response::HTTP_BAD_REQUEST));
+
+		$this->teamService->updateRoles($team, $newTeam);
+		return $this->routeGetTeamAttr($team, "users");
+	}
+
+	/**
+	 * A dirty way to find duplicates among incoming team roles.
+	 * @param TeamRole[] $roles
+	 * @return bool
+	 */
+	private function hasDuplicates(array $roles): bool
+	{
+		for ($i = 0; $i < count($roles); $i++)
+			for ($j = $i + 1; $j < count($roles); $j++)
+				if ($roles[$i]->getUser() === $roles[$j]->getUser()
+					|| ($roles[$i]->getRoleType() === $roles[$j]->getRoleType()
+						&& $roles[$i]->getRoleType()->getName() === RoleType::ROLE_MANAGER))
+					return true;
+		return false;
 	}
 }
