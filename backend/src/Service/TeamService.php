@@ -115,4 +115,23 @@ class TeamService
 		$this->entityManager->flush();
 		$this->entityManager->refresh($team);
 	}
+
+	/**
+	 * @param Team $team
+	 * @param Team $newTeam
+	 * @return void
+	 */
+	public function update(Team $team, Team $newTeam): void
+	{
+		$team->setName($newTeam->getName());
+		$team->setParent($newTeam->getParent());
+
+		foreach ($team->getRooms() as $room)
+			$team->removeRoom($room);
+
+		foreach ($newTeam->getRooms() as $room)
+			$team->addRoom($room);
+
+		$this->save($team);
+	}
 }
