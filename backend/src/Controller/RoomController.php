@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Account;
 use App\Entity\RoleType;
 use App\Entity\Room;
 use App\Entity\User;
@@ -211,5 +212,29 @@ class RoomController extends AbstractFOSRestController
 		$this->roomService->save($room);
 
 		return $this->handleView($this->view(null, Response::HTTP_NO_CONTENT));
+	}
+
+	/**
+	 * @Rest\Put("/rooms/{id}/users", requirements={"id": "\d+"})
+	 * @ParamConverter("room")
+	 * @ParamConverter("newRoom", converter="fos_rest.request_body")
+	 * @IsGranted("IS_AUTHENTICATED_REMEMBERED")
+	 *
+	 * @param Room $room
+	 * @param Room $newRoom
+	 * @return Response
+	 */
+	public function routePutUserRoomRole(Room $room, Room $newRoom): Response
+	{
+		/** @var Account $loggedInUser */
+		$loggedInUser = $this->getUser();
+		if (!($this->isGranted('ROLE_ADMIN')
+			|| in_array($loggedInUser->getOwner(), $this->roomService->getRoomUsers($room, true))))
+			throw $this->createAccessDeniedException();
+		if (in_array(null, $newRoom->getRoomRoles()->toArray()))
+			return $this->handleView($this->view(['error' => 'Invalid data'], Response::HTTP_BAD_REQUEST));
+
+		$this->roomService->updateRoles($room, $newRoom);
+		return $this->routeGetRoomAttr($room, "users");
 	}
 }
