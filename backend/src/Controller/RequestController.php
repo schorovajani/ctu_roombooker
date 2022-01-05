@@ -115,7 +115,7 @@ class RequestController extends AbstractFOSRestController
 			$this->requestService->setPending($request);
 
 		// time range
-		if (!$this->validateDate($request))
+		if (!$this->requestService->validateDate($request))
 			return $this->handleView($this->view(["error" => "Invalid date"], Response::HTTP_BAD_REQUEST));
 
 		$this->requestService->save($request);
@@ -180,46 +180,5 @@ class RequestController extends AbstractFOSRestController
 		$view = $this->view($request, Response::HTTP_OK);
 		$view->getContext()->setGroups(['listBuilding', 'listRequest', 'listRoom', 'listStatus', 'listUser']);
 		return $this->handleView($view);
-	}
-
-	/**
-	 * Validate $request's timestamps
-	 * @param Request $request
-	 * @return bool
-	 */
-	private function validateDate(Request $request): bool
-	{
-		// sensible dates
-		$now = date_create('now');
-		if ($request->getEventStart() >= $request->getEventEnd()
-			|| $request->getEventStart() < $now)
-			return false;
-
-		// overlapping
-		$requests = $this->requestService->getAll();
-		foreach ($requests as $xRequest)
-			if ($this->overlap($request, $xRequest))
-				return false;
-
-		// 15+ minutes
-		if (date_diff($request->getEventStart(), $request->getEventEnd())->i < 15)
-			return false;
-		return true;
-	}
-
-	/**
-	 * Check if two requests overlap time-wise.
-	 * @param Request $a
-	 * @param Request $b
-	 * @return bool
-	 */
-	private function overlap(Request $a, Request $b): bool
-	{
-		if ($a->getEventStart() <= $b->getEventStart() && $a->getEventEnd() >= $b->getEventEnd())
-			return true;
-		return ($a->getEventStart() >= $b->getEventStart()
-				&& $a->getEventStart() <= $b->getEventEnd())
-			|| ($a->getEventEnd() >= $b->getEventStart()
-				&& $a->getEventEnd() <= $b->getEventEnd());
 	}
 }
