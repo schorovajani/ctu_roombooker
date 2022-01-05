@@ -1,5 +1,8 @@
 <template>
   <main>
+    <nuxt-link to="/my-requests/new">
+      <button class="new-request">Nová rezervace</button>
+    </nuxt-link>
     <h2>Moje rezervace</h2>
     <section>
       <RequestsCard

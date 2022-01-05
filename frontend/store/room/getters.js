@@ -1,4 +1,7 @@
 export default {
+  rooms(state) {
+    return state.rooms
+  },
   filteredRooms(state) {
     return state.filteredRooms
   },

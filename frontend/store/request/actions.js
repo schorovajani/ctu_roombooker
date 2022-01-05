@@ -53,4 +53,17 @@ export default {
 
     context.commit('deleteRequest', payload)
   },
+
+  async postRequest(_, payload) {
+    let response
+    try {
+      response = await this.$axios.$post(
+        `${this.$axios.defaults.baseURL}/requests`,
+        payload
+      )
+    } catch (error) {
+      console.log(error)
+      return
+    }
+  },
 }
