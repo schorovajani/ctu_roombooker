@@ -32,6 +32,7 @@ class  RequestService
 								RequestRepository      $requestRepository,
 								Security               $security,
 								UserService            $userService,
+								RoomService            $roomService,
 								StatusRepository       $statusRepository)
 	{
 		$this->requestRepository = $requestRepository;
