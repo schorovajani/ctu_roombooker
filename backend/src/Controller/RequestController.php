@@ -191,7 +191,7 @@ class RequestController extends AbstractFOSRestController
 	{
 		// sensible dates
 		$now = date_create('now');
-		if ($request->getEventStart() < $request->getEventEnd()
+		if ($request->getEventStart() >= $request->getEventEnd()
 			|| $request->getEventStart() < $now)
 			return false;
 
