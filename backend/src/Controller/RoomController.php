@@ -66,6 +66,9 @@ class RoomController extends AbstractFOSRestController
 	 */
 	public function routeGetRoom(Room $room): Response
 	{
+		if (!$room->getIsPublic() && !$this->isGranted('IS_AUTHENTICATED_REMEMBERED'))
+			throw $this->createAccessDeniedException();
+
 		$view = $this->view($room, Response::HTTP_OK);
 		$view->getContext()->setGroups(['listBuilding', 'listRoom', 'listTeam']);
 		return $this->handleView($view);
